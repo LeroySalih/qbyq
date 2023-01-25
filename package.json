@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "refresh-types" : "npx supabase gen types typescript --project-id 'fmudvzcqkiqjyprmtozz' --schema public > types/supabase.ts"
   },
   "dependencies": {
     "@next/font": "13.1.4",

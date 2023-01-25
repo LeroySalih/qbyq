@@ -14,6 +14,7 @@ export interface Database {
           created_at: string | null
           id: number
           marks: number | null
+          month: number | null
           paper: string | null
           specId: number | null
           subject: string | null
@@ -24,6 +25,7 @@ export interface Database {
           created_at?: string | null
           id?: number
           marks?: number | null
+          month?: number | null
           paper?: string | null
           specId?: number | null
           subject?: string | null
@@ -34,11 +36,38 @@ export interface Database {
           created_at?: string | null
           id?: number
           marks?: number | null
+          month?: number | null
           paper?: string | null
           specId?: number | null
           subject?: string | null
           title?: string | null
           year?: string | null
+        }
+      }
+      Profile: {
+        Row: {
+          classes: string[] | null
+          created_at: string | null
+          familyName: string
+          firstName: string
+          id: number
+          isAdmin: boolean
+        }
+        Insert: {
+          classes?: string[] | null
+          created_at?: string | null
+          familyNamr: string
+          firstName: string
+          id?: number
+          isAdmin?: boolean
+        }
+        Update: {
+          classes?: string[] | null
+          created_at?: string | null
+          familyNamr?: string
+          firstName?: string
+          id?: number
+          isAdmin?: boolean
         }
       }
       PupilMarks: {
@@ -95,8 +124,8 @@ export interface Database {
       }
       Spec: {
         Row: {
-          created_at: string | null
-          id: number
+          created_at?: string | null
+          id?: number
           subject: string | null
           title: string | null
         }

@@ -1,8 +1,10 @@
 "use client"
 import supabase from "components/supabase";
-import { useEffect , useState} from "react";
+import { useEffect , useState, useContext} from "react";
 import { Database } from "types/supabase";
 import { Spec, SpecItem, PupilMarks, Question} from "types/alias";
+import { User } from "@supabase/supabase-js";
+import { UserContext } from "components/context/user-context";
 
 type SpecData = {
     spec:Spec,
@@ -11,9 +13,12 @@ type SpecData = {
 
 const PageForm = () => {
 
+    const [paperId, setPaperId] = useState<number>(1);
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
 
+    const {user, profile} = useContext(UserContext);
+    // console.log(user);
     useEffect( 
         
     ()=> {
@@ -23,7 +28,7 @@ const PageForm = () => {
             const {data: paper, error} = await supabase
                                                 .from("Papers")
                                                 .select('*, Questions(*), Spec(*, SpecItem(*))')
-                                                .eq("id",1)
+                                                .eq("id",paperId)
                                                 .single();
 
             error && console.error(error);
@@ -34,36 +39,47 @@ const PageForm = () => {
 
         }
 
+        
+        loadPaper();
+        
+
+    }, []);
+
+
+    useEffect(() => {
+
         const loadPupilMarks = async () => {
 
             const {data, error} = await supabase
                 .from("PupilMarks")
-                .select();
+                .select()
+                .eq("userId", user!.id)
+                .eq("paperId", paperId);
 
-            
             error && console.error(error);
-            console.log(data)
+            // console.log(data);
             setPupilMarks(data);
         }
 
-        loadPaper();
+        if (user === undefined)
+            return;
+
         loadPupilMarks();
 
-    }, []);
+    }, [user])
 
 
     const handleOnChange = (questionId: number, marks:number) => {
 
         const tmpPupilMarks = pupilMarks?.filter(pm => pm.questionId == questionId) || []; 
 
-        console.log(tmpPupilMarks);
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
             tmpPupilMarks.push({
-                userId : "8231e1e1-57f8-44f7-b384-9fe2c88d4d0c",
+                userId : user!.id ,
                 questionId, 
                 marks,
-                paperId : paper.id
+                paperId : paper.id 
             })
         } else {
             tmpPupilMarks && (tmpPupilMarks[0].marks = marks)
@@ -77,27 +93,42 @@ const PageForm = () => {
             ])
     }
 
-    const handleOnBlur = async () => {
-
-        const upsertPupilMarks = pupilMarks?.filter(pm => "id" in pm) || [];
-        console.log(upsertPupilMarks)
-        const {data:upsertData, error:upsertError} = await supabase.from("PupilMarks")
-            .upsert(upsertPupilMarks);
-            upsertError && console.log(upsertError);
-        console.log(upsertData);
-        console.log("Upserted");
 
 
+    const handleOnBlur = async (questionId:number) => {
+
+        // get the pupilMark by question id
+        const pm = pupilMarks?.filter(pm => pm.questionId === questionId)[0]
+
+        if (pm === undefined){
+            return;
+        }
+
+
+        const {data:upsertData, error:upsertError} = await supabase
+                .from("PupilMarks")
+                .upsert(pm)
+                .select();
         
-        const {data:InsertData, error: InsertError} = await supabase.from("PupilMarks")
-            .insert((pupilMarks || []).filter(pm => !("id" in pm)));
-            InsertError && console.log(InsertError);
-        console.log(InsertData);
-        console.log("Inserted");
+        if (upsertError){
+            console.log(upsertError);
+            return;
+        }
+
+        console.log("Upsert Data", upsertData)
+
+        const newPupilMarks = pupilMarks?.map((old) => (old.questionId === pm.questionId) 
+                ? upsertData![0]
+                : old
+            );
+
+            // update the pupil marks data
+        setPupilMarks(newPupilMarks || [])
+
         
     }
 
-    return <><h1>Paper Form for {paper?.title}</h1>
+    return <><h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
     {
         
@@ -126,7 +157,7 @@ type DisplayQuestionProps = {
     specData: SpecData,
     pupilMarks: PupilMarks[],
     onChange : (arg0: number, arg1: number) => void,
-    onBlur : () => void
+    onBlur : (arg0:number) => void
 }
 
 const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
@@ -143,10 +174,10 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
         <div>{question.question_number}</div>
         <input 
             name={question.id.toString()} 
-            value={value?.toString()}
+            value={value?.toString() || ''}
             id={question.id.toString()} 
             onChange={(e)=>onChange(question.id, parseInt(e.target.value))}
-            onBlur={onBlur}/>
+            onBlur={(e) => onBlur(question.id)}/>
         <div>{question.marks}</div>
         <div>{specItem?.tag} {specItem?.title}</div>
         <pre>{JSON.stringify(question, null, 2)}</pre>
