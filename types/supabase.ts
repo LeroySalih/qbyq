@@ -43,8 +43,8 @@ export interface Database {
       }
       PupilMarks: {
         Row: {
-          created_at: string | null
-          id: number
+          created_at?: string | null
+          id?: number
           marks: number | null
           paperId: number | null
           questionId: number | null

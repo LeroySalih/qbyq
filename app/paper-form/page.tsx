@@ -2,7 +2,7 @@
 import supabase from "components/supabase";
 import { useEffect , useState} from "react";
 import { Database } from "types/supabase";
-import { Spec, SpecItem} from "types/alias";
+import { Spec, SpecItem, PupilMarks, Question} from "types/alias";
 
 type SpecData = {
     spec:Spec,
@@ -12,7 +12,7 @@ type SpecData = {
 const PageForm = () => {
 
     const [paper, setPaper] = useState<any>()
-    const [pupilMarks, setPupilMarks] = useState<any>()
+    const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
 
     useEffect( 
         
@@ -34,20 +34,19 @@ const PageForm = () => {
 
         }
 
-        loadPaper();
-
         const loadPupilMarks = async () => {
 
-            const result = await supabase
+            const {data, error} = await supabase
                 .from("PupilMarks")
                 .select();
 
-            const {error} = result;
+            
             error && console.error(error);
-            console.log(result)
-            setPupilMarks(result?.data);
+            console.log(data)
+            setPupilMarks(data);
         }
 
+        loadPaper();
         loadPupilMarks();
 
     }, []);
@@ -55,10 +54,9 @@ const PageForm = () => {
 
     const handleOnChange = (questionId: number, marks:number) => {
 
-        const tmpPupilMarks = pupilMarks?
-            .filter(pm => pm.questionId == questionId)
+        const tmpPupilMarks = pupilMarks?.filter(pm => pm.questionId == questionId) || []; 
 
-            console.log(tmpPupilMarks);
+        console.log(tmpPupilMarks);
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
             tmpPupilMarks.push({
@@ -68,20 +66,20 @@ const PageForm = () => {
                 paperId : paper.id
             })
         } else {
-            tmpPupilMarks[0].marks = marks
+            tmpPupilMarks && (tmpPupilMarks[0].marks = marks)
         }
 
         
 
         setPupilMarks(prev => [
             tmpPupilMarks[0], 
-            ...prev.filter(pm => pm.questionId != questionId), 
+            ...(prev || []).filter(pm => pm.questionId != questionId), 
             ])
     }
 
     const handleOnBlur = async () => {
 
-        const upsertPupilMarks = pupilMarks.filter(pm => "id" in pm);
+        const upsertPupilMarks = pupilMarks?.filter(pm => "id" in pm) || [];
         console.log(upsertPupilMarks)
         const {data:upsertData, error:upsertError} = await supabase.from("PupilMarks")
             .upsert(upsertPupilMarks);
@@ -92,7 +90,7 @@ const PageForm = () => {
 
         
         const {data:InsertData, error: InsertError} = await supabase.from("PupilMarks")
-            .insert(pupilMarks.filter(pm => !("id" in pm)));
+            .insert((pupilMarks || []).filter(pm => !("id" in pm)));
             InsertError && console.log(InsertError);
         console.log(InsertData);
         console.log("Inserted");
@@ -102,14 +100,14 @@ const PageForm = () => {
     return <><h1>Paper Form for {paper?.title}</h1>
     
     {
-        paper?.Questions?
-                .sort((a, b) => a.question_number > b.question_number ? 1 : -1)
+        
+        paper?.Questions?.sort((a:Question, b:Question) => (a.question_number || 0) > (b.question_number || 0) ? 1 : -1)
                 .map(
-            (q, i) => <DisplayQuestion 
+            (q:Question, i:number) => <DisplayQuestion 
                             key={i} 
                             question={q} 
-                            spec={paper.Spec} 
-                            pupilMarks={pupilMarks} 
+                            specData={paper.Spec} 
+                            pupilMarks={(pupilMarks || [])} 
                             onChange={handleOnChange}
                             onBlur={handleOnBlur}
                             />
@@ -123,21 +121,30 @@ const PageForm = () => {
 }
 
 
-const DisplayQuestion = ({question, spec, pupilMarks, onChange, onBlur}) => {
+type DisplayQuestionProps = {
+    question : Question,
+    specData: SpecData,
+    pupilMarks: PupilMarks[],
+    onChange : (arg0: number, arg1: number) => void,
+    onBlur : () => void
+}
+
+const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
 
     const [value, setValue] = useState<number | null>(null);
 
     useEffect(()=> {
         setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks)
-    }, [pupilMarks])
-    const specItem = spec?.SpecItem?.filter(s => s.id === question.specItemId)[0];
+    }, [pupilMarks]);
+
+    const specItem = specData?.specItem?.filter(s => s.id === question.specItemId)[0];
     
     return <>
         <div>{question.question_number}</div>
         <input 
-            name={question.id} 
+            name={question.id.toString()} 
             value={value?.toString()}
-            id={question.id} 
+            id={question.id.toString()} 
             onChange={(e)=>onChange(question.id, parseInt(e.target.value))}
             onBlur={onBlur}/>
         <div>{question.marks}</div>
