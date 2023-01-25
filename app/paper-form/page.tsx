@@ -17,7 +17,7 @@ const PageForm = () => {
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
 
-    const {user} = useContext(UserContext);
+    const {user, profile} = useContext(UserContext);
     // console.log(user);
     useEffect( 
         
@@ -76,10 +76,10 @@ const PageForm = () => {
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
             tmpPupilMarks.push({
-                userId : user?.id || null,
+                userId : user!.id ,
                 questionId, 
                 marks,
-                paperId : paper.id
+                paperId : paper.id 
             })
         } else {
             tmpPupilMarks && (tmpPupilMarks[0].marks = marks)
@@ -128,7 +128,7 @@ const PageForm = () => {
         
     }
 
-    return <><h1>Paper Form for {paper?.title} {user?.id}</h1>
+    return <><h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
     {
         

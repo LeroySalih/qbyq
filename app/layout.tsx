@@ -4,10 +4,14 @@ import {useState, useEffect, createContext} from 'react';
 import { Database } from 'types/supabase';
 import supabase from '../components/supabase'
 import { UserContextType, UserContext } from 'components/context/user-context';
-
+import { Profile } from 'types/alias';
+import { useRouter } from 'next/navigation'
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  
+  const router = useRouter();
 
   useEffect(()=> {
 
@@ -22,11 +26,37 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
      // setUser(session?.user);
     })
   
-  }, [])
+  }, []);
+
+  useEffect(()=> {
+
+    const loadProfile = async () => {
+      if (user) {
+        
+        const {data: profile, error} = await supabase.from("Profile").select().eq("userId", user.id);
+
+        console.log(profile, user.id);
+        
+        if (profile === null){
+          router.push('/new-profile')
+        } else {
+            setProfile((profile![0] || []));
+        }
+        
+        
+
+      } 
+    }
+    
+    loadProfile();
+    
+  }, [user])
+
+  
   return (
     <html>
       <head />
-      <UserContext.Provider value={{user}}>
+      <UserContext.Provider value={{user, profile}}>
         <body>{children}</body>
       </UserContext.Provider>
     </html>

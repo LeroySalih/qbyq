@@ -7,6 +7,9 @@ import { Database } from 'types/supabase';
 import supabase from '../components/supabase';
 import { Spec } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
+import { Profile } from 'types/alias';
+import { useRouter } from 'next/navigation'
+
 /*
 type ProfileProps = {
     profile: {
@@ -23,8 +26,11 @@ type ProfileProps = {}
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
+    const [userProfile, setUserProfile] = useState<Profile | null>(null);
     const [spec, setSpec] = useState<Spec | null>(null);
-    const {user} = useContext<UserContextType>(UserContext);
+    const {user, profile} = useContext<UserContextType>(UserContext);
+
+    const router = useRouter();
 
     // https://1f34-51-252-20-183.in.ngrok.io/paper-form
 
@@ -43,6 +49,9 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
         
     }, []);
 
+
+    
+
     
 
 
@@ -51,7 +60,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
         
          <Link href="/auth">Auth</Link>
           <p>Profile</p>
-          <div>Welcome, </div> 
+          <div>Welcome, {profile?.firstName}</div> 
           <h1>Spec Data</h1>
           <hr/>
           <pre>{JSON.stringify(spec, null, 2)}</pre>
@@ -59,7 +68,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           {user && <Link href="/paper-form">Fill Out a form</Link>}
           <h1>User Data</h1>
           <hr/>
-          <pre>{JSON.stringify(user, null, 2)}</pre>
+          <pre>{JSON.stringify(profile, null, 2)}</pre>
         </>
     )
 }
