@@ -10,7 +10,7 @@ const AuthPage = () => {
             provider: 'azure',
             options: {
               scopes: 'email',
-             // redirectTo: "https://leroysalih-humble-enigma-695prqwq94c4r76-3000.preview.app.github.dev"
+              redirectTo: process.env.NEXT_PUBLIC_SITE_REDIRECT
             },
           });
 

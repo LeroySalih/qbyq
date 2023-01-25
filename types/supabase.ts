@@ -41,6 +41,32 @@ export interface Database {
           year?: string | null
         }
       }
+      PupilMarks: {
+        Row: {
+          created_at: string | null
+          id: number
+          marks: number | null
+          paperId: number | null
+          questionId: number | null
+          userId: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          marks?: number | null
+          paperId?: number | null
+          questionId?: number | null
+          userId?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          marks?: number | null
+          paperId?: number | null
+          questionId?: number | null
+          userId?: string | null
+        }
+      }
       Questions: {
         Row: {
           created_at: string | null
@@ -108,29 +134,6 @@ export interface Database {
           SpecId?: number | null
           tag?: string | null
           title?: string | null
-        }
-      }
-      UserMarks: {
-        Row: {
-          created_at: string | null
-          id: number
-          marks: number | null
-          questionId: number | null
-          userId: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          marks?: number | null
-          questionId?: number | null
-          userId?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          marks?: number | null
-          questionId?: number | null
-          userId?: string | null
         }
       }
     }

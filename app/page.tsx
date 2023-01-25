@@ -1,10 +1,12 @@
 "use client"
-import { User } from '@supabase/supabase-js';
+
 import Link from 'next/link';
-import React from 'react'
+import React, { useContext } from 'react'
 import {useState, useEffect} from 'react';
 import { Database } from 'types/supabase';
-import supabase from '../components/supabase'
+import supabase from '../components/supabase';
+import { Spec } from 'types/alias';
+import { UserContextType, UserContext } from 'components/context/user-context';
 /*
 type ProfileProps = {
     profile: {
@@ -16,21 +18,19 @@ type ProfileProps = {
 */
 
 type ProfileProps = {}
-type Spec = Database["public"]["Tables"]["Spec"]["Row"];
+
 
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
     const [spec, setSpec] = useState<Spec | null>(null);
-    const [user, setUser] = useState<User | undefined>(undefined);
+    const {user} = useContext<UserContextType>(UserContext);
 
-    
+    // https://1f34-51-252-20-183.in.ngrok.io/paper-form
 
     useEffect(() => {
         const loadData = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user || undefined);
-
+            
             const {data, error} = await supabase.from('Spec').select("*").eq("id", 1).limit(1).single();
 
             error && console.error(error);
@@ -40,10 +40,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
 
         loadData();
 
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log(event, session);
-           // setUser(session?.user);
-        })
+        
     }, []);
 
     
@@ -51,7 +48,6 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
 
     return (
         <>
-
         
          <Link href="/auth">Auth</Link>
           <p>Profile</p>
@@ -59,6 +55,8 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           <h1>Spec Data</h1>
           <hr/>
           <pre>{JSON.stringify(spec, null, 2)}</pre>
+
+          {user && <Link href="/paper-form">Fill Out a form</Link>}
           <h1>User Data</h1>
           <hr/>
           <pre>{JSON.stringify(user, null, 2)}</pre>
