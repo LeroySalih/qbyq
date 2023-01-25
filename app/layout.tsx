@@ -19,7 +19,6 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     loadUser();
 
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
      // setUser(session?.user);
     })
   
