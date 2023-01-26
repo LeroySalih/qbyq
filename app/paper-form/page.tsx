@@ -73,6 +73,8 @@ const PageForm = () => {
 
         const tmpPupilMarks = pupilMarks?.filter(pm => pm.questionId == questionId) || []; 
 
+
+        console.log(marks);
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
             tmpPupilMarks.push({
@@ -128,12 +130,31 @@ const PageForm = () => {
         
     }
 
+    const sumMarks = () => {
+        const tMarks = paper.Questions.reduce((prev:number, curr:Question) => prev + (curr.marks || 0), 0)
+        const pMarks = pupilMarks.reduce((prev:number, curr:PupilMarks) => prev + (curr.marks || 0), 0 )
+        return <>
+                <div>{pMarks} / {tMarks}</div>
+                <pre>{JSON.stringify( pupilMarks, null, 2)}</pre>
+                </>;
+    }
+
+    const marksBySpecItem = () => {
+        return <pre>{JSON.stringify(paper, null, 2)}</pre>
+    }
+
     
     if (!paper || !profile || !pupilMarks)
         return <Loading/>
 
     return <><h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
+    {sumMarks()}
+
+    {
+        marksBySpecItem()
+    }
+
     {
         
         paper?.Questions?.sort((a:Question, b:Question) => (a.question_number || 0) > (b.question_number || 0) ? 1 : -1)

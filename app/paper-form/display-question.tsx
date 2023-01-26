@@ -21,28 +21,48 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
     const specItem = specData?.specItem?.filter(s => s.id === question.specItemId)[0];
     
     return <div className="question">
-        <div>{question.question_number}</div>
+        <div className="question-number">{question.question_number}</div>
         <input 
             className="input"
             name={question.id.toString()} 
             value={value?.toString() || ''}
             id={question.id.toString()} 
-            onChange={(e)=>onChange(question.id, parseInt(e.target.value))}
+            onChange={(e)=>onChange(question.id, parseInt(e.target.value || "0"))}
             onBlur={(e) => onBlur(question.id)}/>
-        <div>out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}</div>
+        <div className="question-marks">out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}</div>
         <div>{specItem?.tag} {specItem?.title}</div>
         <style jsx={true}>{`
         
             .question {
-                display : flex;
-                flex-direction : row;
+                display : grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;;
+            }
+
+            .question-number {
+                text-align : right;
+                margin-right: 1.2rem;
+                align-self:center;
             }
 
             .input {
-                text-align : right;
+                text-align: right;
                 margin-left: 1rem;
                 margin-right: 1rem;
+                font-family: 'Poppins';
+                font-size: 1rem;
+                margin: 0.1rem;
+                border-radius: 0.3rem;
+                border: solid 1px silver;
             }
+
+            .question-marks {
+                text-align : left;
+                margin-right: 1.2rem;
+                align-self:center;
+                margin-left: 2rem;
+            }
+
+            
         `}
 
         </style>
