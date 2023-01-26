@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&family=Poppins&family=Roboto:wght@300&display=swap');
+
+html, body {
+    background-color: rgb(247, 247, 247);
+}
+
+div, p, ul, li, span, a {
+    font-family: 'Poppins', sans-serif; 
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+}

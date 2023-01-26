@@ -7,6 +7,8 @@ import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
 
+import './globals.css'
+
 export default function RootLayout({children,}: {children: React.ReactNode}) {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [profile, setProfile] = useState<Profile | null>(null);
