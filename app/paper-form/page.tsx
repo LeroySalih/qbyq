@@ -6,6 +6,8 @@ import { Spec, SpecItem, PupilMarks, Question} from "types/alias";
 import { User } from "@supabase/supabase-js";
 import { UserContext } from "components/context/user-context";
 
+import Loading from "components/loading";
+
 type SpecData = {
     spec:Spec,
     specItem: SpecItem[]
@@ -127,6 +129,10 @@ const PageForm = () => {
 
         
     }
+
+    
+    if (!paper || !profile || !pupilMarks)
+        return <Loading/>
 
     return <><h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
