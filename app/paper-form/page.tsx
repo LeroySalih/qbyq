@@ -2,16 +2,14 @@
 import supabase from "components/supabase";
 import { useEffect , useState, useContext} from "react";
 import { Database } from "types/supabase";
-import { Spec, SpecItem, PupilMarks, Question} from "types/alias";
+import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
 import { User } from "@supabase/supabase-js";
 import { UserContext } from "components/context/user-context";
 
 import Loading from "components/loading";
+import DisplayQuestion from './display-question';
 
-type SpecData = {
-    spec:Spec,
-    specItem: SpecItem[]
-}
+
 
 const PageForm = () => {
 
@@ -150,14 +148,11 @@ const PageForm = () => {
                             />
         )
     }
-    <h1>Pupil Marks</h1>
-    <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
-    <h1>Paper</h1>
-    <pre>{JSON.stringify(paper, null, 2)}</pre>
+    
     </>
 }
 
-
+/*
 type DisplayQuestionProps = {
     question : Question,
     specData: SpecData,
@@ -186,8 +181,8 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
             onBlur={(e) => onBlur(question.id)}/>
         <div>{question.marks}</div>
         <div>{specItem?.tag} {specItem?.title}</div>
-        <pre>{JSON.stringify(question, null, 2)}</pre>
+        
     </>
 }
-
+*/
 export default PageForm;
