@@ -35,6 +35,23 @@ export interface Database {
           title?: string | null
         }
       }
+      ClassMembership: {
+        Row: {
+          classId: number
+          created_at: string | null
+          pupilId: string
+        }
+        Insert: {
+          classId: number
+          created_at?: string | null
+          pupilId: string
+        }
+        Update: {
+          classId?: number
+          created_at?: string | null
+          pupilId?: string
+        }
+      }
       Papers: {
         Row: {
           created_at: string | null

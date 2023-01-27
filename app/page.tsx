@@ -9,7 +9,8 @@ import { Spec } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
-
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext'; 
 /*
 type ProfileProps = {
     profile: {
@@ -61,6 +62,13 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
          <Link href="/auth">Auth</Link>
           <p>Profile</p>
           <div>Welcome, {profile?.firstName}</div> 
+          <div>
+            <h3>Join Class</h3>
+            <InputText/>
+            <Button>Join Class</Button>
+            <h3>Classes</h3>
+            <div>...</div>
+          </div>
           <h1>Spec Data</h1>
           <hr/>
           <pre>{JSON.stringify(spec, null, 2)}</pre>
