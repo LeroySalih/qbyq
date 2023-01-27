@@ -4,10 +4,12 @@ import { useEffect , useState, useContext} from "react";
 import { Database } from "types/supabase";
 import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
 import { User } from "@supabase/supabase-js";
+import { FileObject} from "@supabase/storage-js";
 import { UserContext } from "components/context/user-context";
 
 import Loading from "components/loading";
 import DisplayQuestion from './display-question';
+import DownloadButton from './download-button';
 
 import {Button} from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
@@ -20,6 +22,8 @@ const PageForm = () => {
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
     const [activeIndex, setActiveIndex] = useState(0);
+    const [files, setFiles] = useState<FileObject[] | null>(null)
+    const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
 
     const {user, profile} = useContext(UserContext);
     // console.log(user);
@@ -43,8 +47,35 @@ const PageForm = () => {
 
         }
 
+        const loadResources  = async () => {
+
+            const {data, error} = await supabase
+                                            .storage
+                                            .from('exam-papers')
+                                            .list(`${paperId}`)
+
+            error && console.error(error);
+
+            // upload the files
+            setFiles(data);
+
+            const {data: urlsData, error: urlsError} = await supabase
+                                                .storage 
+                                                .from('exam-papers')
+                                                .createSignedUrls(data?.map(d => (`${paperId}/${d.name}`)) || [], 3600)
+
+            urlsError && console.error(urlsError);
+            const urlDataObject = urlsData?.reduce(
+                                        (prev:{[key:string]:string}, curr)=> {prev[curr.path || 'default'] = curr.signedUrl; return prev},
+                                        {}
+                                        );
+            setUrls(urlDataObject);
+
+        }
+
         
         loadPaper();
+        loadResources();
         
 
     }, []);
@@ -151,12 +182,11 @@ const PageForm = () => {
         // 10.5.6 => 10 * 100 + 5 * 10 + 6
 
         const score =  terms.reduce((prev:number, curr:string, i:number) => {
-            console.log(prev, parseInt(curr))
             prev = prev + (parseInt(curr) * (10 ** (terms.length - i - 1) ))
             return prev
         }, 0);
 
-        console.log(qNumber, score);
+        
         return score;
     }
 
@@ -215,6 +245,15 @@ const PageForm = () => {
                         "questionMarks" : getPaperMarksForSi(si.id)})
                     );
     }
+// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
+// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-question-paper-2-v1.0.pdf
+
+// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
+// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/sign/exam-papers/computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJleGFtLXBhcGVycy9jb21wdXRlci1zY2llbmNlLzkyMTAtaW50ZXJuYXRpb25hbC1nY3NlLWNvbXB1dGVyLXNjaWVuY2UtbWFyay1zY2hlbWUtMi12MS4wLnBkZiIsImlhdCI6MTY3NDgwNzIwNiwiZXhwIjoxOTkwMTY3MjA2fQ.rWpTf5ySYuav27YkmpXD3DjPERqkscDQQyNYg4cttDY&download
+
+    const getUrl = (fName: string) => {
+        return urls![`${paperId}/${fName}`]
+    }
 
     
     if (!paper || !profile || !pupilMarks)
@@ -222,11 +261,26 @@ const PageForm = () => {
 
     return <>
         <div className="page">
-            <Button>Testing</Button>
+            
         <h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
     
     <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+        
+        <TabPanel header="Resources">
+            <div>
+                <ul>
+                {
+                files && files
+                    .filter(f => f.name != '.emptyFolderPlaceholder')
+                    .map((f , i:number) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
+                }
+                </ul>
+
+                
+                
+            </div>
+        </TabPanel>
         <TabPanel header="Questions" >
             {sumMarks()}
             {
