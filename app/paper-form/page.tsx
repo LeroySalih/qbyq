@@ -11,6 +11,8 @@ import DisplayQuestion from './display-question';
 
 import {Button} from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 const PageForm = () => {
 
@@ -176,6 +178,7 @@ const PageForm = () => {
         
     }
 
+/*
     const marksBySpecItem = () => {
         return <><div className="spec-points">
             {paper.Spec.SpecItem.map((si:SpecItem, i:number) => [<div className="question-number">{si.tag}</div>,<div> {si.title}</div>, <div> {getPupilMarksForSi(si.id)}</div>, <div> {getPaperMarksForSi(si.id)}</div>])}
@@ -194,11 +197,24 @@ const PageForm = () => {
     }
 `}
 
+
 </style>
         </>
     }
 
-    
+*/
+
+    const getMarksBySpecItem = () => {
+        return paper
+                    .Spec
+                    .SpecItem
+                    .map((si:SpecItem, i:number) => (
+                        {"tag" : si.tag, 
+                        "title" : si.title, 
+                        "pupilMarks" : getPupilMarksForSi(si.id),
+                        "questionMarks" : getPaperMarksForSi(si.id)})
+                    );
+    }
 
     
     if (!paper || !profile || !pupilMarks)
@@ -227,9 +243,14 @@ const PageForm = () => {
                 )
             }
         </TabPanel>
-        
-        <TabPanel header="Spec Points">
-            {marksBySpecItem()}
+    
+        <TabPanel header="Score By Spec">
+            <DataTable value={getMarksBySpecItem()} responsiveLayout="scroll">
+                <Column field="tag" header="Number" ></Column>
+                <Column field="title" header="Question"></Column>
+                <Column field="pupilMarks" header="Score" sortable></Column>
+                <Column field="questionMarks" header="Marks"></Column>
+            </DataTable>
         </TabPanel>
 
         <TabPanel header="Data">
