@@ -9,6 +9,29 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      Classes: {
+        Row: {
+          created_at: string | null
+          id: number
+          join_code: string | null
+          tag: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          join_code?: string | null
+          tag?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          join_code?: string | null
+          tag?: string | null
+          title?: string | null
+        }
+      }
       Papers: {
         Row: {
           created_at: string | null
@@ -52,28 +75,31 @@ export interface Database {
           firstName: string
           id: number
           isAdmin: boolean
+          userId: string | null
         }
         Insert: {
           classes?: string[] | null
           created_at?: string | null
-          familyNamr: string
+          familyName: string
           firstName: string
           id?: number
           isAdmin?: boolean
+          userId?: string | null
         }
         Update: {
           classes?: string[] | null
           created_at?: string | null
-          familyNamr?: string
+          familyName?: string
           firstName?: string
           id?: number
           isAdmin?: boolean
+          userId?: string | null
         }
       }
       PupilMarks: {
         Row: {
-          created_at?: string | null
-          id?: number
+          created_at: string | null
+          id: number
           marks: number | null
           paperId: number | null
           questionId: number | null
@@ -124,8 +150,8 @@ export interface Database {
       }
       Spec: {
         Row: {
-          created_at?: string | null
-          id?: number
+          created_at: string | null
+          id: number
           subject: string | null
           title: string | null
         }
@@ -163,6 +189,29 @@ export interface Database {
           SpecId?: number | null
           tag?: string | null
           title?: string | null
+        }
+      }
+      Tasks: {
+        Row: {
+          classId: number | null
+          created_at: string | null
+          id: number
+          isActive: boolean | null
+          paperId: number | null
+        }
+        Insert: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          isActive?: boolean | null
+          paperId?: number | null
+        }
+        Update: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          isActive?: boolean | null
+          paperId?: number | null
         }
       }
     }
