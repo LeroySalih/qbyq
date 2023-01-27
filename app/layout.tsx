@@ -7,7 +7,11 @@ import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
 
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 import './globals.css'
+
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
   const [user, setUser] = useState<User | undefined>(undefined);

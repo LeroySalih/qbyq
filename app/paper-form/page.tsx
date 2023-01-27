@@ -9,13 +9,15 @@ import { UserContext } from "components/context/user-context";
 import Loading from "components/loading";
 import DisplayQuestion from './display-question';
 
-
+import {Button} from 'primereact/button';
+import { TabView, TabPanel } from 'primereact/tabview';
 
 const PageForm = () => {
 
     const [paperId, setPaperId] = useState<number>(1);
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
+    const [activeIndex, setActiveIndex] = useState(0);
 
     const {user, profile} = useContext(UserContext);
     // console.log(user);
@@ -132,44 +134,121 @@ const PageForm = () => {
 
     const sumMarks = () => {
         const tMarks = paper.Questions.reduce((prev:number, curr:Question) => prev + (curr.marks || 0), 0)
-        const pMarks = pupilMarks.reduce((prev:number, curr:PupilMarks) => prev + (curr.marks || 0), 0 )
+        const pMarks = pupilMarks?.reduce((prev:number, curr:PupilMarks) => prev + (curr.marks || 0), 0 )
         return <>
                 <div>{pMarks} / {tMarks}</div>
-                <pre>{JSON.stringify( pupilMarks, null, 2)}</pre>
+                
                 </>;
     }
 
-    const marksBySpecItem = () => {
-        return <pre>{JSON.stringify(paper, null, 2)}</pre>
+    const rankQuestionNumber = (qNumber:string) : number => {
+        // split the quesiton nmber into terms
+        const terms = qNumber.split('.')
+
+        // 10.5 => 10 * 10  + 5 * 1
+        // 10.5.6 => 10 * 100 + 5 * 10 + 6
+
+        const score =  terms.reduce((prev:number, curr:string, i:number) => {
+            console.log(prev, parseInt(curr))
+            prev = prev + (parseInt(curr) * (10 ** (terms.length - i - 1) ))
+            return prev
+        }, 0);
+
+        console.log(qNumber, score);
+        return score;
     }
+
+    const getPupilMarksForSi = (siId: number) : number => {
+
+        const matchingQuestionIds:number[] = paper.Questions.filter((q:Question) => q.specItemId === siId).map((q:Question) => q.id);
+        const matchingPupilMarks = pupilMarks?.filter((p:PupilMarks) => matchingQuestionIds.includes((p.questionId || -1)))
+        //console.log("si", siId, matchingQuestionIds, matchingPupilMarks)
+        return matchingPupilMarks!.reduce((prev, curr) => prev + (curr.marks || 0), 0)
+    }
+
+    const getPaperMarksForSi = (siId: number) : number => {
+
+        const filteredQuestions = paper.Questions.filter((q:Question) => q.specItemId === siId)
+        const tMarksForSi = filteredQuestions.reduce((prev:number, curr:Question) => prev + (curr.marks || 0), 0)
+
+        //console.log("siId", siId, filteredQuestions, tMarksForSi);
+        return tMarksForSi;
+        
+    }
+
+    const marksBySpecItem = () => {
+        return <><div className="spec-points">
+            {paper.Spec.SpecItem.map((si:SpecItem, i:number) => [<div className="question-number">{si.tag}</div>,<div> {si.title}</div>, <div> {getPupilMarksForSi(si.id)}</div>, <div> {getPaperMarksForSi(si.id)}</div>])}
+        </div>
+        <style jsx={true}>{`
+    
+    .spec-points {
+        display : grid;
+        grid-template-columns : 0.25fr 2.75fr 0.25fr 0.25fr;
+    }
+
+    .question-number {
+        text-align : right;
+        margin-right: 1.2rem;
+        align-self:center;
+    }
+`}
+
+</style>
+        </>
+    }
+
+    
 
     
     if (!paper || !profile || !pupilMarks)
         return <Loading/>
 
-    return <><h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
+    return <>
+        <div className="page">
+            <Button>Testing</Button>
+        <h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
     
-    {sumMarks()}
-
-    {
-        marksBySpecItem()
-    }
-
-    {
+    
+    <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+        <TabPanel header="Questions" >
+            {sumMarks()}
+            {
+                paper?.Questions?.sort((a:Question, b:Question) => (rankQuestionNumber(a.question_number || "0.0")) > (rankQuestionNumber(b.question_number || "0.0")) ? 1 : -1)
+                        .map(
+                    (q:Question, i:number) => <DisplayQuestion 
+                                    key={i} 
+                                    question={q} 
+                                    specData={paper.Spec} 
+                                    pupilMarks={(pupilMarks || [])} 
+                                    onChange={handleOnChange}
+                                    onBlur={handleOnBlur}
+                                    />
+                )
+            }
+        </TabPanel>
         
-        paper?.Questions?.sort((a:Question, b:Question) => (a.question_number || 0) > (b.question_number || 0) ? 1 : -1)
-                .map(
-            (q:Question, i:number) => <DisplayQuestion 
-                            key={i} 
-                            question={q} 
-                            specData={paper.Spec} 
-                            pupilMarks={(pupilMarks || [])} 
-                            onChange={handleOnChange}
-                            onBlur={handleOnBlur}
-                            />
-        )
-    }
+        <TabPanel header="Spec Points">
+            {marksBySpecItem()}
+        </TabPanel>
+
+        <TabPanel header="Data">
+            <pre>{JSON.stringify(paper, null, 2)}</pre>
+        </TabPanel>
+
+        <TabPanel header="Pupil Marks">
+            <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
+        </TabPanel>
+        
+    </TabView>
+
     
+
+    
+
+    
+    </div>
+   
     </>
 }
 
