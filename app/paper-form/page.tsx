@@ -4,6 +4,7 @@ import { useEffect , useState, useContext} from "react";
 import { Database } from "types/supabase";
 import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
 import { User } from "@supabase/supabase-js";
+import { FileObject} from "@supabase/storage-js";
 import { UserContext } from "components/context/user-context";
 
 import Loading from "components/loading";
@@ -21,7 +22,7 @@ const PageForm = () => {
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
     const [activeIndex, setActiveIndex] = useState(0);
-    const [files, setFiles] = useState<any | null>(null)
+    const [files, setFiles] = useState<FileObject[] | null>(null)
     const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
 
     const {user, profile} = useContext(UserContext);
@@ -272,7 +273,7 @@ const PageForm = () => {
                 {
                 files && files
                     .filter(f => f.name != '.emptyFolderPlaceholder')
-                    .map((f , i) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
+                    .map((f , i:number) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
                 }
                 </ul>
 
