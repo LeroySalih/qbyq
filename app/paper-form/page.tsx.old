@@ -16,9 +16,15 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-const PageForm = () => {
+type PaperFormParams = {
+    params : {
+        paperId: string
+    }
+}
 
-    const [paperId, setPaperId] = useState<number>(1);
+const PageForm = ({params}:PaperFormParams) => {
+
+    const [paperId, setPaperId] = useState<number>(parseInt(params.paperId));
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
     const [activeIndex, setActiveIndex] = useState(0);
@@ -245,11 +251,6 @@ const PageForm = () => {
                         "questionMarks" : getPaperMarksForSi(si.id)})
                     );
     }
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-question-paper-2-v1.0.pdf
-
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/sign/exam-papers/computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJleGFtLXBhcGVycy9jb21wdXRlci1zY2llbmNlLzkyMTAtaW50ZXJuYXRpb25hbC1nY3NlLWNvbXB1dGVyLXNjaWVuY2UtbWFyay1zY2hlbWUtMi12MS4wLnBkZiIsImlhdCI6MTY3NDgwNzIwNiwiZXhwIjoxOTkwMTY3MjA2fQ.rWpTf5ySYuav27YkmpXD3DjPERqkscDQQyNYg4cttDY&download
 
     const getUrl = (fName: string) => {
         return urls![`${paperId}/${fName}`]
@@ -307,13 +308,18 @@ const PageForm = () => {
             </DataTable>
         </TabPanel>
 
-        <TabPanel header="Data">
-            <pre>{JSON.stringify(paper, null, 2)}</pre>
-        </TabPanel>
+        {/*
+        
+            <TabPanel header="Data">
+                <pre>{JSON.stringify(paper, null, 2)}</pre>
+            </TabPanel>
 
-        <TabPanel header="Pupil Marks">
-            <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
-        </TabPanel>
+            <TabPanel header="Pupil Marks">
+                <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
+            </TabPanel>
+
+        */}
+        
         
     </TabView>
 

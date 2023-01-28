@@ -93,27 +93,24 @@ export interface Database {
           created_at: string | null
           familyName: string
           firstName: string
-          id: number
+          id: string
           isAdmin: boolean
-          userId: string | null
         }
         Insert: {
           classes?: string[] | null
           created_at?: string | null
           familyName: string
           firstName: string
-          id?: number
+          id: string
           isAdmin?: boolean
-          userId?: string | null
         }
         Update: {
           classes?: string[] | null
           created_at?: string | null
           familyName?: string
           firstName?: string
-          id?: number
+          id?: string
           isAdmin?: boolean
-          userId?: string | null
         }
       }
       PupilMarks: {
