@@ -14,7 +14,6 @@ export interface Database {
           created_at: string | null
           id: number
           join_code: string | null
-          resources: Json | null
           tag: string | null
           title: string | null
         }
@@ -22,7 +21,6 @@ export interface Database {
           created_at?: string | null
           id?: number
           join_code?: string | null
-          resources?: Json | null
           tag?: string | null
           title?: string | null
         }
@@ -30,7 +28,6 @@ export interface Database {
           created_at?: string | null
           id?: number
           join_code?: string | null
-          resources?: Json | null
           tag?: string | null
           title?: string | null
         }
@@ -50,6 +47,23 @@ export interface Database {
           classId?: number
           created_at?: string | null
           pupilId?: string
+        }
+      }
+      ClassPapers: {
+        Row: {
+          classId: number
+          created_at: string | null
+          paperId: number
+        }
+        Insert: {
+          classId: number
+          created_at?: string | null
+          paperId: number
+        }
+        Update: {
+          classId?: number
+          created_at?: string | null
+          paperId?: number
         }
       }
       Papers: {

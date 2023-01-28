@@ -72,26 +72,6 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
 
   useEffect(()=> {
 
-
-    const loadProfile = async () => {
-      if (user) {
-        
-        const {data: profile, error} = await supabase.from("Profile").select().eq("id", user.id);
-
-        console.log(profile, user.id);
-        
-        if (profile === null){
-          router.push('/new-profile')
-        } else {
-            setProfile((profile![0] || []));
-        }
-        
-        
-
-      } 
-    }
-    
-
     loadProfile();
     loadClasses(); 
     
