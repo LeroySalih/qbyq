@@ -29,7 +29,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
     const [userProfile, setUserProfile] = useState<Profile | null>(null);
     const [spec, setSpec] = useState<Spec | null>(null);
-    const {user, profile} = useContext<UserContextType>(UserContext);
+    const {user, profile, classes} = useContext<UserContextType>(UserContext);
 
     const router = useRouter();
 
@@ -67,7 +67,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             <InputText/>
             <Button>Join Class</Button>
             <h3>Classes</h3>
-            <div>...</div>
+            <div>{JSON.stringify(classes, null, 2)}</div>
           </div>
           <h1>Spec Data</h1>
           <hr/>
