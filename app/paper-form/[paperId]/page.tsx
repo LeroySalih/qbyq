@@ -15,6 +15,7 @@ import {Button} from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import Link from 'next/link';
 
 const PageForm = () => {
 
@@ -261,26 +262,15 @@ const PageForm = () => {
 
     return <>
         <div className="page">
-            
-        <h1>Paper Form for {paper?.title}:: {`${profile?.firstName} ${profile?.familyName}`}</h1>
+        <Link href="/">Home</Link>
+        <h1>{paper?.title} - {paper?.paper}</h1>
+        <hr></hr>
+        <h3>{paper?.year}</h3>
     
     
     <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
         
-        <TabPanel header="Resources">
-            <div>
-                <ul>
-                {
-                files && files
-                    .filter(f => f.name != '.emptyFolderPlaceholder')
-                    .map((f , i:number) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
-                }
-                </ul>
-
-                
-                
-            </div>
-        </TabPanel>
+        
         <TabPanel header="Questions" >
             {sumMarks()}
             {
@@ -307,6 +297,19 @@ const PageForm = () => {
             </DataTable>
         </TabPanel>
 
+        <TabPanel header="Resources">
+            <div>
+                <ul>
+                {
+                files && files
+                    .filter(f => f.name != '.emptyFolderPlaceholder')
+                    .map((f , i:number) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
+                }
+                </ul>
+            </div>
+        </TabPanel>
+
+        {/*
         <TabPanel header="Data">
             <pre>{JSON.stringify(paper, null, 2)}</pre>
         </TabPanel>
@@ -314,7 +317,7 @@ const PageForm = () => {
         <TabPanel header="Pupil Marks">
             <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
         </TabPanel>
-        
+            */}
     </TabView>
 
     
