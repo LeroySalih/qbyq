@@ -2,7 +2,7 @@ import supabase from "components/supabase";
 
 export const getClasses = async (userId: string) => {
     const {data, error} = await supabase.from("ClassMembership")
-            .select("pupilId, Classes(id, tag, title, resources)")
+            .select("pupilId, Classes(id, tag, title, ClassPapers(paperId, Papers(year, title, paper)))")
             .eq("pupilId", userId);
   
     error && console.error(error);
@@ -25,8 +25,6 @@ export const getClassByTag = async (tag: string | undefined) => {
 }
 
 export type GetClassByTagResponseType = Awaited<ReturnType<typeof getClassByTag>>
-
-
 export type GetClassesResponseType = Awaited<ReturnType<typeof getClasses>>
 
 

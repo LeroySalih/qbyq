@@ -15,6 +15,7 @@ import { InputText } from 'primereact/inputtext';
 import { Class } from 'types/alias';
 import AddClass, {OnAddHandler} from 'components/add-class';
 import { GetClassesResponseType } from 'lib';
+import DisplayClasses from 'components/display-classes';
 
 type ProfileProps = {}
 
@@ -66,31 +67,34 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
 
     return (
         <>
-        
-         <Link href="/auth">Auth</Link>
-          <p>Profile</p>
-          <div>Welcome, {profile?.firstName}</div> 
-          <div>
-            <h3>Join Class</h3>
-            <AddClass onAdd={handleOnAddClass}/>
-            <h3>Classes</h3>
+        <div className="page">
+         <Link href="/auth">
+            {user && <span>Sign Out</span> }
             
-            <div>{classes && classes.map((c, i) => 
-                    <div key={i}>
-                        {/* 
-                        // @ts-ignore */}
-                        {c.Classes.tag}, {c.Classes.title}
-                    </div>
-                )}</div>
-          </div>
-          <h1>Spec Data</h1>
-          <hr/>
-          <pre>{JSON.stringify(spec, null, 2)}</pre>
+        </Link>
 
-          {user && <Link href="/paper-form">Fill Out a form</Link>}
-          <h1>User Data</h1>
-          <hr/>
-          <pre>{JSON.stringify(profile, null, 2)}</pre>
+          {!user && 
+            <div>
+                <h1>Question By Question (QbyQ)</h1>
+                <h3>Click here to sign in</h3>
+                <Link href="/auth">Sign In</Link>
+            </div>
+          }
+
+          {
+            user && <><h1>Welcome, {profile?.firstName}</h1> 
+            <div>
+              <h3>Join Class</h3>
+              <AddClass onAdd={handleOnAddClass}/>
+              {/*
+              //@ts-ignore */}
+              <DisplayClasses classes={classes}/>
+            </div>
+            </>
+          }
+          
+          
+          </div>
         </>
     )
 }
