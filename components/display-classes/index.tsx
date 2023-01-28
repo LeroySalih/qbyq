@@ -11,11 +11,15 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
         <h1>Classes</h1>
             <div>
                 {classes?.map((c, i) => <div key={i}>
-                                            <div className="classTitle">{c.Classes.title} ({c.Classes.tag})</div>
+                                            {
+                                                /*
+                                            // @ts-ignore */}
+                                            <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
                                             <div >
-                                                {
-                                                    c.Classes.ClassPapers
-                                                        .map((cp, i) => <div  key={i}>
+                                            {
+                                                /*
+                                                // @ts-ignore */}
+                                            { c!.Classes!.ClassPapers.map((cp, i) => <div  key={i}>
                                                             <Link className="classLink" href={`/paper-form/${cp.paperId}`}>
                                                                <span className="classLink"> {cp.paperId} { cp.Papers.title} - {cp.Papers.paper} ( {cp.Papers.year})</span>
                                                             </Link>
