@@ -11,25 +11,18 @@ import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext'; 
-/*
-type ProfileProps = {
-    profile: {
-    firstName: string,
-    lastName: string,
-    age: number,
-    }
-}
-*/
+
+import { Class } from 'types/alias';
+import AddClass, {OnAddHandler} from 'components/add-class';
+import { GetClassesResponseType } from 'lib';
 
 type ProfileProps = {}
-
-
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
     const [userProfile, setUserProfile] = useState<Profile | null>(null);
     const [spec, setSpec] = useState<Spec | null>(null);
-    const {user, profile, classes} = useContext<UserContextType>(UserContext);
+    const {user, profile, classes, loadClasses} = useContext<UserContextType>(UserContext);
 
     const router = useRouter();
 
@@ -51,9 +44,24 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     }, []);
 
 
-    
+    const handleCheckClick = () => {
 
-    
+    }
+
+    type ClassParam = Class | null | undefined;
+
+    const handleOnAddClass = async (c:ClassParam) => {
+
+        const {data, error} = await supabase.from("ClassMembership")
+                                            .insert({classId: c!.id, pupilId: user!.id})
+                                            .select()
+
+        error && console.error(error);
+        
+        loadClasses!()        
+    }
+
+
 
 
     return (
@@ -64,10 +72,16 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           <div>Welcome, {profile?.firstName}</div> 
           <div>
             <h3>Join Class</h3>
-            <InputText/>
-            <Button>Join Class</Button>
+            <AddClass onAdd={handleOnAddClass}/>
             <h3>Classes</h3>
-            <div>{JSON.stringify(classes, null, 2)}</div>
+            
+            <div>{classes && classes.map((c, i) => 
+                    <div key={i}>
+                        {/* 
+                        // @ts-ignore */}
+                        {c.Classes.tag}, {c.Classes.title}
+                    </div>
+                )}</div>
           </div>
           <h1>Spec Data</h1>
           <hr/>
