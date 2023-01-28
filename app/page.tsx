@@ -16,6 +16,7 @@ import { Class } from 'types/alias';
 import AddClass, {OnAddHandler} from 'components/add-class';
 import { GetClassesResponseType } from 'lib';
 import DisplayClasses from 'components/display-classes';
+import Loading from 'components/loading';
 
 type ProfileProps = {}
 
@@ -24,6 +25,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     const [userProfile, setUserProfile] = useState<Profile | null>(null);
     const [spec, setSpec] = useState<Spec | null>(null);
     const {user, profile, classes, loadClasses} = useContext<UserContextType>(UserContext);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
 
@@ -39,7 +41,9 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             setSpec(data);
         };
 
+        setLoading(true);
         loadData();
+        setLoading(false);
 
         
     }, []);
@@ -63,21 +67,38 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     }
 
 
+    const handleSignIn = async () => {
 
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'azure',
+            options: {
+              scopes: 'email',
+              redirectTo: process.env.NEXT_PUBLIC_SITE_REDIRECT
+            },
+          });
+
+    }
+
+    const handleSignOut = async () => {
+        const {  error } = await supabase.auth.signOut();
+
+        router.push("/goodbye")
+        
+    }
+
+    if (loading)
+        return <Loading/>
 
     return (
         <>
         <div className="page">
-         <Link href="/auth">
-            {user && <span>Sign Out</span> }
-            
-        </Link>
+         {user && <Button onClick={handleSignOut}>Sign Out</Button>}
 
           {!user && 
             <div>
                 <h1>Question By Question (QbyQ)</h1>
                 <h3>Click here to sign in</h3>
-                <Link href="/auth">Sign In</Link>
+                <Button onClick={handleSignIn}>Sign In</Button>
             </div>
           }
 
