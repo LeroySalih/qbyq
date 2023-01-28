@@ -39,7 +39,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     const loadProfile = async () => {
       if (user) {
         
-        const {data: profile, error} = await supabase.from("Profile").select().eq("userId", user.id);
+        const {data: profile, error} = await supabase.from("Profile").select().eq("id", user.id);
 
         console.log(profile, user.id);
         
