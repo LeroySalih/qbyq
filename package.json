@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "bump" : "npm run build && git add . && git commit -m 'Build' && git push origin",
     "refresh-types": "npx supabase gen types typescript --project-id 'fmudvzcqkiqjyprmtozz' --schema public > types/supabase.ts"
   },
   "dependencies": {
