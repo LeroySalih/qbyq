@@ -93,7 +93,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     
 
     loadProfile();
-    loadClasses();
+    loadClasses(); 
     
   }, [user])
 
