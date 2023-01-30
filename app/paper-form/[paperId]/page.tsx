@@ -16,6 +16,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Link from 'next/link';
+import { umask } from "process";
 
 type PagePropsType = {
        params : {
@@ -33,6 +34,40 @@ const PageForm = ({params}: PagePropsType) => {
     const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
 
     const {user, profile} = useContext(UserContext);
+
+    const [userFiles, setUserFiles] = useState<{ name: string; signedUrl: string; }[] | undefined>([]);
+
+    const loadFiles = async () => {
+
+        const path =  `${user!.id}/${paperId}`
+        const {data: listFiles, error} = await supabase.storage
+                        .from('exam-papers')
+                        .list(path, {
+                            limit: 100,
+                            offset: 0,
+                            sortBy: { column: 'name', order: 'asc' },
+                          });
+
+        const {data: downloadUrls, error: downloadError }  = await supabase.storage
+                        .from('exam-papers')
+                        .createSignedUrls(listFiles?.map(lf => `${path}/${lf.name}`) || [], 3600, {download: true})
+
+        error && console.error(error)
+                
+        console.log("Files", downloadUrls);
+
+        setUserFiles(listFiles?.map(
+                (lf, i) => (
+                    {   
+                        name: lf.name, 
+                        signedUrl: downloadUrls![i].signedUrl
+                    } || {}
+                    ) 
+                )
+        )
+    }
+
+
     // console.log(user);
     useEffect( 
         
@@ -81,8 +116,11 @@ const PageForm = ({params}: PagePropsType) => {
         }
 
         
+
+        
         loadPaper();
         loadResources();
+        
         
 
     }, []);
@@ -107,6 +145,7 @@ const PageForm = ({params}: PagePropsType) => {
             return;
 
         loadPupilMarks();
+        loadFiles();
 
     }, [user])
 
@@ -210,36 +249,11 @@ const PageForm = ({params}: PagePropsType) => {
         const filteredQuestions = paper.Questions.filter((q:Question) => q.specItemId === siId)
         const tMarksForSi = filteredQuestions.reduce((prev:number, curr:Question) => prev + (curr.marks || 0), 0)
 
-        //console.log("siId", siId, filteredQuestions, tMarksForSi);
         return tMarksForSi;
         
     }
 
-/*
-    const marksBySpecItem = () => {
-        return <><div className="spec-points">
-            {paper.Spec.SpecItem.map((si:SpecItem, i:number) => [<div className="question-number">{si.tag}</div>,<div> {si.title}</div>, <div> {getPupilMarksForSi(si.id)}</div>, <div> {getPaperMarksForSi(si.id)}</div>])}
-        </div>
-        <style jsx={true}>{`
-    
-    .spec-points {
-        display : grid;
-        grid-template-columns : 0.25fr 2.75fr 0.25fr 0.25fr;
-    }
 
-    .question-number {
-        text-align : right;
-        margin-right: 1.2rem;
-        align-self:center;
-    }
-`}
-
-
-</style>
-        </>
-    }
-
-*/
 
     const getMarksBySpecItem = () => {
         return paper
@@ -252,14 +266,27 @@ const PageForm = ({params}: PagePropsType) => {
                         "questionMarks" : getPaperMarksForSi(si.id)})
                     );
     }
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-question-paper-2-v1.0.pdf
-
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/public/exam-papers//computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf
-// https://fmudvzcqkiqjyprmtozz.supabase.co/storage/v1/object/sign/exam-papers/computer-science/9210-international-gcse-computer-science-mark-scheme-2-v1.0.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJleGFtLXBhcGVycy9jb21wdXRlci1zY2llbmNlLzkyMTAtaW50ZXJuYXRpb25hbC1nY3NlLWNvbXB1dGVyLXNjaWVuY2UtbWFyay1zY2hlbWUtMi12MS4wLnBkZiIsImlhdCI6MTY3NDgwNzIwNiwiZXhwIjoxOTkwMTY3MjA2fQ.rWpTf5ySYuav27YkmpXD3DjPERqkscDQQyNYg4cttDY&download
 
     const getUrl = (fName: string) => {
         return urls![`${paperId}/${fName}`]
+    }
+
+    const handleFileChange = async (e:any) => {
+        console.log(e.target.files[0])
+
+        const uploadFile = e.target.files[0];
+        const {data, error} = await supabase
+                                        .storage
+                                        .from('exam-papers')
+                                        .upload(`/${user!.id}/${paperId}/${uploadFile.name}`, uploadFile, {
+                                            cacheControl: '3600',
+                                            upsert: false
+                                            });
+
+        error && console.error(error);
+        console.log(data)
+
+        loadFiles();
     }
 
     
@@ -314,16 +341,14 @@ const PageForm = ({params}: PagePropsType) => {
                 </ul>
             </div>
         </TabPanel>
-
-        {/*
-        <TabPanel header="Data">
-            <pre>{JSON.stringify(paper, null, 2)}</pre>
+        <TabPanel header="Files">
+            <input type="file" name="upload" onChange={handleFileChange}/>
+            <ul>
+            {userFiles && userFiles.map((uf,i) => <li><Link href={uf.signedUrl} key={i}>{uf.name}</Link></li>)}
+            </ul>
+           
         </TabPanel>
 
-        <TabPanel header="Pupil Marks">
-            <pre>{JSON.stringify(pupilMarks, null, 2)}</pre>
-        </TabPanel>
-            */}
     </TabView>
 
     
@@ -336,37 +361,5 @@ const PageForm = ({params}: PagePropsType) => {
     </>
 }
 
-/*
-type DisplayQuestionProps = {
-    question : Question,
-    specData: SpecData,
-    pupilMarks: PupilMarks[],
-    onChange : (arg0: number, arg1: number) => void,
-    onBlur : (arg0:number) => void
-}
 
-const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
-
-    const [value, setValue] = useState<number | null>(null);
-
-    useEffect(()=> {
-        setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks)
-    }, [pupilMarks]);
-
-    const specItem = specData?.specItem?.filter(s => s.id === question.specItemId)[0];
-    
-    return <>
-        <div>{question.question_number}</div>
-        <input 
-            name={question.id.toString()} 
-            value={value?.toString() || ''}
-            id={question.id.toString()} 
-            onChange={(e)=>onChange(question.id, parseInt(e.target.value))}
-            onBlur={(e) => onBlur(question.id)}/>
-        <div>{question.marks}</div>
-        <div>{specItem?.tag} {specItem?.title}</div>
-        
-    </>
-}
-*/
 export default PageForm;
