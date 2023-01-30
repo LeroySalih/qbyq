@@ -279,7 +279,7 @@ const PageForm = () => {
                     (q:Question, i:number) => <DisplayQuestion 
                                     key={i} 
                                     question={q} 
-                                    specData={paper.Spec} 
+                                    specItems={paper.Spec.SpecItem} 
                                     pupilMarks={(pupilMarks || [])} 
                                     onChange={handleOnChange}
                                     onBlur={handleOnBlur}

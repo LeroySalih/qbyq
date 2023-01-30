@@ -6,7 +6,7 @@ import {InputNumber} from 'primereact/inputnumber';
 
 type DisplayQuestionProps = {
     question : Question,
-    specData: SpecData,
+    specItems: SpecItem[],
     pupilMarks: PupilMarks[],
     onChange : (arg0: number, arg1: number) => void,
     onBlur : (arg0:number) => void
@@ -18,13 +18,16 @@ type FieldData = {
     errorMessage: string | null
 }
 
-const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
+const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
 
     const [value, setValue] = useState<number | null>(null);
     const [fieldData, setFieldData] = useState<FieldData>({isValid : null, errorMessage: null });
-
+    const [specItem, setSpecItem] = useState<SpecItem | null>(null);
+    
     useEffect(()=> {
-        setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks)
+        setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks);
+
+        setSpecItem (specItems.filter(sp => sp.id === question.specItemId)[0])
     }, [pupilMarks]);
 
 
@@ -40,6 +43,7 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
             onBlur(question.id)
         }
 
+
         
     }
     return <div className="question">
@@ -54,6 +58,9 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
         <div className="question-marks">
             out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}
         </div>
+        
+        <div className="specItemTag">{specItem?.tag}</div>
+        <div className="specItemTitle">{specItem?.title}</div>
         
         <div></div><div className="errorMessage">{fieldData.errorMessage}</div>
         <style jsx={true}>{`
@@ -94,6 +101,23 @@ const DisplayQuestion = ({question, specData, pupilMarks, onChange, onBlur}: Dis
                 grid-column-end: 4;
                 color: red;
                 font-size: 0.8rem;
+            }
+
+            .specItemTag {
+                color: silver;
+                font-size: 0.8rem;
+                text-align: right;
+                padding-right: 1rem;
+                margin-bottom: 1rem;
+
+            }
+
+            .specItemTitle {
+                grid-column-start : 2;
+                grid-column-end: 4;
+                color: silver;
+                font-size: 0.8rem;
+                
             }
 
             
