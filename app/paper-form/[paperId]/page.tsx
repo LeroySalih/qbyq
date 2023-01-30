@@ -17,9 +17,15 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Link from 'next/link';
 
-const PageForm = () => {
+type PagePropsType = {
+       params : {
+        paperId: string
+       } 
+}
+const PageForm = ({params}: PagePropsType) => {
 
-    const [paperId, setPaperId] = useState<number>(1);
+    const {paperId} = params;
+    // const [paperId, setPaperId] = useState<number>(1);
     const [paper, setPaper] = useState<any>()
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
     const [activeIndex, setActiveIndex] = useState(0);
