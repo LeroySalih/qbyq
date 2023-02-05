@@ -160,6 +160,7 @@ export interface Database {
           marks: number | null
           PaperId: number | null
           question_number: string | null
+          question_order: number | null
           specItemId: number | null
         }
         Insert: {
@@ -168,6 +169,7 @@ export interface Database {
           marks?: number | null
           PaperId?: number | null
           question_number?: string | null
+          question_order?: number | null
           specItemId?: number | null
         }
         Update: {
@@ -176,6 +178,7 @@ export interface Database {
           marks?: number | null
           PaperId?: number | null
           question_number?: string | null
+          question_order?: number | null
           specItemId?: number | null
         }
       }
@@ -256,6 +259,11 @@ export interface Database {
           title: string | null
           uMarks: number | null
           userId: string | null
+        }
+      }
+      vw_user_marks_for_paper_clone: {
+        Row: {
+          "?column?": number | null
         }
       }
     }

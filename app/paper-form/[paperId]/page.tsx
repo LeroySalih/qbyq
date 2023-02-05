@@ -307,7 +307,7 @@ const PageForm = ({params}: PagePropsType) => {
         <TabPanel header="Questions" >
             {sumMarks()}
             {
-                paper?.Questions?.sort((a:Question, b:Question) => (rankQuestionNumber(a.question_number || "0.0")) > (rankQuestionNumber(b.question_number || "0.0")) ? 1 : -1)
+                paper?.Questions?.sort((a:Question, b:Question) => a.question_order! > b?.question_order! ? 1 : -1)
                         .map(
                     (q:Question, i:number) => <DisplayQuestion 
                                     key={i} 
