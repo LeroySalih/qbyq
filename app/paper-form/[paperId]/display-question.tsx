@@ -3,6 +3,8 @@ import { Database } from "types/supabase";
 import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
 import { isVariableDeclarationList } from 'typescript';
 import {InputNumber} from 'primereact/inputnumber';
+import styles from './display-question.module.css';
+
 
 type DisplayQuestionProps = {
     question : Question,
@@ -49,7 +51,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
     return <div className="question">
         <div className="question-number">{question.question_number}</div>
         <InputNumber 
-            className={`input ${fieldData.isValid === false && 'p-invalid'}`}
+            className={`${styles['p-inputtext']} input ${fieldData.isValid === false && 'p-invalid'}`}
             name={question.id.toString()} 
             value={value}
             id={question.id.toString()} 
@@ -86,6 +88,9 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
                 border-radius: 0.3rem;
                 border: solid 1px silver;
             }
+
+                
+            
 
             
 
