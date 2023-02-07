@@ -8,7 +8,7 @@ type DisplayClassesParams = {
 const DisplayClasses = ({classes}:DisplayClassesParams) => {
 
     return <>
-        <h1>Classes</h1>
+        
             <div>
                 {classes?.map((c, i) => <div key={i}>
                                             {

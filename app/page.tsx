@@ -18,6 +18,9 @@ import { GetClassesResponseType } from 'lib';
 import DisplayClasses from 'components/display-classes';
 import Loading from 'components/loading';
 
+import { TabView, TabPanel } from 'primereact/tabview';
+
+
 type ProfileProps = {}
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
@@ -136,23 +139,30 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           }
 
           {
-            user && <><h1>Welcome, {profile?.firstName}</h1> 
+            user && <div className="page-header">
+            <h1>Welcome, {profile?.firstName}</h1> 
             <div>
               <h3>Join Class</h3>
               <AddClass onAdd={handleOnAddClass}/>
-              {/*
+            </div>
+            </div>
+          }
+
+
+          <TabView>
+            <TabPanel header="Papers">
+            {/*
               //@ts-ignore */}
               <DisplayClasses classes={classes}/>
-            </div>
-            </>
-          }
-          <h1>Specs</h1>
-          {specData && (<select value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.target.value))}>
-            <option value={1}>AQA Computer Science</option>
-            <option value={2}>EdExcel iGCSE Business</option>
-          </select>)
-          } 
-          <div className="display-spec">
+            </TabPanel>
+            <TabPanel header="Specifications">
+            
+            {specData && (<select value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.target.value))}>
+              <option value={1}>AQA Computer Science</option>
+              <option value={2}>EdExcel iGCSE Business</option>
+            </select>)
+            } 
+            <div className="display-spec">
           {
             specData && specData.map((sd, i) => <>
               <div>{sd.tag}</div>
@@ -164,13 +174,18 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
               </> )
           }
           </div>
-          {
-            specData && <pre>{JSON.stringify(specData, null, 2)}</pre>
-          }
-          
-          
+            </TabPanel>
+          </TabView>
+
           </div>
           <style jsx={true}>{`
+
+            .page-header {
+              display : flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+
             .display-spec {
               display: grid;
               grid-template-columns : 1fr 3fr 1fr 1fr 1fr;
