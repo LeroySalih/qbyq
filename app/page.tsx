@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import {useState, useEffect} from 'react';
 import { Database } from 'types/supabase';
 import supabase from '../components/supabase';
-import { Spec } from 'types/alias';
+import { PupilMarksForSpec, Spec } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
@@ -27,6 +27,10 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     const {user, profile, classes, loadClasses} = useContext<UserContextType>(UserContext);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [currentSpec, setCurrentSpec] = useState<number | undefined>(0);
+    const [specData, setSpecData] = useState<PupilMarksForSpec | undefined>();
+
+
     const router = useRouter();
 
     // https://1f34-51-252-20-183.in.ngrok.io/paper-form
@@ -41,12 +45,41 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             setSpec(data);
         };
 
+        
+
         setLoading(true);
         loadData();
+        setCurrentSpec(1);
         setLoading(false);
+        
 
         
     }, []);
+
+
+    useEffect (() => {
+
+      if (currentSpec == undefined || !user) return;
+
+      const loadSpecData = async (specId:number, userId:string) =>{
+
+        // @ts-ignore
+        const {data, error} = await supabase.rpc('fn_pupil_marks_per_spec_item', {
+                                                  userid: userId,
+                                                  specid: specId, 
+                                            })
+                                            
+        
+        error && console.error(error);
+        console.log("Data", data);  
+        // @ts-ignore                                  
+        setSpecData(data);
+
+      }
+
+      user && loadSpecData(currentSpec, user!.id);
+
+    }, [currentSpec, user])
 
 
     const handleCheckClick = () => {
@@ -113,9 +146,37 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             </div>
             </>
           }
+          <h1>Specs</h1>
+          {specData && (<select value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.target.value))}>
+            <option value={1}>AQA Computer Science</option>
+            <option value={2}>EdExcel iGCSE Business</option>
+          </select>)
+          } 
+          <div className="display-spec">
+          {
+            specData && specData.map((sd, i) => <>
+              <div>{sd.tag}</div>
+              <div>{sd.title}</div>
+              <div>{sd.pm_marks}</div>
+              <div>{sd.q_marks}</div>
+              <div>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toPrecision(2)}%` : 0
+              }</div>
+              </> )
+          }
+          </div>
+          {
+            specData && <pre>{JSON.stringify(specData, null, 2)}</pre>
+          }
           
           
           </div>
+          <style jsx={true}>{`
+            .display-spec {
+              display: grid;
+              grid-template-columns : 1fr 3fr 1fr 1fr 1fr;
+            }
+          `}
+          </style>
         </>
     )
 }

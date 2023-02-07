@@ -2,7 +2,7 @@
 import supabase from "components/supabase";
 import { useEffect , useState, useContext} from "react";
 import { Database } from "types/supabase";
-import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
+import { Spec, SpecItem, SpecData, PupilMarks, Question, PupilMarksForSpec} from "types/alias";
 import { User } from "@supabase/supabase-js";
 import { FileObject} from "@supabase/storage-js";
 import { UserContext } from "components/context/user-context";
@@ -36,7 +36,7 @@ const PageForm = ({params}: PagePropsType) => {
     const {user, profile} = useContext(UserContext);
 
     const [userFiles, setUserFiles] = useState<{ name: string; signedUrl: string; }[] | undefined>([]);
-
+    
     const loadFiles = async () => {
 
         const path =  `${user!.id}/${paperId}`
@@ -66,6 +66,8 @@ const PageForm = ({params}: PagePropsType) => {
                 )
         )
     }
+
+    
 
 
     // console.log(user);
@@ -146,6 +148,7 @@ const PageForm = ({params}: PagePropsType) => {
 
         loadPupilMarks();
         loadFiles();
+        // loadSpecData(1, user.id);
 
     }, [user])
 
@@ -299,6 +302,8 @@ const PageForm = ({params}: PagePropsType) => {
         <h1>{paper?.title} - {paper?.paper}</h1>
         <hr></hr>
         <h3>{paper?.year}</h3>
+
+        
     
     
     <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>

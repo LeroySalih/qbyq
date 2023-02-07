@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "bump" : "npm run build && git add . && git commit -m 'Build' && git push origin",
+    "bump": "npm run build && git add . && git commit -m 'Build' && git push origin",
     "refresh-types": "npx supabase gen types typescript --project-id 'fmudvzcqkiqjyprmtozz' --schema public > types/supabase.ts"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "primereact": "^9.0.0-beta.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "supabase": "^1.36.7",
     "typescript": "4.9.4"
   }
 }
