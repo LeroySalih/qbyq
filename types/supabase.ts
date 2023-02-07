@@ -250,6 +250,17 @@ export interface Database {
       }
     }
     Views: {
+      vw_pupil_marks_for_spec: {
+        Row: {
+          avg: number | null
+          pm_marks: number | null
+          q_marks: number | null
+          SpecId: number | null
+          tag: string | null
+          title: string | null
+          userId: string | null
+        }
+      }
       vw_user_marks_for_paper: {
         Row: {
           qMarks: number | null
@@ -266,11 +277,35 @@ export interface Database {
           "?column?": number | null
         }
       }
+      vw_user_marks_for_spec: {
+        Row: {
+          avg: number | null
+          pm_marks: number | null
+          q_marks: number | null
+          tag: string | null
+          title: string | null
+        }
+      }
     }
     Functions: {
-      [_ in never]: never
+      fn_pupil_marks_per_spec_item: {
+        Args: {
+          userid: string
+          specid: number
+        }
+        Returns: {
+          specId: number
+          tag: string
+          title: string
+          q_marks: number
+          pm_marks: number
+        }[]
+      }
     }
     Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
       [_ in never]: never
     }
   }

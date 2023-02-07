@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import {useState, useEffect} from 'react';
 import { Database } from 'types/supabase';
 import supabase from '../components/supabase';
-import { Spec } from 'types/alias';
+import { PupilMarksForSpec, Spec } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
@@ -18,6 +18,9 @@ import { GetClassesResponseType } from 'lib';
 import DisplayClasses from 'components/display-classes';
 import Loading from 'components/loading';
 
+import { TabView, TabPanel } from 'primereact/tabview';
+
+
 type ProfileProps = {}
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
@@ -26,6 +29,10 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     const [spec, setSpec] = useState<Spec | null>(null);
     const {user, profile, classes, loadClasses} = useContext<UserContextType>(UserContext);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const [currentSpec, setCurrentSpec] = useState<number | undefined>(0);
+    const [specData, setSpecData] = useState<PupilMarksForSpec | undefined>();
+
 
     const router = useRouter();
 
@@ -41,12 +48,41 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             setSpec(data);
         };
 
+        
+
         setLoading(true);
         loadData();
+        setCurrentSpec(1);
         setLoading(false);
+        
 
         
     }, []);
+
+
+    useEffect (() => {
+
+      if (currentSpec == undefined || !user) return;
+
+      const loadSpecData = async (specId:number, userId:string) =>{
+
+        // @ts-ignore
+        const {data, error} = await supabase.rpc('fn_pupil_marks_per_spec_item', {
+                                                  userid: userId,
+                                                  specid: specId, 
+                                            })
+                                            
+        
+        error && console.error(error);
+        console.log("Data", data);  
+        // @ts-ignore                                  
+        setSpecData(data);
+
+      }
+
+      user && loadSpecData(currentSpec, user!.id);
+
+    }, [currentSpec, user])
 
 
     const handleCheckClick = () => {
@@ -103,19 +139,59 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           }
 
           {
-            user && <><h1>Welcome, {profile?.firstName}</h1> 
+            user && <div className="page-header">
+            <h1>Welcome, {profile?.firstName}</h1> 
             <div>
               <h3>Join Class</h3>
               <AddClass onAdd={handleOnAddClass}/>
-              {/*
+            </div>
+            </div>
+          }
+
+
+          <TabView>
+            <TabPanel header="Papers">
+            {/*
               //@ts-ignore */}
               <DisplayClasses classes={classes}/>
-            </div>
-            </>
+            </TabPanel>
+            <TabPanel header="Specifications">
+            
+            {specData && (<select value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.target.value))}>
+              <option value={1}>AQA Computer Science</option>
+              <option value={2}>EdExcel iGCSE Business</option>
+            </select>)
+            } 
+            <div className="display-spec">
+          {
+            specData && specData.map((sd, i) => <>
+              <div>{sd.tag}</div>
+              <div>{sd.title}</div>
+              <div>{sd.pm_marks}</div>
+              <div>{sd.q_marks}</div>
+              <div>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toPrecision(2)}%` : 0
+              }</div>
+              </> )
           }
-          
-          
           </div>
+            </TabPanel>
+          </TabView>
+
+          </div>
+          <style jsx={true}>{`
+
+            .page-header {
+              display : flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+
+            .display-spec {
+              display: grid;
+              grid-template-columns : 1fr 3fr 1fr 1fr 1fr;
+            }
+          `}
+          </style>
         </>
     )
 }
