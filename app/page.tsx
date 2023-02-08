@@ -19,7 +19,7 @@ import DisplayClasses from 'components/display-classes';
 import Loading from 'components/loading';
 
 import { TabView, TabPanel } from 'primereact/tabview';
-
+import { Dropdown } from 'primereact/dropdown';
 
 type ProfileProps = {}
 
@@ -157,12 +157,20 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             </TabPanel>
             <TabPanel header="Specifications">
             
-            {specData && (<select value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.target.value))}>
-              <option value={1}>AQA Computer Science</option>
-              <option value={2}>EdExcel iGCSE Business</option>
-            </select>)
-            } 
+            
+            {
+              specData && (<Dropdown value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.value))} options={[
+                {value: 1, label: "AQA Computer Science"}, 
+                {value: 2, label: "EdExcel Business"}]} 
+                
+                placeholder="Select a Specification" className="w-full md:w-14rem" />)
+            }
             <div className="display-spec">
+              <div className="display-spec-heading">Tag</div>
+              <div className="display-spec-heading">Title</div>
+              <div className="display-spec-heading">Given</div>
+              <div className="display-spec-heading">Available</div>
+              <div className="display-spec-heading">%</div>
           {
             specData && specData.map((sd, i) => <>
               <div>{sd.tag}</div>
@@ -186,9 +194,24 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
               justify-content: space-between;
             }
 
+            .display-spec-heading {
+              font-weight : bold;
+              font-size: 1.1rem;
+              font-family: 'Oswald';
+              border-bottom: solid 1px silver;
+              margin-bottom: 1rem;
+              margin-top : 1rem;
+            }
+
             .display-spec {
               display: grid;
               grid-template-columns : 1fr 3fr 1fr 1fr 1fr;
+              font-size: 0.8rem;
+              line-height: 1.5rem;
+            }
+
+            option {
+              font-family: 'Poppins'
             }
           `}
           </style>
