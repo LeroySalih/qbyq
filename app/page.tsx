@@ -174,10 +174,10 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           {
             specData && specData.map((sd, i) => <>
               <div>{sd.tag}</div>
-              <div>{sd.title}</div>
+              <div>{sd.revisionMaterials != null ? <a href={sd.revisionMaterials} target="_new">{sd.title}</a> : sd.title}</div>
               <div>{sd.pm_marks}</div>
               <div>{sd.q_marks}</div>
-              <div>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toPrecision(2)}%` : 0
+              <div>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toFixed(2)}%` : 0
               }</div>
               </> )
           }

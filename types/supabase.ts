@@ -206,6 +206,7 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
+          revisionMaterials: string | null
           SpecId: number | null
           tag: string | null
           title: string | null
@@ -213,6 +214,7 @@ export interface Database {
         Insert: {
           created_at?: string | null
           id?: number
+          revisionMaterials?: string | null
           SpecId?: number | null
           tag?: string | null
           title?: string | null
@@ -220,6 +222,7 @@ export interface Database {
         Update: {
           created_at?: string | null
           id?: number
+          revisionMaterials?: string | null
           SpecId?: number | null
           tag?: string | null
           title?: string | null
@@ -297,6 +300,7 @@ export interface Database {
           specId: number
           tag: string
           title: string
+          revisionMaterials: string
           q_marks: number
           pm_marks: number
         }[]
