@@ -21,7 +21,7 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
                                                 // @ts-ignore */}
                                             { c!.Classes!.ClassPapers.map((cp, i) => <div  key={i}>
                                                             <Link className="classLink" href={`/paper-form/${cp.paperId}`}>
-                                                               <span className="classLink"> {cp.paperId} { cp.Papers.title} - {cp.Papers.paper} ( {cp.Papers.year})</span>
+                                                               <span className="classLink"> {cp.paperId} { cp.Papers.title} - {cp.Papers.paper} ( {cp.Papers.month}-{cp.Papers.year})</span>
                                                             </Link>
                                                         </div>)
                                                 }

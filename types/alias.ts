@@ -10,6 +10,7 @@ export type Profile = Database["public"]["Tables"]["Profile"]["Row"];
 export type Class = Database["public"]["Tables"]["Classes"]["Row"];
 export type ClassMembership = Database["public"]["Tables"]["ClassMembership"]["Row"];
 export type PupilMarksForSpec = Database["public"]["Functions"]["fn_pupil_marks_per_spec_item"]["Returns"]
+export type Paper = Database["public"]["Tables"]["ClassPapers"]["Row"];
 
 export type SpecData = {
     spec:Spec,

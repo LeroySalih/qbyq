@@ -71,7 +71,7 @@ export interface Database {
           created_at: string | null
           id: number
           marks: number | null
-          month: number | null
+          month: string | null
           paper: string | null
           specId: number | null
           subject: string | null
@@ -82,7 +82,7 @@ export interface Database {
           created_at?: string | null
           id?: number
           marks?: number | null
-          month?: number | null
+          month?: string | null
           paper?: string | null
           specId?: number | null
           subject?: string | null
@@ -93,7 +93,7 @@ export interface Database {
           created_at?: string | null
           id?: number
           marks?: number | null
-          month?: number | null
+          month?: string | null
           paper?: string | null
           specId?: number | null
           subject?: string | null
