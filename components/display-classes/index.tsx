@@ -15,15 +15,23 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
                                                 /*
                                             // @ts-ignore */}
                                             <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
-                                            <div >
+                                            <div className="display-papers">
                                             {
                                                 /*
                                                 // @ts-ignore */}
-                                            { c!.Classes!.ClassPapers.map((cp, i) => <div  key={i}>
-                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>
-                                                               <span className="classLink"> {cp.paperId} { cp.Papers.title} - {cp.Papers.paper} ( {cp.Papers.month}-{cp.Papers.year})</span>
-                                                            </Link>
-                                                        </div>)
+                                            { c!.Classes!.ClassPapers.map((cp, i) => <>
+                                                <div  key={i}>
+                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.month}-{cp.Papers.year}</Link>
+                                                </div>
+                                                
+                                                <div  key={i}>
+                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.paper}</Link>
+                                                </div>
+                                            
+                                                <div>
+                                                    <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{ cp.Papers.title}</Link>     
+                                                </div>
+                                                </>)
                                                 }
                                             </div>
                                         </div>)}
@@ -44,6 +52,13 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
                 
                 text-decoration: none;
             }
+
+
+            .display-papers {
+                display : grid;
+                grid-template-columns: 1fr 2fr 3fr;
+            }
+
 
             
             
