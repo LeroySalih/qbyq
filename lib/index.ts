@@ -10,6 +10,17 @@ export const getClasses = async (userId: string) => {
     return data;
 }
 
+export const getAllPupilMarks = async (userId: string) => {
+    const {data, error} = await supabase
+                    .rpc("fn_pupil_marks_for_all_papers", {_userid: userId});
+
+    error && console.error(error);
+
+    return data;
+
+}
+
+
 export const getClassByTag = async (tag: string | undefined) => {
     if (tag === undefined)
         return undefined;
@@ -24,6 +35,7 @@ export const getClassByTag = async (tag: string | undefined) => {
     return data;
 }
 
+export type GetAllPupilMarks = Awaited<ReturnType<typeof getAllPupilMarks>>
 export type GetClassByTagResponseType = Awaited<ReturnType<typeof getClassByTag>>
 export type GetClassesResponseType = Awaited<ReturnType<typeof getClasses>>
 

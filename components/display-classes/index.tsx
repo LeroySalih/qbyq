@@ -1,12 +1,20 @@
-import { GetClassesResponseType } from "lib";
+import { GetClassesResponseType, GetAllPupilMarks } from "lib";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+
 type DisplayClassesParams = {
-    classes : GetClassesResponseType
+    classes : GetClassesResponseType,
+    pupilMarks :GetAllPupilMarks
 }
 
-const DisplayClasses = ({classes}:DisplayClassesParams) => {
+const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
 
+    const getMarksForPaper = (paperId: number) => {
+        // @ts-ignore
+        const filtered = pupilMarks && pupilMarks.filter(pm => pm.paperId == paperId)
+        // @ts-ignore
+        return filtered && filtered.length > 0 ? ((filtered[0].marks / filtered[0].max_marks) * 100).toFixed(0) + "%": null;
+    }
     return <>
         
             <div>
@@ -21,7 +29,7 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
                                                 // @ts-ignore */}
                                             { c!.Classes!.ClassPapers.map((cp, i) => <>
                                                 <div  key={i}>
-                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.month}-{cp.Papers.year}</Link>
+                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.year}-{cp.Papers.month}</Link>
                                                 </div>
                                                 
                                                 <div  key={i}>
@@ -31,10 +39,12 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
                                                 <div>
                                                     <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{ cp.Papers.title}</Link>     
                                                 </div>
+                                                <div>{getMarksForPaper(cp.paperId)}</div>
                                                 </>)
                                                 }
                                             </div>
                                         </div>)}
+                
             </div>
         
             
@@ -56,7 +66,7 @@ const DisplayClasses = ({classes}:DisplayClassesParams) => {
 
             .display-papers {
                 display : grid;
-                grid-template-columns: 1fr 2fr 3fr;
+                grid-template-columns: 1fr 2fr 3fr 1fr;
             }
 
 

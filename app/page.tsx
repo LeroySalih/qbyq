@@ -27,7 +27,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
     const [userProfile, setUserProfile] = useState<Profile | null>(null);
     const [spec, setSpec] = useState<Spec | null>(null);
-    const {user, profile, classes, loadClasses} = useContext<UserContextType>(UserContext);
+    const {user, profile, classes, pupilMarks, loadClasses} = useContext<UserContextType>(UserContext);
     const [loading, setLoading] = useState<boolean>(false);
 
     const [currentSpec, setCurrentSpec] = useState<number | undefined>(0);
@@ -153,7 +153,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             <TabPanel header="Papers">
             {/*
               //@ts-ignore */}
-              <DisplayClasses classes={classes}/>
+              <DisplayClasses classes={classes} pupilMarks={pupilMarks}/>
             </TabPanel>
             <TabPanel header="Specifications">
             
