@@ -52,24 +52,30 @@ export interface Database {
       ClassPapers: {
         Row: {
           classId: number
+          completeBy: string | null
           created_at: string | null
+          markBy: string | null
           paperId: number
         }
         Insert: {
           classId: number
+          completeBy?: string | null
           created_at?: string | null
+          markBy?: string | null
           paperId: number
         }
         Update: {
           classId?: number
+          completeBy?: string | null
           created_at?: string | null
+          markBy?: string | null
           paperId?: number
         }
       }
       Papers: {
         Row: {
-          created_at: string | null
-          id: number
+          created_at?: string | null
+          id?: number
           marks: number | null
           month: string | null
           paper: string | null
@@ -291,6 +297,17 @@ export interface Database {
       }
     }
     Functions: {
+      fn_pupil_marks_for_all_papers: {
+        Args: {
+          _userid: string
+        }
+        Returns: {
+          userId: string
+          paperId: number
+          max_marks: number
+          marks: number
+        }[]
+      }
       fn_pupil_marks_per_spec_item: {
         Args: {
           userid: string

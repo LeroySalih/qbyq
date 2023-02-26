@@ -12,14 +12,15 @@ import "primereact/resources/primereact.min.css";                  //core css
 import "primeicons/primeicons.css";                                //icons
 import './globals.css'
 
-import { getClasses, GetClassesResponseType  } from 'lib';
+import { getClasses, GetClassesResponseType, getAllPupilMarks, GetAllPupilMarks  } from 'lib';
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
 
   const [user, setUser] = useState<User | undefined>(undefined);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [classes, setClasses] = useState<GetClassesResponseType>(null);
-  
+  const [pupilMarks, setPupilMarks] = useState<GetAllPupilMarks>(null);
+
   const router = useRouter();
 
   const loadClasses = async () => {
@@ -31,6 +32,20 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
 
       setClasses(data);
     }
+  }
+
+  const loadPupilMarks = async () => {
+    
+    if (user) {
+
+      const  data = await getAllPupilMarks(user.id);
+
+      console.log("Pupil Marks", data);
+
+      setPupilMarks(data);
+
+    }
+    
   }
 
   const loadProfile = async () => {
@@ -78,7 +93,8 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
       return;
 
     loadProfile();
-    loadClasses(); 
+    loadClasses();
+    loadPupilMarks(); 
     
   }, [user])
 
@@ -86,7 +102,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   return (
     <html>
       <head />
-      <UserContext.Provider value={{user, profile, classes, loadClasses}}>
+      <UserContext.Provider value={{user, profile, classes, pupilMarks, loadClasses}}>
         <body>{children}</body>
       </UserContext.Provider>
     </html>
