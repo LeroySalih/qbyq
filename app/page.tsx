@@ -9,7 +9,8 @@ import { PupilMarksForSpec, Spec } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
-import { Button } from 'primereact/button';
+// import { Button } from 'primereact/button';
+import Button from '@mui/material/Button';
 import { InputText } from 'primereact/inputtext'; 
 
 import { Class } from 'types/alias';
@@ -128,13 +129,13 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     return (
         <>
         <div className="page">
-         {user && <Button onClick={handleSignOut}>Sign Out</Button>}
+         {user && <Button variant="outlined" onClick={handleSignOut}>Sign Out</Button>}
 
           {!user && 
             <div>
                 <h1>Question By Question (QbyQ)</h1>
                 <h3>Click here to sign in</h3>
-                <Button onClick={handleSignIn}>Sign In</Button>
+                <Button variant="outlined" onClick={handleSignIn}>Sign In</Button>
             </div>
           }
 
@@ -165,20 +166,19 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
                 
                 placeholder="Select a Specification" className="w-full md:w-14rem" />)
             }
-            <div className="display-spec">
-              <div className="display-spec-heading">Tag</div>
-              <div className="display-spec-heading">Title</div>
-              <div className="display-spec-heading">Given</div>
-              <div className="display-spec-heading">Available</div>
-              <div className="display-spec-heading">%</div>
+              <div key={`sd01`} className="display-spec">
+              <div key={`sd02`} className="display-spec-heading">Tag</div>
+              <div key={`sd03`} className="display-spec-heading">Title</div>
+              <div key={`sd04`} className="display-spec-heading">Given</div>
+              <div key={`sd05`} className="display-spec-heading">Available</div>
+              <div key={`sd06`} className="display-spec-heading">%</div>
           {
             specData && specData.map((sd, i) => <>
-              <div>{sd.tag}</div>
-              <div>{sd.revisionMaterials != null ? <a href={sd.revisionMaterials} target="_new">{sd.title}</a> : sd.title}</div>
-              <div>{sd.pm_marks}</div>
-              <div>{sd.q_marks}</div>
-              <div>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toFixed(2)}%` : 0
-              }</div>
+              <div key={`sd1${i}`}>{sd.tag}</div>
+              <div key={`sd2${i}`}>{sd.revisionMaterials != null ? <a href={sd.revisionMaterials} target="_new">{sd.title}</a> : sd.title}</div>
+              <div key={`sd3${i}`}>{sd.pm_marks}</div>
+              <div key={`sd4${i}`}>{sd.q_marks}</div>
+              <div key={`sd5${i}`}>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toFixed(2)}%` : 0}</div>
               </> )
           }
           </div>

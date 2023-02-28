@@ -11,6 +11,9 @@
     "refresh-types": "npx supabase gen types typescript --project-id 'fmudvzcqkiqjyprmtozz' --schema public > types/supabase.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.10",
     "@next/font": "13.1.4",
     "@supabase/supabase-js": "^2.4.1",
     "@types/node": "18.11.18",
