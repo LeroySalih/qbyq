@@ -18,7 +18,9 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
     return <>
         
             <div>
-                {classes?.map((c, i) => <div key={i}>
+                {/*
+                 // @ts-ignore */
+                classes?.map((c, i) => <div key={`${i}-${c?.Classes?.title}`}>
                                             {
                                                 /*
                                             // @ts-ignore */}
@@ -28,18 +30,18 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                 /*
                                                 // @ts-ignore */}
                                             { c!.Classes!.ClassPapers.map((cp, i) => <>
-                                                <div  key={i}>
-                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.year}-{cp.Papers.month}</Link>
+                                                <div  key={`0${i}`}>
+                                                    <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.year}-{cp.Papers.month}</Link>
                                                 </div>
                                                 
-                                                <div  key={i}>
-                                                            <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.paper}</Link>
+                                                <div  key={`1${i}`}>
+                                                    <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{cp.Papers.paper}</Link>
                                                 </div>
                                             
-                                                <div>
+                                                <div key={`2${i}`}>
                                                     <Link className="classLink" href={`/paper-form/${cp.paperId}`}>{ cp.Papers.title}</Link>     
                                                 </div>
-                                                <div>{getMarksForPaper(cp.paperId)}</div>
+                                                <div key={`3${i}`}>{getMarksForPaper(cp.paperId)}</div>
                                                 </>)
                                                 }
                                             </div>

@@ -1,7 +1,7 @@
 
 import supabase from "components/supabase";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
+import TextField  from "@mui/material/TextField";
+import  Button  from "@mui/material/Button";
 import {useState, useEffect, ChangeEventHandler, ChangeEvent} from 'react';
 
 import { getClassByTag, GetClassByTagResponseType } from "lib";
@@ -38,9 +38,9 @@ const AddClass = ({onAdd}:AddClassProps) => {
 
     return <>
         <div>
-            <InputText value={classTag} onChange={handleTagChange}/>
-            <Button disabled={classTag === undefined || classTag.length === 0} onClick={handleCheckClick}>Check</Button>
-            <Button disabled={joinClass === undefined || joinClass=== null} onClick={handleAddClick}>Add</Button>
+            <TextField value={classTag} onChange={handleTagChange} variant="outlined" />
+            <Button variant="outlined" disabled={classTag === undefined || classTag.length === 0} onClick={handleCheckClick}>Check</Button>
+            <Button variant="outlined" disabled={joinClass === undefined || joinClass=== null} onClick={handleAddClick}>Add</Button>
         </div>
         <div>
             {joinClass === null && `No class found.`}

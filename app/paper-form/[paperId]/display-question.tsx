@@ -62,7 +62,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
         </div>
         
         <div className="specItemTag">{specItem?.tag}</div>
-        <div className="specItemTitle">{specItem?.title}</div>
+        <div className="specItemTitle">{specItem?.title}({question.question_order})</div>
         
         <div></div><div className="errorMessage">{fieldData.errorMessage}</div>
         <style jsx={true}>{`

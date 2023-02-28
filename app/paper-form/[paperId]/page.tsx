@@ -129,7 +129,7 @@ const PageForm = ({params}: PagePropsType) => {
 
 
     useEffect(() => {
-
+        console.log("layout Changed: user")
         const loadPupilMarks = async () => {
 
             const {data, error} = await supabase
@@ -190,6 +190,7 @@ const PageForm = ({params}: PagePropsType) => {
             return;
         }
 
+        
 
         const {data:upsertData, error:upsertError} = await supabase
                 .from("PupilMarks")
@@ -199,17 +200,13 @@ const PageForm = ({params}: PagePropsType) => {
         if (upsertError){
             console.log(upsertError);
             return;
+        } else {
+            console.log("Upserted", pm, "returned", upsertData)
         }
 
         console.log("Upsert Data", upsertData)
 
-        const newPupilMarks = pupilMarks?.map((old) => (old.questionId === pm.questionId) 
-                ? upsertData![0]
-                : old
-            );
-
-            // update the pupil marks data
-        setPupilMarks(newPupilMarks || [])
+        
 
         
     }
@@ -301,7 +298,7 @@ const PageForm = ({params}: PagePropsType) => {
         <Link href="/">Home</Link>
         <h1>{paper?.title} - {paper?.paper}</h1>
         <hr></hr>
-        <h3>{paper?.year}</h3>
+        <h3>{paper?.year} - {paper?.month}</h3>
 
         
     
@@ -315,7 +312,7 @@ const PageForm = ({params}: PagePropsType) => {
                 paper?.Questions?.sort((a:Question, b:Question) => a.question_order! > b?.question_order! ? 1 : -1)
                         .map(
                     (q:Question, i:number) => <DisplayQuestion 
-                                    key={i} 
+                                    key={`q${i}`} 
                                     question={q} 
                                     specItems={paper.Spec.SpecItem} 
                                     pupilMarks={(pupilMarks || [])} 
