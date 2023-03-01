@@ -74,8 +74,8 @@ export interface Database {
       }
       Papers: {
         Row: {
-          created_at?: string | null
-          id?: number
+          created_at: string | null
+          id: number
           marks: number | null
           month: string | null
           paper: string | null
@@ -138,13 +138,39 @@ export interface Database {
           created_at?: string | null
           id?: number
           marks: number | null
+          paperId: number
+          questionId: number
+          userId: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          marks?: number | null
+          paperId: number
+          questionId: number
+          userId: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          marks?: number | null
+          paperId?: number
+          questionId?: number
+          userId?: string
+        }
+      }
+      "PupilMarks.copy": {
+        Row: {
+          created_at: string | null
+          id: number | null
+          marks: number | null
           paperId: number | null
           questionId: number | null
           userId: string | null
         }
         Insert: {
           created_at?: string | null
-          id?: number
+          id?: number | null
           marks?: number | null
           paperId?: number | null
           questionId?: number | null
@@ -152,7 +178,7 @@ export interface Database {
         }
         Update: {
           created_at?: string | null
-          id?: number
+          id?: number | null
           marks?: number | null
           paperId?: number | null
           questionId?: number | null
@@ -320,6 +346,22 @@ export interface Database {
           revisionMaterials: string
           q_marks: number
           pm_marks: number
+        }[]
+      }
+      fn_upsert_pupilmarks: {
+        Args: {
+          _paperid: number
+          _questionid: number
+          _userid: string
+          _marks: number
+        }
+        Returns: {
+          id: number
+          created_at: string
+          userid: string
+          questionid: number
+          marks: number
+          paperid: number
         }[]
       }
     }

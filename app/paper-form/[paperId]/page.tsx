@@ -79,7 +79,7 @@ const PageForm = ({params}: PagePropsType) => {
 
             const {data: paper, error} = await supabase
                                                 .from("Papers")
-                                                .select('*, Questions(*), Spec(*, SpecItem(*))')
+                                                .select('*, Questions!Questions_PaperId_fkey(*), Spec(*, SpecItem(*))')
                                                 .eq("id",paperId)
                                                 .single();
 
@@ -190,12 +190,22 @@ const PageForm = ({params}: PagePropsType) => {
             return;
         }
 
-        
+        const {data:upsertData, error:upsertError} = await supabase
+                                                .rpc("fn_upsert_pupilmarks", {
+                                                    _userid : pm.userId,
+                                                    _paperid : pm.paperId,
+                                                    _questionid : pm.questionId,
+                                                    _marks : (pm.marks || 0)
+                                                })
 
+        /*
         const {data:upsertData, error:upsertError} = await supabase
                 .from("PupilMarks")
                 .upsert(pm)
                 .select();
+
+
+        */
         
         if (upsertError){
             console.log(upsertError);
