@@ -10,13 +10,14 @@ import { UserContext } from "components/context/user-context";
 import Loading from "components/loading";
 import DisplayQuestion from './display-question';
 import DownloadButton from './download-button';
+import DisplayResources from "./display-resources";
 
 import {Button} from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Link from 'next/link';
-import { umask } from "process";
+
 
 type PagePropsType = {
        params : {
@@ -344,14 +345,11 @@ const PageForm = ({params}: PagePropsType) => {
 
         <TabPanel header="Resources">
             <div>
-                <ul>
-                {
-                files && files
-                    .filter(f => f.name != '.emptyFolderPlaceholder')
-                    .map((f , i:number) => <li key={i}><a target="new" href={getUrl(f.name)}>{f.name}</a></li>)
+                {// @ts-ignore
+                <DisplayResources paperId={parseInt(paperId)} profile={profile}/>
                 }
-                </ul>
             </div>
+            
         </TabPanel>
         <TabPanel header="Files">
             <input type="file" name="upload" onChange={handleFileChange}/>
