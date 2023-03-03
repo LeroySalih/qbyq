@@ -49,8 +49,35 @@ export interface Database {
           pupilId?: string
         }
       }
+      ClassPaperResources: {
+        Row: {
+          classId: number | null
+          created_at: string | null
+          id: number
+          label: string | null
+          paperId: number | null
+          url: string | null
+        }
+        Insert: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          label?: string | null
+          paperId?: number | null
+          url?: string | null
+        }
+        Update: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          label?: string | null
+          paperId?: number | null
+          url?: string | null
+        }
+      }
       ClassPapers: {
         Row: {
+          availableFrom: string | null
           classId: number
           completeBy: string | null
           created_at: string | null
@@ -58,6 +85,7 @@ export interface Database {
           paperId: number
         }
         Insert: {
+          availableFrom?: string | null
           classId: number
           completeBy?: string | null
           created_at?: string | null
@@ -65,6 +93,7 @@ export interface Database {
           paperId: number
         }
         Update: {
+          availableFrom?: string | null
           classId?: number
           completeBy?: string | null
           created_at?: string | null
@@ -285,6 +314,15 @@ export interface Database {
       }
     }
     Views: {
+      vw_duplicate_pupil_marks: {
+        Row: {
+          count: number | null
+          firstName: string | null
+          paperId: number | null
+          questionId: number | null
+          userId: string | null
+        }
+      }
       vw_pupil_marks_for_spec: {
         Row: {
           avg: number | null

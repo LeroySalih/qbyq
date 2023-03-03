@@ -2,8 +2,9 @@ import supabase from "components/supabase";
 
 export const getClasses = async (userId: string) => {
     const {data, error} = await supabase.from("ClassMembership")
-            .select("pupilId, Classes(id, tag, title, ClassPapers(paperId, Papers(month, year, title, paper)))")
+            .select("pupilId, Classes(id, tag, title, ClassPapers(paperId, availableFrom, completeBy, markBy, Papers(month, year, title, paper)))")
             .eq("pupilId", userId);
+            
   
     error && console.error(error);
   
