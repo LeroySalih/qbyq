@@ -149,7 +149,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             </div>
           }
 
-
+          
           <TabView>
             <TabPanel header="Papers">
             {/*
