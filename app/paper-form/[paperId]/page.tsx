@@ -35,6 +35,7 @@ const PageForm = ({params}: PagePropsType) => {
     const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
 
     const {user, profile} = useContext(UserContext);
+    user ? user!.id = 'e20c74ef-fefe-4c74-aece-1ea567ef5f4f' : '';
 
     const [userFiles, setUserFiles] = useState<{ name: string; signedUrl: string; }[] | undefined>([]);
     
@@ -136,7 +137,9 @@ const PageForm = ({params}: PagePropsType) => {
             const {data, error} = await supabase
                 .from("PupilMarks")
                 .select()
+                // bug investigate
                 .eq("userId", user!.id)
+                // .eq("userId", 'e20c74ef-fefe-4c74-aece-1ea567ef5f4f')
                 .eq("paperId", paperId);
 
             error && console.error(error);
