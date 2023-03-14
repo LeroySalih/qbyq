@@ -1,6 +1,7 @@
 import { GetClassesResponseType, GetAllPupilMarks } from "lib";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Link from "next/link";
+import { UserContextType, UserContext } from 'components/context/user-context';
 
 type DisplayClassesParams = {
     classes : GetClassesResponseType,
@@ -9,6 +10,9 @@ type DisplayClassesParams = {
 
 const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
 
+    const {profile} = useContext<UserContextType>(UserContext);
+
+    console.log("Class Data", classes)
     const getMarksForPaper = (paperId: number) => {
         // @ts-ignore
         const filtered = pupilMarks && pupilMarks.filter(pm => pm.paperId == paperId)
@@ -21,10 +25,22 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                 {/*
                  // @ts-ignore */
                 classes?.map((c, i) => <div key={`${i}-${c?.Classes?.title}`}>
+                                            
+                                            
                                             {
                                                 /*
                                             // @ts-ignore */}
                                             <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
+                                            <div>
+                                                {// @ts-ignore
+                                                 profile && <Link href={`/spec-report/${profile.id}/${c!.Classes!.ClassPapers[0].Papers.specId}`}>
+                                                <span>{
+                                                // @ts-ignore
+                                                c!.Classes!.ClassPapers[0].Papers.Spec.title}
+                                                </span>
+                                                </Link>}
+                                            
+                                            </div>
                                             <div className="display-papers">
                                                 <div>Date</div>
                                                 <div>Code</div>

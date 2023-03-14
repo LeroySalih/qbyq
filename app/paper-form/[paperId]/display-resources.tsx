@@ -19,6 +19,7 @@ const DisplayResources: FC<DisplayResourcesPropsType> = (props: DisplayResources
 
         if (!classes) return;
 
+        console.log("Classes", classes);
 
         // @ts-ignore
         const classArray = classes!.map((c, i) => c!.Classes.id);
@@ -32,7 +33,7 @@ const DisplayResources: FC<DisplayResourcesPropsType> = (props: DisplayResources
                                         .in("classId",classArray);
         
             error && console.error(error);
-            console.log("Data", data);
+            console.log("ClassPaperResources", data);
             // @ts-ignore
             setResources(data);
         }
