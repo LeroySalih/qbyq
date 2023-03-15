@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import { Database } from "types/supabase";
 import { Spec, SpecItem, SpecData, PupilMarks, Question} from "types/alias";
 import { isVariableDeclarationList } from 'typescript';
@@ -20,12 +20,19 @@ type FieldData = {
     errorMessage: string | null
 }
 
+
+
+
+
 const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
 
     const [value, setValue] = useState<number | null>(null);
     const [fieldData, setFieldData] = useState<FieldData>({isValid : null, errorMessage: null });
     const [specItem, setSpecItem] = useState<SpecItem | null>(null);
     
+    const textInput = useRef<any>(null);
+
+    const setValueState = () => {}
     useEffect(()=> {
         setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks);
 
@@ -40,14 +47,28 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
                 isValid: false, 
                 errorMessage : `Can not be less than 0.`});
 
+            //setValue(0);
+            onChange(question.id, 0);
+            setValue(0);
+
+            // @ts-ignore
+            textInput?.current.focus();
             return;
         }
 
 
-        if (value! > question.marks! || value! < 0){
+        if (value! > question.marks!){
             setFieldData({
                 isValid: false, 
-                errorMessage : `Can not be greater than ${question.marks} ${question.marks === 1 ? 'mark' : 'marks' }.`})
+                errorMessage : `Can not be greater than ${question.marks} ${question.marks === 1 ? 'mark' : 'marks' }.`});
+
+            //setValue(0);
+            
+            onChange(question.id, question.marks || 0);
+            setValue(question.marks);
+
+            // @ts-ignore
+            textInput?.current.focus();
             return;
         } 
             
@@ -65,6 +86,8 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
             name={question.id.toString()} 
             value={value}
             id={question.id.toString()} 
+            
+            ref={textInput}
             onChange={(e)=>onChange(question.id, e.value || 0)}
             onBlur={handleOnBlur}/>
         <div className="question-marks">
