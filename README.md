@@ -11,8 +11,9 @@ for questions and suggestions, contact [leroy Salih](mailto:leroysalih@gmail.com
 
 ## Todo Ideas
 
-- [ ] Add 
-- [ ] Add date on the resources to show when each file was issued
+- [x] Fix Validation
+- [ ] Fix Links 
+- [x] Add date on the resources to show when each file was issued
 - [ ] Add specification materials page to group resources for each specification
 - [ ] Automate the new pupil profile process to create a new profile when a pupil signs in for the first time
 - [ ] Class Page to show the activities scores for a class
