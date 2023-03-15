@@ -35,19 +35,29 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
 
     const handleOnBlur = () => {
 
-        if (value! > question.marks!){
+        if (value! < 0) {
             setFieldData({
                 isValid: false, 
-                errorMessage : `Can not be greater than ${question.marks} ${question.marks === 1 ? 'mark' : 'marks' }.`})
-        } else {
-            setFieldData({isValid: true, errorMessage : null})
-            // notify parent that change has occured
-            onBlur(question.id)
+                errorMessage : `Can not be less than 0.`});
+
+            return;
         }
 
 
+        if (value! > question.marks! || value! < 0){
+            setFieldData({
+                isValid: false, 
+                errorMessage : `Can not be greater than ${question.marks} ${question.marks === 1 ? 'mark' : 'marks' }.`})
+            return;
+        } 
+            
         
+        setFieldData({isValid: true, errorMessage : null})
+        // notify parent that change has occured
+        onBlur(question.id)    
     }
+
+
     return <div className="question">
         <div className="question-number">{question.question_number}</div>
         <InputNumber 
