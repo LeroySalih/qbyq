@@ -45,7 +45,7 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                 <div>Date</div>
                                                 <div>Code</div>
                                                 <div>Title</div>
-                                                <div>Available</div>
+                                                <div>Issued</div>
                                                 <div>Marks</div>
                                             {
                                                 /*
