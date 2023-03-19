@@ -46,6 +46,8 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                 <div>Code</div>
                                                 <div>Title</div>
                                                 <div>Issued</div>
+                                                <div>Complete By</div>
+                                                <div>Mark By</div>
                                                 <div>Marks</div>
                                             {
                                                 /*
@@ -72,6 +74,9 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                     </Link>     
                                                 </div>
                                                 <div className="classLink">{cp.availableFrom.substr(0,10)}</div>
+                                                <div className="classLink">{cp.completeBy.substr(0,10)}</div>
+                                                <div className="classLink">{cp.markBy.substr(0,10)}</div>
+                                                
                                                 <div key={`3${i}`} className="classLink">
                                                     {getMarksForPaper(cp.paperId)}
                                                 </div>
@@ -101,7 +106,7 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
 
             .display-papers {
                 display : grid;
-                grid-template-columns: 1fr 2fr 3fr 1fr 1fr;
+                grid-template-columns: 1fr 2fr 3fr 1fr 1fr 1fr 1fr;
             }
 
 
