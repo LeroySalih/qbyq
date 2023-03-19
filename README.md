@@ -12,8 +12,9 @@ for questions and suggestions, contact [leroy Salih](mailto:leroysalih@gmail.com
 ## Todo Ideas
 
 - [x] Fix Validation
-- [ ] Fix Links 
-- [ ] Add page to check marks for all pupils in a class
+- [ ] Fix Undefined links on Spec Report 
+- [ ] Fix Sort order of Papers on Landing Page 
+- [X] Add page to check marks for all pupils in a class
 - [x] Add date on the resources to show when each file was issued
 - [ ] Add specification materials page to group resources for each specification
 - [ ] Automate the new pupil profile process to create a new profile when a pupil signs in for the first time
