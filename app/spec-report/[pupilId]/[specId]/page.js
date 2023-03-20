@@ -59,7 +59,7 @@ const DisplaySpecProgress = ({pupilId, specId}) => {
 
     // fn_pupil_marks_by_paper 
     return <Card title="Progess">
-        {specData && <Chart labels={specData.map(s => s.availableFrom)} data={specData.map(s => s.pct)}/>}
+        {specData && <Chart labels={specData.map(s => s.availableFrom)} data={specData.map(s => (s.pct * 100))}/>}
         
     </Card>
 }
@@ -76,7 +76,7 @@ const DisplaySpecDataByItem = ({pupilId, specId}) => {
 
         error && console.error(error);
 
-        console.log(data);
+        console.log("SpecData", data);
 
         setSpecData(data)
     }
@@ -114,7 +114,7 @@ const DisplaySpecDataByItem = ({pupilId, specId}) => {
                 {specData && specData.map((s,i) => <>
                     <div>{s.specTag}</div>
                     
-                    <div>{(s.specRevisionMaterials !== null) ? <Link href={`${s.specRevisionMaterials}`}>{s.specItem}</Link> : <span>{s.specItem}</span>}</div>
+                    <div>{(s.revisionMaterials !== null) ? <Link href={`${s.revisionMaterials}`}>{s.specItem}</Link> : <span>{s.specItem}</span>}</div>
                     <div>{s.pMarks}</div>
                     <div>{s.aMarks}</div>
                     <div>{((s.pMarks / s.aMarks) * 100).toFixed(0)}%</div>

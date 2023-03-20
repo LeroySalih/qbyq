@@ -21,25 +21,25 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
     }
     return <>
         
-            <div>
+            <div >
                 {/*
                  // @ts-ignore */
-                classes?.map((c, i) => <div key={`${i}-${c?.Classes?.title}`}>
+                classes?.map((c, i) => <div key={`${i}-${c?.Classes?.title}`} className="display-class">
                                             
-                                            
-                                            {
-                                                /*
-                                            // @ts-ignore */}
-                                            <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
-                                            <div>
-                                                {// @ts-ignore
-                                                 profile && <Link href={`/spec-report/${profile.id}/${c!.Classes!.ClassPapers[0].Papers.specId}`}>
-                                                <span>{
-                                                // @ts-ignore
-                                                c!.Classes!.ClassPapers[0].Papers.Spec.title}
-                                                </span>
-                                                </Link>}
-                                            
+                                            <div className="class-title-block">
+                                                {
+                                                    /*
+                                                // @ts-ignore */}
+                                                <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
+                                                <div>
+                                                    {// @ts-ignore
+                                                    profile && <Link href={`/spec-report/${profile.id}/${c!.Classes!.ClassPapers[0].Papers.specId}`}>
+                                                    <span className="classTitle">{
+                                                    // @ts-ignore
+                                                    c!.Classes!.ClassPapers[0].Papers.Spec.title}
+                                                    </span>
+                                                    </Link>}
+                                                </div>
                                             </div>
                                             <div className="display-papers">
                                                 <div>Date</div>
@@ -54,6 +54,7 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                 // @ts-ignore */}
                                             { c!.Classes!.ClassPapers
                                                 .filter((cp:any) => {return cp.availableFrom.substr(0,10) <= new Date().toISOString().substr(0,10)})
+                                                .sort((a:any, b:any) => a.availableFrom > b.availableFrom ? -1 : 1)
                                                 .map((cp:any, i:number) => <>
                                                 <div  key={`0${i}`}>
                                                     <Link className="classLink" href={`/paper-form/${cp.paperId}`}>
@@ -90,15 +91,28 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
             
         <style jsx={true}>{`
 
+            .display-class {
+                border-bottom:solid 1px silver;
+                margin-bottom: 2rem;
+                
+            }
+
+            .class-title-block {
+                display: flex;
+                flex-direction:row;
+                justify-content: space-between;
+                align-items: center;
+                
+            }
             .classTitle {
                 font-size: 1.3rem;
                 font-weight : bold;
-                border-bottom:solid 1px silver;
+                
                 margin-top: 1rem;
             }
 
             .classLink {
-                font-size: 0.8rem;
+                font-size: 0.7rem;
                 
                 text-decoration: none;
             }

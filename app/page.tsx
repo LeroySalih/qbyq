@@ -149,42 +149,11 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             </div>
           }
 
-          
-          <TabView>
-            <TabPanel header="Papers">
-            {/*
-              //@ts-ignore */}
-              <DisplayClasses classes={classes} pupilMarks={pupilMarks}/>
-            </TabPanel>
-            <TabPanel header="Specifications">
-            
-            
-            {
-              specData && (<Dropdown value={currentSpec} onChange={(e) => setCurrentSpec(parseInt(e.value))} options={[
-                {value: 1, label: "AQA Computer Science"}, 
-                {value: 2, label: "EdExcel Business"}]} 
-                
-                placeholder="Select a Specification" className="w-full md:w-14rem" />)
-            }
-              <div key={`sd01`} className="display-spec">
-              <div key={`sd02`} className="display-spec-heading">Tag</div>
-              <div key={`sd03`} className="display-spec-heading">Title</div>
-              <div key={`sd04`} className="display-spec-heading">Given</div>
-              <div key={`sd05`} className="display-spec-heading">Available</div>
-              <div key={`sd06`} className="display-spec-heading">%</div>
-          {
-            specData && specData.map((sd, i) => <>
-              <div key={`sd1${i}`}>{sd.tag}</div>
-              <div key={`sd2${i}`}>{sd.revisionMaterials != null ? <a href={sd.revisionMaterials} target="_new">{sd.title}</a> : sd.title}</div>
-              <div key={`sd3${i}`}>{sd.pm_marks}</div>
-              <div key={`sd4${i}`}>{sd.q_marks}</div>
-              <div key={`sd5${i}`}>{sd.pm_marks > 0 ? `${((sd.pm_marks || 0) / sd.q_marks * 100).toFixed(2)}%` : 0}</div>
-              </> )
+          {// @ts-ignore
+          <DisplayClasses classes={classes} pupilMarks={pupilMarks}/>
           }
-          </div>
-            </TabPanel>
-          </TabView>
 
+          
           </div>
           <style jsx={true}>{`
 
