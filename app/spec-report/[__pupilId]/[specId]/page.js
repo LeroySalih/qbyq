@@ -1,20 +1,103 @@
 "use client";
 
 import supabase from 'components/supabase';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, Profiler } from 'react';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import Link from 'next/link';
 import Chart from 'components/line-chart';
+import { getAllPupilMarks } from 'lib';
 
-  
+
   
 
 const SpecReport = ({params}) => {
-    const {pupilId, specId} = params;
-    const {user, profile, classes, pupilMarks, loadClasses} = useContext(UserContext);
+
+    const {__pupilId, specId} = params;
+    const {user, profile, classes, pupilMarks} = useContext(UserContext);
+
+    const [currentClassId, setCurrentClassId] = useState(0);
+    const [pupilId, setPupilId] = useState(__pupilId);
+
+    const [allClasses, setAllClasses] = useState(null);
+    const [allPupils, setAllPupils] = useState(null);
+
+    const getClasses = async (specId) => {
+        const {data:classes, error} = await supabase.from("Classes").select().eq("specId", specId)
+
+        console.log("Classes", classes);
+
+        error && console.error(error);
+
+        setAllClasses(classes);
+        setCurrentClassId(classes[0].id)
+    }
+
+
+    const getAllPupils = async (classId) => {
+
+        
+        const {data:pupils, error} = (await supabase
+            .from("ClassMembership")
+            .select("*, Classes(*), Profile(*)")
+            .eq("classId", classId))
+            
+
+        console.log("pupils", pupils);
+
+        error && console.error(error);
+
+        const tmp = pupils.map((p, i) => ({ 
+            pupilId: p.pupilId,
+            classTitle: p.Classes.title, 
+            firstName: p.Profile.firstName, 
+            familyName: p.Profile.familyName
+        }))
+
+        //setPupilId(tmp[0]?.id)
+
+        setAllPupils(tmp);
+    }
+
+    useEffect(()=> {
+
+         if (profile && profile.isAdmin) {
+            getClasses(specId);
+         }
+        
+        
+    }, [profile, specId]);
+
+
+    useEffect(()=> {
+
+        if (profile && profile.isAdmin) {
+            getAllPupils(currentClassId);
+        }
+
+    }, [profile, allClasses, currentClassId])
 
     return <>
-        <h1>Spec Report for {profile && `${profile.firstName} ${profile.familyName}`}</h1>
+        <div><Link href="/">Home</Link></div>
+        <h1>
+            <span>Spec Report for </span>
+            {profile && !profile.isAdmin && `${profile.firstName} ${profile.familyName}`}
+            {profile && profile.isAdmin && 
+                <span>
+                    {allClasses && 
+                        <select value={currentClassId} onChange={(e) => {setCurrentClassId(e.target.value)}}>
+                            {allClasses.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
+                        </select>
+                    }
+
+                    {allPupils && 
+                        <select value={pupilId} onChange={(e) => {setPupilId(e.target.value)}}>
+                            {allPupils.map((p, i) => <option value={p.pupilId} key={i}>{p.firstName} {p.familyName}</option>)}
+                        </select>
+                    }
+                </span>
+            }
+
+        </h1>
         <hr></hr>
         <div className="display">
         <div style={{gridArea:"a"}}>
@@ -55,7 +138,7 @@ const DisplaySpecProgress = ({pupilId, specId}) => {
     }
     useEffect(()=> {
         loadData();
-    }, []);
+    }, [pupilId, specId]);
 
     // fn_pupil_marks_by_paper 
     return <Card title="Progess">
@@ -85,7 +168,7 @@ const DisplaySpecDataByItem = ({pupilId, specId}) => {
 
         loadData();
 
-    }, [])
+    }, [pupilId, specId])
 
     const footer = () => {
 
@@ -153,7 +236,7 @@ const DisplaySpecDataByMarks = ({pupilId, specId}) => {
 
         loadData();
 
-    }, [])
+    }, [pupilId, specId])
 
     const footer = () => {
 
