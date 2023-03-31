@@ -75,7 +75,12 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                                                     </Link>     
                                                 </div>
                                                 <div className="classLink">{cp.availableFrom.substr(0,10)}</div>
-                                                <div className="classLink">{cp.completeBy.substr(0,10)}</div>
+                                                
+                                                {profile && profile.isAdmin && 
+                                                     // @ts-ignore
+                                                    <Link href={`/admin/check-paper-marks-for-class/${c!.Classes!.id}/${cp.paperId}`}><div className="classLink">{cp.completeBy.substr(0,10)}</div></Link> }
+                                                {profile && !profile.isAdmin && <div className="classLink">{cp.completeBy.substr(0,10)}</div> }
+                                                
                                                 <div className="classLink">{cp.markBy.substr(0,10)}</div>
                                                 
                                                 <div key={`3${i}`} className="classLink">
