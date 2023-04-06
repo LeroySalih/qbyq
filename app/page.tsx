@@ -22,7 +22,12 @@ import Loading from 'components/loading';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Dropdown } from 'primereact/dropdown';
 
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+
+
 type ProfileProps = {}
+type ClassParam = Class | null | undefined;
 
 const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     
@@ -34,11 +39,13 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     const [currentSpec, setCurrentSpec] = useState<number | undefined>(0);
     const [specData, setSpecData] = useState<PupilMarksForSpec | undefined>();
 
+    const [addDlgOpen, setAddDlgOpen] = useState(false);
 
     const router = useRouter();
 
     // https://1f34-51-252-20-183.in.ngrok.io/paper-form
 
+    
     useEffect(() => {
         const loadData = async () => {
             
@@ -90,17 +97,18 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
 
     }
 
-    type ClassParam = Class | null | undefined;
+    
 
     const handleOnAddClass = async (c:ClassParam) => {
 
         const {data, error} = await supabase.from("ClassMembership")
                                             .insert({classId: c!.id, pupilId: user!.id})
-                                            .select()
+                                            .select();
 
         error && console.error(error);
         
         loadClasses!()        
+        
     }
 
 
@@ -120,7 +128,6 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
         const {  error } = await supabase.auth.signOut();
 
         router.push("/goodbye")
-        
     }
 
     if (loading)
@@ -129,22 +136,25 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     return (
         <>
         <div className="page">
-         {user && <Button variant="outlined" onClick={handleSignOut}>Sign Out</Button>}
-
-          {!user && 
-            <div>
-                <h1>Question By Question (QbyQ)</h1>
-                <h3>Click here to sign in</h3>
-                <Button variant="outlined" onClick={handleSignIn}>Sign In</Button>
-            </div>
-          }
-
+          
+          
           {
             user && <div className="page-header">
-            <h1>Welcome, {profile?.firstName}</h1> 
+            <h2>Welcome, {profile?.firstName}</h2> 
             <div>
-              <h3>Join Class</h3>
-              <AddClass onAdd={handleOnAddClass}/>
+              <Button variant="outlined" onClick={() => {setAddDlgOpen(true)}}>Join Class</Button>
+              {
+                user && <Button variant="outlined" onClick={handleSignOut}>Sign Out</Button>
+              }
+
+              {!user && 
+                <div>
+                    <h1>Question By Question (QbyQ)</h1>
+                    <h3>Click here to sign in</h3>
+                    <Button variant="outlined" onClick={handleSignIn}>Sign In</Button>
+                </div>
+              }
+
             </div>
             </div>
           }
@@ -153,6 +163,11 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
           <DisplayClasses classes={classes} pupilMarks={pupilMarks}/>
           }
 
+          <AddClassDlg 
+            open={addDlgOpen} 
+            onClose={(v) => {setAddDlgOpen(false)}}
+            onAddClass={handleOnAddClass}
+            />
           
           </div>
           <style jsx={true}>{`
@@ -161,6 +176,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
               display : flex;
               flex-direction: row;
               justify-content: space-between;
+              align-items: center;
             }
 
             .display-spec-heading {
@@ -189,3 +205,18 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
 }
 
 export default MainPage;
+
+
+type AddClassDlgProps = {
+  open: boolean;
+  onClose: (value: string) => void;
+  onAddClass: (c: ClassParam) => void;
+}
+
+const AddClassDlg = ({open, onClose, onAddClass}: AddClassDlgProps) => {
+  return  <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Adding Class</DialogTitle>
+            <AddClass onAdd={onAddClass} />
+          </Dialog>
+}
+

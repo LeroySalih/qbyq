@@ -12,6 +12,8 @@ import "primereact/resources/primereact.min.css";                  //core css
 import "primeicons/primeicons.css";                                //icons
 import './globals.css'
 
+import Tooltip from '@mui/material/Tooltip';
+
 import { getClasses, GetClassesResponseType, getAllPupilMarks, GetAllPupilMarks  } from 'lib';
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
@@ -103,7 +105,32 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     <html>
       <head />
       <UserContext.Provider value={{user, profile, classes, pupilMarks, loadClasses}}>
-        <body>{children}</body>
+        <body>
+          <div className="nav-bar">
+            <Tooltip title="Logo idea by Ethan Lopez">
+            <img className="logo" src="qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
+            </Tooltip>
+            <h1>Question By Question (QbyQ)</h1>
+          </div>
+          {children}
+        </body>
+        <style jsx={true}>{`
+         .nav-bar {
+          background-color: #E4E5FF;
+          margin-bottom: 2rem;
+          padding: 0.5rem;
+          border-radius: 1rem;
+          display: flex;
+          flex-direction: row;
+         }
+
+         .logo {
+            margin-left: 1rem;
+            margin-right: 2rem;
+         }
+
+        `} 
+        </style>
       </UserContext.Provider>
     </html>
   )
