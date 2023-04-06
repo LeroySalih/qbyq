@@ -16,6 +16,11 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { getClasses, GetClassesResponseType, getAllPupilMarks, GetAllPupilMarks  } from 'lib';
 
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 export default function RootLayout({children,}: {children: React.ReactNode}) {
 
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -104,6 +109,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   return (
     <html>
       <head />
+      <LocalizationProvider dateAdapter={AdapterLuxon}>
       <UserContext.Provider value={{user, profile, classes, pupilMarks, loadClasses}}>
         <body>
           <div className="nav-bar">
@@ -132,6 +138,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
         `} 
         </style>
       </UserContext.Provider>
+      </LocalizationProvider>
     </html>
   )
 }

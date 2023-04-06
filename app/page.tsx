@@ -24,7 +24,14 @@ import { Dropdown } from 'primereact/dropdown';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {DateTime} from 'luxon';
 
+import { useFilePicker } from 'use-file-picker';
 
 type ProfileProps = {}
 type ClassParam = Class | null | undefined;
@@ -40,6 +47,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     const [specData, setSpecData] = useState<PupilMarksForSpec | undefined>();
 
     const [addDlgOpen, setAddDlgOpen] = useState(false);
+    const [showCreatePaperDlg, setShowCreatePaperDlg] = useState(false);
 
     const router = useRouter();
 
@@ -111,6 +119,10 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
         
     }
 
+    const handleOnCreatePaper = async () => {
+
+    }
+
 
     const handleSignIn = async () => {
 
@@ -143,6 +155,11 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             <h2>Welcome, {profile?.firstName}</h2> 
             <div>
               <Button variant="outlined" onClick={() => {setAddDlgOpen(true)}}>Join Class</Button>
+              
+              {
+                profile && profile.isAdmin && <Button  variant="outlined" onClick={()=> {setShowCreatePaperDlg(true)}}>Create Paper</Button>
+              }
+              
               {
                 user && <Button variant="outlined" onClick={handleSignOut}>Sign Out</Button>
               }
@@ -168,6 +185,12 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
             onClose={(v) => {setAddDlgOpen(false)}}
             onAddClass={handleOnAddClass}
             />
+
+          <CreatePaperDlg 
+            open={showCreatePaperDlg}
+            onClose={()=> {setShowCreatePaperDlg(false)}}
+            onCreatePaper={()=>{}}
+          />
           
           </div>
           <style jsx={true}>{`
@@ -218,5 +241,113 @@ const AddClassDlg = ({open, onClose, onAddClass}: AddClassDlgProps) => {
             <DialogTitle>Adding Class</DialogTitle>
             <AddClass onAdd={onAddClass} />
           </Dialog>
+}
+
+type CreatePaperDlgProps = {
+  open: boolean;
+  onClose: () => void;
+  onCreatePaper: () => void;
+}
+
+const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) => {
+      const [title, setTitle] = useState('');
+      const [yearMonth, setYearMonth] = useState('');
+      const [paper, setPaper] = useState('');
+      const [availableDate, setAvailableDate] = useState(DateTime.now());
+      const [completeDate, setCompleteDate] = useState(DateTime.now().plus({days: 7}));
+      const [markByDate, setMarkByDate] = useState(DateTime.now().plus({days: 8}));
+
+      const [openFileSelector, { filesContent, loading }] = useFilePicker({
+        accept: '.pdf',
+      });
+
+      const handleFileOpen = async () => {
+
+        try {
+          // you can also get values directly from the openFileSelector
+          const result = openFileSelector();
+          
+        } catch (err) {
+          console.log(err);
+          console.log('Something went wrong or validation failed');
+        }
+      }
+
+      return  <Dialog open={open} onClose={onClose}>
+                <DialogTitle>Creating a Paper</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Creating a new Paper</DialogContentText>
+                  <div className="">
+                  <TextField
+                    label="Year-Month"
+                    value={yearMonth}
+                    defaultValue="Small"
+                    size="small"
+                    onChange={(e:any) => {setYearMonth(e.target.value);}}
+
+                  />
+                  
+                  <TextField
+                    label="code"
+                    value={paper}
+                    defaultValue="Small"
+                    size="small"
+                    onChange={(e:any) => {setPaper(e.target.value);}}
+                  />
+
+                  <TextField
+                    label="Title"
+                    value={title}
+                    defaultValue="Small"
+                    size="small"
+                    onChange={(e:any) => {setTitle(e.target.value);}}
+
+                  />
+                  
+                  <select>
+                    <option>Spec 1</option>
+                    <option>Spec 2</option>
+                    <option>Spec 3</option>
+                  </select>
+                  
+                  <DatePicker 
+                    label="Available"
+                    format="yyyy-MM-dd"
+                    value={availableDate} 
+                    onChange={(val) => setAvailableDate(val)}/>
+
+                  <DatePicker 
+                    label="Complete"
+                    format="yyyy-MM-dd"
+                    value={completeDate} 
+                    onChange={(val) => setCompleteDate(val)}/>
+
+                  <DatePicker 
+                    label="Mark By"
+                    format="yyyy-MM-dd"
+                    value={markByDate} 
+                    onChange={(val) => setMarkByDate(val)}/>
+
+                  </div>
+
+                  <Button onClick={handleFileOpen}>Select</Button>
+
+                  <div>{
+                    filesContent.map((file, index) => (
+                      <div key={index}>
+                        <h2>{file.name}</h2>
+                        <img alt={file.name} src={file.content}></img>
+                        <br />
+                      </div>
+                    ))
+                    
+                    }</div>
+      
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={onClose}>Cancel</Button>
+                  <Button>Create</Button>
+                </DialogActions>
+              </Dialog>
 }
 
