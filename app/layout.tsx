@@ -125,7 +125,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
         <body>
           <div className="nav-bar">
             <Tooltip title="Logo idea by Ethan Lopez">
-            <img className="logo" src="qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
+            <img className="logo" src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
             </Tooltip>
             <h1>Question By Question (QbyQ)</h1>
           </div>
