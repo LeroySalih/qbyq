@@ -36,9 +36,23 @@ export const getClassByTag = async (tag: string | undefined) => {
     return data;
 }
 
+
+export const getAllSpecs = async () => {
+    const {data, error} = await supabase.from("Spec")
+            .select()
+            .neq("id", 0);
+
+    error && console.error(error);
+
+    console.log("Specs", data)
+    return data;
+
+}
+
 export type GetAllPupilMarks = Awaited<ReturnType<typeof getAllPupilMarks>>
 export type GetClassByTagResponseType = Awaited<ReturnType<typeof getClassByTag>>
 export type GetClassesResponseType = Awaited<ReturnType<typeof getClasses>>
+export type GetAllSpecsType = Awaited<ReturnType<typeof getAllSpecs>>
 
 
 

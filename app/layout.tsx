@@ -14,7 +14,10 @@ import './globals.css'
 
 import Tooltip from '@mui/material/Tooltip';
 
-import { getClasses, GetClassesResponseType, getAllPupilMarks, GetAllPupilMarks  } from 'lib';
+import { getClasses, GetClassesResponseType, 
+         getAllPupilMarks, GetAllPupilMarks,
+         getAllSpecs, GetAllSpecsType
+        } from 'lib';
 
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -27,8 +30,15 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [classes, setClasses] = useState<GetClassesResponseType>(null);
   const [pupilMarks, setPupilMarks] = useState<GetAllPupilMarks>(null);
+  const [specs, setSpecs] = useState<GetAllSpecsType>(null);
 
   const router = useRouter();
+
+  const loadSpecs = async () => {
+    const data = await getAllSpecs();
+
+    setSpecs(data);
+  }
 
   const loadClasses = async () => {
     if (user){
@@ -102,6 +112,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     loadProfile();
     loadClasses();
     loadPupilMarks(); 
+    loadSpecs();
     
   }, [user])
 
@@ -110,7 +121,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     <html>
       <head />
       <LocalizationProvider dateAdapter={AdapterLuxon}>
-      <UserContext.Provider value={{user, profile, classes, pupilMarks, loadClasses}}>
+      <UserContext.Provider value={{user, specs, profile, classes, pupilMarks, loadClasses}}>
         <body>
           <div className="nav-bar">
             <Tooltip title="Logo idea by Ethan Lopez">

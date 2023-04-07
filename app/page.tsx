@@ -3,15 +3,15 @@
 import Link from 'next/link';
 import React, { useContext } from 'react'
 import {useState, useEffect} from 'react';
-import { Database } from 'types/supabase';
+
 import supabase from '../components/supabase';
-import { PupilMarksForSpec, Spec } from 'types/alias';
+import { PupilMarksForSpec, Specs, Spec, Paper } from 'types/alias';
 import { UserContextType, UserContext } from 'components/context/user-context';
 import { Profile } from 'types/alias';
 import { useRouter } from 'next/navigation'
 // import { Button } from 'primereact/button';
 import Button from '@mui/material/Button';
-import { InputText } from 'primereact/inputtext'; 
+ 
 
 import { Class } from 'types/alias';
 import AddClass, {OnAddHandler} from 'components/add-class';
@@ -21,6 +21,7 @@ import Loading from 'components/loading';
 
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Dropdown } from 'primereact/dropdown';
+import { InputText } from 'primereact/inputtext';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -28,6 +29,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {DateTime} from 'luxon';
 
@@ -243,19 +247,27 @@ const AddClassDlg = ({open, onClose, onAddClass}: AddClassDlgProps) => {
           </Dialog>
 }
 
+
+
 type CreatePaperDlgProps = {
   open: boolean;
   onClose: () => void;
-  onCreatePaper: () => void;
+  onCreatePaper: (p: Paper) => void;
 }
 
 const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) => {
       const [title, setTitle] = useState('');
-      const [yearMonth, setYearMonth] = useState('');
+      const [year, setYear] = useState('');
+      const [month, setMonth] = useState('');
       const [paper, setPaper] = useState('');
       const [availableDate, setAvailableDate] = useState(DateTime.now());
       const [completeDate, setCompleteDate] = useState(DateTime.now().plus({days: 7}));
       const [markByDate, setMarkByDate] = useState(DateTime.now().plus({days: 8}));
+      const [status, setStatus] = useState('not ready');
+      const [specId, setSpecId] = useState<number | null>(null);
+      const [marks, setMarks] = useState<number | null>(0);
+      const {specs} = useContext<UserContextType>(UserContext);
+      
 
       const [openFileSelector, { filesContent, loading }] = useFilePicker({
         accept: '.pdf',
@@ -273,81 +285,156 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
         }
       }
 
-      return  <Dialog open={open} onClose={onClose}>
+
+      const handleOnCreatePaper = async () => {
+      
+        setStatus("Creating Paper")
+        
+        const {data: createPaperData, error: createPaperError} = await supabase.from("Papers")
+                                                                .insert({
+                                                                  month: month, 
+                                                                  year: year,
+                                                                  marks: marks,
+                                                                  title: title,
+                                                                  specId: specId})
+                                                                .select();
+
+        createPaperError && console.error(createPaperError);
+
+        if (!createPaperData) return;
+
+        console.log("CreatePaperData", createPaperData);
+
+        setStatus(`Created paper ${createPaperData[0].id}`);
+
+        /*
+        const uploadFile = e.target.files[0];
+        const {data, error} = await supabase
+                                        .storage
+                                        .from('exam-papers')
+                                        .upload(`/${user!.id}/${paperId}/${uploadFile.name}`, uploadFile, {
+                                            cacheControl: '3600',
+                                            upsert: false
+                                            });
+        */
+           
+        
+        for (const file of filesContent){
+
+          const {data: fileUploadData, error:fileUploadError} = await supabase.storage.from("exam-papers")
+                                  .upload(`/0-test-${createPaperData[0].id}/${file.name}`,file);
+          
+          
+          fileUploadError && console.error(fileUploadError); 
+
+          if (fileUploadData){
+            console.log("Upload Data", fileUploadData)
+          }
+
+        }
+        
+        // onCreatePaper && onCreatePaper(p);
+      }
+
+      useEffect(()=> {
+        specs && setSpecId(specs[0].id);
+      }, [specs])
+      useEffect (()=> {
+        console.log("Checking")
+        if (title !== '' && 
+            year !== '' && 
+            month !== '' && 
+            paper !== '' && 
+            filesContent.length > 0) {
+          setStatus('valid')
+        }
+
+      }, [title, year, month, paper])
+
+      return  <>
+                <Dialog open={open} onClose={onClose}>
                 <DialogTitle>Creating a Paper</DialogTitle>
                 <DialogContent>
                   <DialogContentText>Creating a new Paper</DialogContentText>
-                  <div className="">
-                  <TextField
-                    label="Year-Month"
-                    value={yearMonth}
-                    defaultValue="Small"
-                    size="small"
-                    onChange={(e:any) => {setYearMonth(e.target.value);}}
+                  <div className="form-layout">
+                    <TextField
+                      label="Year"
+                      value={year}
+                      size="small"
+                      onChange={(e:any) => {setYear(e.target.value);}}
+                    />
 
-                  />
+                    <TextField
+                      label="Month"
+                      value={month}
+                      size="small"
+                      onChange={(e:any) => {setMonth(e.target.value);}}
+                    />
                   
-                  <TextField
-                    label="code"
-                    value={paper}
-                    defaultValue="Small"
-                    size="small"
-                    onChange={(e:any) => {setPaper(e.target.value);}}
-                  />
+                    <TextField
+                      label="code"
+                      value={paper}
+                      size="small"
+                      onChange={(e:any) => {setPaper(e.target.value);}}
+                    />
 
-                  <TextField
-                    label="Title"
-                    value={title}
-                    defaultValue="Small"
-                    size="small"
-                    onChange={(e:any) => {setTitle(e.target.value);}}
-
-                  />
+                    <TextField
+                      label="Title"
+                      value={title}
+                      size="small"
+                      onChange={(e:any) => {setTitle(e.target.value);}}
+                    />
+                    <TextField
+                      label="Marks"
+                      value={marks}
+                      size="small"
+                      onChange={(e:any) => {setMarks(e.target.value);}}
+                    />
                   
-                  <select>
-                    <option>Spec 1</option>
-                    <option>Spec 2</option>
-                    <option>Spec 3</option>
-                  </select>
                   
-                  <DatePicker 
-                    label="Available"
-                    format="yyyy-MM-dd"
-                    value={availableDate} 
-                    onChange={(val) => setAvailableDate(val)}/>
+                    <Select value={specId?.toString()} onChange={(v: SelectChangeEvent) => setSpecId(parseInt(v.target.value))}>
+                      {
+                        specs && specs.map((s:Spec, i) => <MenuItem key={i} value={s.id}>{s.title}</MenuItem>)
+                      }
+                    </Select>
+                  
+                </div>
 
-                  <DatePicker 
-                    label="Complete"
-                    format="yyyy-MM-dd"
-                    value={completeDate} 
-                    onChange={(val) => setCompleteDate(val)}/>
-
-                  <DatePicker 
-                    label="Mark By"
-                    format="yyyy-MM-dd"
-                    value={markByDate} 
-                    onChange={(val) => setMarkByDate(val)}/>
-
-                  </div>
-
-                  <Button onClick={handleFileOpen}>Select</Button>
-
-                  <div>{
+                <div>
+                    <Button onClick={handleFileOpen}>Select Files</Button>
+                    <ul >
+                    {
                     filesContent.map((file, index) => (
-                      <div key={index}>
-                        <h2>{file.name}</h2>
-                        <img alt={file.name} src={file.content}></img>
-                        <br />
-                      </div>
+                        <li key={index}>{file.name}</li>
                     ))
-                    
-                    }</div>
+            
+                    }
+                    </ul>
+                </div>
+
+                <div>{status}</div>
       
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={onClose}>Cancel</Button>
-                  <Button>Create</Button>
+                  <Button 
+                    disabled={status !== 'valid'} 
+                    onClick={handleOnCreatePaper}>Create</Button>
                 </DialogActions>
               </Dialog>
+              <style jsx={true}>{`
+                .form-layout {
+                  display : grid;
+                  grid-template-columns: 1fr;
+                  grid-gap: 1rem;
+                  flex-direction: column;
+                }
+
+                .form-layout > * {
+                  margin: 1rem;
+                }
+              `}
+              </style>
+              </>
 }
 

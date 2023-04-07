@@ -38,5 +38,8 @@
     "supabase-cli": "^0.0.21",
     "typescript": "4.9.4",
     "use-file-picker": "^1.6.1"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.3.0"
   }
 }
