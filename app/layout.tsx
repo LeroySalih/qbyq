@@ -14,7 +14,15 @@ import './globals.css'
 
 import Tooltip from '@mui/material/Tooltip';
 
-import { getClasses, GetClassesResponseType, getAllPupilMarks, GetAllPupilMarks  } from 'lib';
+import { getClasses, GetClassesResponseType, 
+         getAllPupilMarks, GetAllPupilMarks,
+         getAllSpecs, GetAllSpecsType
+        } from 'lib';
+
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
 
@@ -22,8 +30,15 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [classes, setClasses] = useState<GetClassesResponseType>(null);
   const [pupilMarks, setPupilMarks] = useState<GetAllPupilMarks>(null);
+  const [specs, setSpecs] = useState<GetAllSpecsType>(null);
 
   const router = useRouter();
+
+  const loadSpecs = async () => {
+    const data = await getAllSpecs();
+
+    setSpecs(data);
+  }
 
   const loadClasses = async () => {
     if (user){
@@ -97,6 +112,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
     loadProfile();
     loadClasses();
     loadPupilMarks(); 
+    loadSpecs();
     
   }, [user])
 
@@ -104,11 +120,12 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   return (
     <html>
       <head />
-      <UserContext.Provider value={{user, profile, classes, pupilMarks, loadClasses}}>
+      <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <UserContext.Provider value={{user, specs, profile, classes, pupilMarks, loadClasses}}>
         <body>
           <div className="nav-bar">
             <Tooltip title="Logo idea by Ethan Lopez">
-            <img className="logo" src="qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
+            <img className="logo" src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
             </Tooltip>
             <h1>Question By Question (QbyQ)</h1>
           </div>
@@ -132,6 +149,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
         `} 
         </style>
       </UserContext.Provider>
+      </LocalizationProvider>
     </html>
   )
 }
