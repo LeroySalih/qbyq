@@ -152,7 +152,13 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
     return (
         <>
         <div className="page">
-          
+          {!user && 
+                <div>
+                    
+                    <h3>Click here to sign in</h3>
+                    <Button variant="outlined" onClick={handleSignIn}>Sign In</Button>
+                </div>
+          }
           
           {
             user && <div className="page-header">
@@ -168,14 +174,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
                 user && <Button variant="outlined" onClick={handleSignOut}>Sign Out</Button>
               }
 
-              {!user && 
-                <div>
-                    <h1>Question By Question (QbyQ)</h1>
-                    <h3>Click here to sign in</h3>
-                    <Button variant="outlined" onClick={handleSignIn}>Sign In</Button>
-                </div>
-              }
-
+             
             </div>
             </div>
           }
