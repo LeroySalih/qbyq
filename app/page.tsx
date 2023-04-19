@@ -258,6 +258,7 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
       const [title, setTitle] = useState('');
       const [year, setYear] = useState('');
       const [month, setMonth] = useState('');
+      const [subject, setSubject] = useState('');
       const [paper, setPaper] = useState('');
       const [availableDate, setAvailableDate] = useState(DateTime.now());
       const [completeDate, setCompleteDate] = useState(DateTime.now().plus({days: 7}));
@@ -295,6 +296,8 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
                                                                   year: year,
                                                                   marks: marks,
                                                                   title: title,
+                                                                  paper: paper,
+                                                                  subject: subject,
                                                                   specId: specId})
                                                                 .select();
 
@@ -343,12 +346,13 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
         if (title !== '' && 
             year !== '' && 
             month !== '' && 
+            subject !== '' &&
             paper !== '' && 
             filesContent.length > 0) {
           setStatus('valid')
         }
 
-      }, [title, year, month, paper])
+      }, [title, year, month, subject, paper, filesContent])
 
       return  <>
                 <Dialog open={open} onClose={onClose}>
@@ -369,9 +373,16 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
                       size="small"
                       onChange={(e:any) => {setMonth(e.target.value);}}
                     />
+
+                    <TextField
+                      label="Subject"
+                      value={subject}
+                      size="small"
+                      onChange={(e:any) => {setSubject(e.target.value);}}
+                    />
                   
                     <TextField
-                      label="code"
+                      label="paper"
                       value={paper}
                       size="small"
                       onChange={(e:any) => {setPaper(e.target.value);}}
