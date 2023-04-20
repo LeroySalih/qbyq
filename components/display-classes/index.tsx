@@ -27,10 +27,14 @@ const DisplayClasses = ({classes, pupilMarks}:DisplayClassesParams) => {
                 classes?.map((c, i) => <div key={`${i}-${c?.Classes?.title}`} className="display-class">
                                             
                                             <div className="class-title-block">
-                                                {
-                                                    /*
+                                                <div className="classTitle">
+                                                   { /*
                                                 // @ts-ignore */}
-                                                <div className="classTitle">{c?.Classes?.title} ({c?.Classes?.tag})</div>
+                                                    {profile?.isAdmin && <Link href={`admin/check-class/${c?.Classes?.id}`}>{c?.Classes?.title}</Link> }
+                                                    { /*
+                                                // @ts-ignore */}
+                                                    {!profile?.isAdmin && c?.Classes?.title }
+                                                    </div>
                                                 <div>
                                                     {// @ts-ignore
                                                     profile && <Link href={`/spec-report/${profile.id}/${c!.Classes!.ClassPapers[0].Papers.specId}`}>
