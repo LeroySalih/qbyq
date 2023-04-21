@@ -3,13 +3,19 @@ import supabase from 'components/supabase';
 import {useState, useEffect, useMemo} from 'react';
 import 'react-data-grid/lib/styles.css';
 import DataGrid, {textEditor} from 'react-data-grid';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const CheckClass = ({params}) => {
 
-    const {classid} = params;
+    const {_classid} = params;
+    
+    const [classid, setClassId] = useState(_classid);
     const [paperMarks, setPaperMarks] = useState(null);
     const [papersForClass, setPapersForClass] = useState(null);
     const [classDetails, setClassDetails] = useState(null);
+    const [classes, setClasses] = useState(null);
 
     const shapePapers = (papers) => {
 
@@ -24,6 +30,7 @@ const CheckClass = ({params}) => {
             }, 
             ...(papers.map((p, i) => ({
                 key: p.paperId, 
+                width: 160,
                 name: `${p.Papers.year}-${p.Papers.month}-${p.Papers.paper}`,
                 availableFrom: p.availableFrom,
                 completeBy: p.completeBy,
@@ -70,7 +77,6 @@ const CheckClass = ({params}) => {
           setPapersForClass(shapePapers(data));
     } 
 
-
     const loadClassData = async (classid) => {
         const {data, error} =await supabase.rpc('fn_check_class', {
           classid
@@ -79,15 +85,27 @@ const CheckClass = ({params}) => {
         error && console.error(error);
 
         setPaperMarks(shapePaperMarks(data));
+    } 
 
+    const loadAllClasses = async () => {
+        const {data, error} = await supabase.from("Classes").select().neq("id", 0);
+
+        error && console.error(error);
+
+        setClasses(data);
     }
+
+    useEffect(()=> {
+        loadAllClasses();
+        setClassId(_classid);
+    },[_classid]);
 
     useEffect(()=> {
         loadClassData(classid);
         loadPapersForClass(classid);
         loadClassDetails(classid);
-    }, [classid]
-    )
+        }, [classid]
+    );
 
     const summaryRows = useMemo(() => {
         console.log('pfc', papersForClass)
@@ -98,7 +116,13 @@ const CheckClass = ({params}) => {
       }, [papersForClass]);
 
     return <>
-            <h1>Listing Papers for Class {classDetails?.tag}</h1>
+            <h1>Listing Papers for Class 
+            
+                <Select value={classid} onChange={(e) => setClassId(e.target.value)}>
+                    {classes && classes.map((c, i) => <MenuItem key={i} value={c.id}>{c.tag}</MenuItem>)}
+                </Select>
+                
+            </h1>
            {paperMarks && papersForClass && <DataGrid 
             columns={papersForClass} 
             rows={paperMarks} 
