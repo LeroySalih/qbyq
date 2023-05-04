@@ -14,6 +14,7 @@ export interface Database {
           created_at: string | null
           id: number
           join_code: string | null
+          specId: number | null
           tag: string | null
           title: string | null
         }
@@ -21,6 +22,7 @@ export interface Database {
           created_at?: string | null
           id?: number
           join_code?: string | null
+          specId?: number | null
           tag?: string | null
           title?: string | null
         }
@@ -28,6 +30,7 @@ export interface Database {
           created_at?: string | null
           id?: number
           join_code?: string | null
+          specId?: number | null
           tag?: string | null
           title?: string | null
         }
@@ -312,6 +315,84 @@ export interface Database {
           paperId?: number | null
         }
       }
+      TDFQuestions: {
+        Row: {
+          AO: number | null
+          created_at: string | null
+          def: string | null
+          id: number
+          questionSetId: number | null
+          specItemId: number | null
+          term: string | null
+        }
+        Insert: {
+          AO?: number | null
+          created_at?: string | null
+          def?: string | null
+          id?: number
+          questionSetId?: number | null
+          specItemId?: number | null
+          term?: string | null
+        }
+        Update: {
+          AO?: number | null
+          created_at?: string | null
+          def?: string | null
+          id?: number
+          questionSetId?: number | null
+          specItemId?: number | null
+          term?: string | null
+        }
+      }
+      TDFQuestionSets: {
+        Row: {
+          created_at: string | null
+          id: number
+          owner: string | null
+          specId: number | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          owner?: string | null
+          specId?: number | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          owner?: string | null
+          specId?: number | null
+          title?: string | null
+        }
+      }
+      TDFQueue: {
+        Row: {
+          created_at: string | null
+          dueDate: string | null
+          questionId: number
+          queueType: number | null
+          result: boolean | null
+          userId: string
+        }
+        Insert: {
+          created_at?: string | null
+          dueDate?: string | null
+          questionId: number
+          queueType?: number | null
+          result?: boolean | null
+          userId: string
+        }
+        Update: {
+          created_at?: string | null
+          dueDate?: string | null
+          questionId?: number
+          queueType?: number | null
+          result?: boolean | null
+          userId?: string
+        }
+      }
     }
     Views: {
       vw_duplicate_pupil_marks: {
@@ -332,6 +413,28 @@ export interface Database {
           tag: string | null
           title: string | null
           userId: string | null
+        }
+      }
+      vw_questions_denorm: {
+        Row: {
+          p_id: number | null
+          p_paper: string | null
+          p_subject: string | null
+          p_title: string | null
+          p_year: string | null
+          pm_entered: string | null
+          pm_id: number | null
+          pm_pMarks: number | null
+          pm_userId: string | null
+          q_amarks: number | null
+          q_id: number | null
+          q_month: string | null
+          q_qnumber: string | null
+          q_qorder: number | null
+          si_revision_materials: string | null
+          si_specId: number | null
+          si_tag: string | null
+          si_title: string | null
         }
       }
       vw_user_marks_for_paper: {
@@ -361,6 +464,131 @@ export interface Database {
       }
     }
     Functions: {
+      fn_check_class: {
+        Args: {
+          classid: number
+        }
+        Returns: {
+          pupilId: string
+          firstName: string
+          familyName: string
+          classId: number
+          paperId: number
+          year: string
+          month: string
+          paper: string
+          pMarks: number
+        }[]
+      }
+      fn_check_class_spec_item: {
+        Args: {
+          classid: number
+        }
+        Returns: {
+          pupilId: string
+          firstName: string
+          familyName: string
+          tag: string
+          title: string
+          pMarks: number
+          qMarks: number
+        }[]
+      }
+      fn_check_paper_for_class: {
+        Args: {
+          paperid: number
+          classid: number
+        }
+        Returns: {
+          pupilId: string
+          firstName: string
+          familyName: string
+          pMarks: number
+        }[]
+      }
+      fn_get_paper_data_for_pupil: {
+        Args: {
+          pupilid: string
+        }
+        Returns: {
+          classTag: string
+          pupilId: string
+          firstName: string
+          familyName: string
+          paperId: number
+          year: string
+          month: string
+          paper: string
+          availableFrom: string
+          completeBy: string
+          markBy: string
+          qMarks: number
+          pMarks: number
+        }[]
+      }
+      fn_marks_entered: {
+        Args: {
+          paperid: number
+          classid: number
+        }
+        Returns: {
+          pupilId: string
+          firstName: string
+          familyName: string
+          pMarks: number
+          qMarks: number
+          pct: number
+        }[]
+      }
+      fn_pupil_marks_by_available_from_date: {
+        Args: {
+          uuid: string
+          specid: number
+        }
+        Returns: {
+          tag: string
+          title: string
+          paperid: number
+          availablefrom: string
+          amarks: number
+          pmarks: number
+        }[]
+      }
+      fn_pupil_marks_by_available_marks: {
+        Args: {
+          userid: string
+          specid: number
+        }
+        Returns: {
+          avMarks: number
+          pMarks: number
+          aMarks: number
+        }[]
+      }
+      fn_pupil_marks_by_paper: {
+        Args: {
+          uuid: string
+          specid: number
+        }
+        Returns: {
+          paperId: number
+          pMarks: number
+          aMarks: number
+        }[]
+      }
+      fn_pupil_marks_by_spec_item: {
+        Args: {
+          userid: string
+          specid: number
+        }
+        Returns: {
+          specTag: string
+          specItem: string
+          revisionMaterials: string
+          pMarks: number
+          aMarks: number
+        }[]
+      }
       fn_pupil_marks_for_all_papers: {
         Args: {
           _userid: string
@@ -372,18 +600,36 @@ export interface Database {
           marks: number
         }[]
       }
-      fn_pupil_marks_per_spec_item: {
+      fn_pupilmarks_by_specitem: {
         Args: {
           userid: string
           specid: number
         }
         Returns: {
-          specId: number
           tag: string
-          title: string
-          revisionMaterials: string
-          q_marks: number
-          pm_marks: number
+          SpecItem: string
+          pupilMarks: number
+          availableMarks: number
+        }[]
+      }
+      fn_tdf_get_queue: {
+        Args: {
+          pid: string
+          questionsetid: number
+        }
+        Returns: {
+          questionId: number
+          questionSetId: number
+          specItemId: number
+          term: string
+          def: string
+          AO: number
+          createdAt: string
+          pupilId: string
+          queueType: number
+          result: boolean
+          dueDate: string
+          inQueue: number
         }[]
       }
       fn_upsert_pupilmarks: {

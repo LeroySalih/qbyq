@@ -2,15 +2,15 @@ import { UserContext,  } from "components/context/user-context";
 import { useContext, useEffect, useState, FC} from 'react';
 import supabase from "components/supabase";
 
-interface DisplayResourcesPropsType {
-
-    paperId : number 
+type DisplayResourcesPropsType = {
+    paperId : number, 
+    classId : number
 }
 
 const DisplayResources: FC<DisplayResourcesPropsType> = (props: DisplayResourcesPropsType): JSX.Element => {
     
     const {paperId} = props;
-    const {profile, classes} = useContext(UserContext);
+    //const {profile, classes} = useContext(UserContext);
     const [resources, setResources] = useState(null);
     const [fileUrls, setFileUrls] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +19,7 @@ const DisplayResources: FC<DisplayResourcesPropsType> = (props: DisplayResources
 
         if (!classes) return;
 
-        console.log("Classes", classes);
+        // console.log("Classes", classes);
 
         // @ts-ignore
         const classArray = classes!.map((c, i) => c!.Classes.id);

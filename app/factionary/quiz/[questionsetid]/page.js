@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 
 import { useState, useEffect, createContext, useContext, useRef, createRef, forwardRef } from "react";
 import supabase from "components/supabase";
@@ -391,7 +390,7 @@ const DisplayQuestionNav = ({onScrollTo}) => {
 }
 
 
-const displayQuestion = (props, ref) => {
+const DisplayQuestionInner = (props, ref) => {
   const { question, onNext } = props;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState(undefined);
@@ -559,7 +558,7 @@ const displayQuestion = (props, ref) => {
   );
 };
 
-const DisplayQuestion = forwardRef(displayQuestion);
+const DisplayQuestion = forwardRef(DisplayQuestionInner);
 
 
 const DisplayResults = ({ practice }) => {

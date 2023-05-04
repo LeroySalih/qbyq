@@ -1,0 +1,115 @@
+'use client';
+
+import { User } from '@supabase/supabase-js';
+import {useState, useEffect, createContext} from 'react';
+import { Database } from 'types/supabase';
+import supabase from '../components/supabase'
+import { UserContextType, UserContext } from 'components/context/user-context';
+import { Profile, ClassMembershipData } from 'types/alias';
+import { useRouter } from 'next/navigation'
+
+
+import './globals.css'
+
+
+
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+
+export default function RootLayout({children,}: {children: React.ReactNode}) {
+
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  const router = useRouter();
+
+  const loadProfile = async (user: User) => {
+
+    if (!user) {
+      setProfile(null);
+      setUser(null);
+    }
+
+    if (user) {
+      
+      const {data:profile, error} = await supabase.from("Profile")
+                                            .select()
+                                            .eq("id", user.id);
+
+      error && console.error(error)
+      
+
+      if (profile === null){
+          router.push('/new-profile')
+      } else {
+          setProfile((profile![0] || []));
+      }
+
+    } 
+  }
+
+
+  useEffect(()=> {
+
+    const loadUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user || null);
+    }
+
+    loadUser();
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      // console.log(event, session)
+      // setUser(session?.user);
+    })
+  
+  }, []);
+
+  useEffect(()=> {
+    console.log("User useEffect", user);
+
+    if (!user)
+      return;
+
+    loadProfile(user);
+
+  }, [user])
+
+  
+  return (
+    <html>
+      <head />
+      <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <UserContext.Provider value={{user, profile}}>
+        <body>
+          <div className="nav-bar">
+            <Tooltip title="Logo idea by Ethan Lopez">
+            <img className="logo" src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
+            </Tooltip>
+            <h1>Question By Question (QbyQ)</h1>
+          </div>
+          {children}
+        </body>
+        <style jsx={true}>{`
+         .nav-bar {
+          background-color: #E4E5FF;
+          margin-bottom: 2rem;
+          padding: 0.5rem;
+          border-radius: 1rem;
+          display: flex;
+          flex-direction: row;
+         }
+
+         .logo {
+            margin-left: 1rem;
+            margin-right: 2rem;
+         }
+
+        `} 
+        </style>
+      </UserContext.Provider>
+      </LocalizationProvider>
+    </html>
+  )
+}

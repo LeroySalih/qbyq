@@ -2,13 +2,13 @@ import { User } from '@supabase/supabase-js';
 import {createContext } from 'react';
 import { Profile, ClassMembershipData } from 'types/alias';
 import { GetClassesResponseType, GetAllPupilMarks, GetAllSpecsType } from 'lib';
+import {SupabaseClient} from "@supabase/supabase-js";
 
-export type UserContextType = {
-    user?: User | null,
-    profile?: Profile | null,
+export type SupabaseContextType = {
+    supabase?: SupabaseClient
 }
   
-export const UserContext = createContext<UserContextType >({});
+export const SupabaseContext = createContext<SupabaseContextType >({});
 
 
 

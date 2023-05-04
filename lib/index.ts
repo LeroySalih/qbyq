@@ -1,15 +1,22 @@
 import supabase from "components/supabase";
 
-export const getClasses = async (userId: string) => {
-    const {data, error} = await supabase.from("ClassMembership")
+export const getClassesForPupil = async (id: string) => {
+
+    return await supabase.from("ClassMembership")
             .select("pupilId, Classes(id, tag, title, ClassPapers(paperId, availableFrom, completeBy, markBy, Papers(month, year, title, paper, specId, Spec(title))))")
-            .eq("pupilId", userId);
+            .eq("pupilId", id);
             
-  
-    error && console.error(error);
-  
-    return data;
 }
+
+export const getProfile = async (id: string) => {
+
+    return await supabase.from("Profile")
+            .select()
+            .eq("id", id)
+            .single();
+            
+}
+
 
 export const getAllPupilMarks = async (userId: string) => {
     const {data, error} = await supabase
@@ -89,9 +96,13 @@ export const getSpecItemsForSpec = async (specId: number) => {
 
 }
 
+
+export type GetClassesForPupilResponseType = Awaited<ReturnType<typeof getClassesForPupil>>
+export type GetProfileResponseType = Awaited<ReturnType<typeof getProfile>>
+
 export type GetAllPupilMarks = Awaited<ReturnType<typeof getAllPupilMarks>>
 export type GetClassByTagResponseType = Awaited<ReturnType<typeof getClassByTag>>
-export type GetClassesResponseType = Awaited<ReturnType<typeof getClasses>>
+
 export type GetAllSpecsType = Awaited<ReturnType<typeof getAllSpecs>>
 export type GetPaperType = Awaited<ReturnType<typeof getPaper>> 
 export type GetSpecItemsForSpecType = Awaited<ReturnType<typeof getSpecItemsForSpec>> 

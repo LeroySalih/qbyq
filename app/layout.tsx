@@ -1,155 +1,77 @@
-"use client"
-import { User } from '@supabase/supabase-js';
-import {useState, useEffect, createContext} from 'react';
-import { Database } from 'types/supabase';
-import supabase from '../components/supabase'
-import { UserContextType, UserContext } from 'components/context/user-context';
-import { Profile, ClassMembershipData } from 'types/alias';
-import { useRouter } from 'next/navigation'
-
-import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
-import "primereact/resources/primereact.min.css";                  //core css
-import "primeicons/primeicons.css";                                //icons
-import './globals.css'
-
-import Tooltip from '@mui/material/Tooltip';
-
-import { getClasses, GetClassesResponseType, 
-         getAllPupilMarks, GetAllPupilMarks,
-         getAllSpecs, GetAllSpecsType
-        } from 'lib';
-
-
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+"use client";
+import "./globals.css"
+import styles from './layout.module.css';
+import {useState, useEffect} from 'react';
+import {createClient} from '@supabase/supabase-js' 
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { SupabaseContext } from "components/context/supabase-context";
 
 export default function RootLayout({children,}: {children: React.ReactNode}) {
 
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [classes, setClasses] = useState<GetClassesResponseType>(null);
-  const [pupilMarks, setPupilMarks] = useState<GetAllPupilMarks>(null);
-  const [specs, setSpecs] = useState<GetAllSpecsType>(null);
-
+  console.log("Layout Running");
+  const [id, setId] = useState<string | null>(null);
   const router = useRouter();
 
-  const loadSpecs = async () => {
-    const data = await getAllSpecs();
+  const supabaseUrl: string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey: string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
 
-    setSpecs(data);
+  const [supabase] = useState(()=> createBrowserSupabaseClient({supabaseUrl, supabaseKey}));
+
+  const handleSignIn = async () => {
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'azure',
+      options: {
+        scopes: 'email',
+        redirectTo: process.env.NEXT_PUBLIC_SITE_REDIRECT
+      },
+    });
+
+
+    error && console.error(error);
+    console.log(data);
   }
 
-  const loadClasses = async () => {
-    if (user){
-      
-      const data = await getClasses(user.id);
+  const handleSignOut = async () => {
+    const error = await supabase.auth.signOut();
 
-      console.log("Classes", data);
-
-      setClasses(data);
-    }
+    console.log("Error", error);
   }
 
-  const loadPupilMarks = async () => {
+  useEffect(() => {
     
-    if (user) {
+    const {data: {subscription}} = supabase.auth.onAuthStateChange( ()=> {
+      router.refresh();
+    });
 
-      const  data = await getAllPupilMarks(user.id);
-
-      console.log("Pupil Marks", data);
-
-      setPupilMarks(data);
-
-    }
-    
-  }
-
-  const loadProfile = async () => {
-    if (user) {
-      
-      const {data:profile, error} = await supabase.from("Profile")
-                                            .select()
-                                            .eq("id", user.id);
-
-      error && console.error(error)
-      
-
-      if (profile === null){
-          router.push('/new-profile')
-      } else {
-          setProfile((profile![0] || []));
-      }
-      
-      
-
-    } 
-  }
-
-
-  useEffect(()=> {
-
-    const loadUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user || undefined);
+    return ()=> {
+      subscription.unsubscribe();
     }
 
-    loadUser();
+  }, [supabase, router]);
 
-    supabase.auth.onAuthStateChange((event, session) => {
-      // console.log(event, session)
-      // setUser(session?.user);
-    })
-  
-  }, []);
-
-  useEffect(()=> {
-    console.log("User useEffect", user);
-
-    if (user === undefined)
-      return;
-
-    loadProfile();
-    loadClasses();
-    loadPupilMarks(); 
-    loadSpecs();
-    
-  }, [user])
-
-  
   return (
+    <SupabaseContext.Provider value={{supabase}}>
     <html>
       <head />
-      <LocalizationProvider dateAdapter={AdapterLuxon}>
-      <UserContext.Provider value={{user, specs, profile, classes, pupilMarks, loadClasses}}>
         <body>
-          <div className="nav-bar">
-            <Tooltip title="Logo idea by Ethan Lopez">
-            <img className="logo" src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
-            </Tooltip>
+          <div className={styles.navbar}>
+            <img className={styles.logo} src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
             <h1>Question By Question (QbyQ)</h1>
+          </div>
+          <div>
+            <button onClick={handleSignIn}>Sign In</button>
+            <button onClick={handleSignOut}>Sign Out</button>
+
           </div>
           {children}
         </body>
-        <style jsx={true}>{`
-         .nav-bar {
-          background-color: #E4E5FF;
-          margin-bottom: 2rem;
-          padding: 0.5rem;
-          border-radius: 1rem;
-          display: flex;
-          flex-direction: row;
-         }
-
-         .logo {
-            margin-left: 1rem;
-            margin-right: 2rem;
-         }
-
-        `} 
-        </style>
-      </UserContext.Provider>
-      </LocalizationProvider>
+       
     </html>
+    </SupabaseContext.Provider>
   )
 }
+
+
+
