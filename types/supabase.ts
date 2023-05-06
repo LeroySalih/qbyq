@@ -511,7 +511,9 @@ export interface Database {
           pupilid: string
         }
         Returns: {
+          classId: number
           classTag: string
+          specId: number
           pupilId: string
           firstName: string
           familyName: string

@@ -1,123 +1,126 @@
 "use client";
 
 import { useEffect , useState, useContext} from "react";
-import { SupabaseContext } from "components/context/supabase-context";
-import { UserContext } from "components/context/user-context";
+import { useSupabase }  from "components/context/supabase-context";
 
 import DisplayQuestion from "./display-question";
 import { FileObject} from "@supabase/storage-js";
+import { User} from "@supabase/supabase-js";
 import {  PupilMarks, Question,} from "types/alias";
 import Loading from "components/loading";
+import { setDefaultResultOrder } from "dns";
 
-const DisplayQuestions = ({paperId} : {paperId : number}) => {
+
+const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
 
     const [paper, setPaper] = useState<any>()
-    const {supabase} = useContext(SupabaseContext);
-
+   
     const [files, setFiles] = useState<FileObject[] | null>(null)
     const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null);
+    
+    const {supabase} = useSupabase();
 
-    const {user, profile} = useContext(UserContext);
-
-    useEffect( 
-        
-        ()=> {
-            if (!supabase)
-                return;
-
-            const loadPaper = async () => {
-    
-                const {data: paper, error} = await supabase
-                                                    .from("Papers")
-                                                    .select('*, Questions!Questions_PaperId_fkey(*), Spec(*, SpecItem(*))')
-                                                    .eq("id",paperId)
-                                                    .single();
-    
-                error && console.error(error);
-    
-                console.log(paper?.title);
-    
-                setPaper(paper);
-    
-            }
-    
-            const loadResources  = async () => {
-    
-                const {data, error} = await supabase
-                                                .storage
-                                                .from('exam-papers')
-                                                .list(`${paperId}`)
-    
-                error && console.error(error);
-    
-                // upload the files
-                setFiles(data);
-    
-                const {data: urlsData, error: urlsError} = await supabase
-                                                    .storage 
-                                                    .from('exam-papers')
-                                                    .createSignedUrls(data?.map(d => (`${paperId}/${d.name}`)) || [], 3600)
-    
-                urlsError && console.error(urlsError);
-                const urlDataObject = urlsData?.reduce(
-                                            (prev:{[key:string]:string}, curr)=> {prev[curr.path || 'default'] = curr.signedUrl; return prev},
-                                            {}
-                                            );
-                setUrls(urlDataObject);
-    
-            }
-    
-            loadPaper();
-            loadResources();
+    const loadPupilMarks = async (userId: string | null) => {
             
-        }, [supabase]);
-
-    useEffect(() => {
-        console.log("layout Changed: user")
-        const loadPupilMarks = async () => {
-            
-            if (!supabase)
-                return;
-
-            const {data, error} = await supabase
-                .from("PupilMarks")
-                .select()
-                // bug investigate
-                .eq("userId", user!.id)
-                // .eq("userId", 'e20c74ef-fefe-4c74-aece-1ea567ef5f4f')
-                .eq("paperId", paperId);
-
-            error && console.error(error);
-            // console.log(data);
-            setPupilMarks(data);
+        console.log("loadPupilMarks running")
+        if (!supabase){
+            console.log("No supabase client");
+            return;
         }
 
-        if (user === undefined)
+        if (!userId){
+            console.log("No valid user id", userId);
             return;
+        }
+            
+        const {data, error} = await supabase
+            .from("PupilMarks")
+            .select()
+            // bug investigate
+            .eq("userId", userId)
+            // .eq("userId", 'e20c74ef-fefe-4c74-aece-1ea567ef5f4f')
+            .eq("paperId", paperId);
 
-        loadPupilMarks();
-        // loadFiles();
-        // loadSpecData(1, user.id);
-
-    }, [user]);
+        error && console.error(error);
+        console.log("Pupil Marks", data);
+        setPupilMarks(data);
+    }
 
     const loadPaper = async () => {
 
-        const {data: paper, error} = await supabase?.from("Papers")
+        if (!supabase){
+            return;
+        }
+        console.log("Loading Paper")
+        const {data: paper, error} = await supabase.from("Papers")
                                             .select('*, Questions!Questions_PaperId_fkey(*), Spec(*, SpecItem(*))')
                                             .eq("id",paperId)
                                             .single() || {data: null, error: null};
 
         error && console.error(error);
 
-        console.log(paper?.title);
+        console.log("paper", paper);
 
         setPaper(paper);
 
     }
 
+    const loadResources  = async () => {
+
+        if (!supabase){
+            return;
+        }
+    
+        const {data, error} = await supabase
+                                        .storage
+                                        .from('exam-papers')
+                                        .list(`${paperId}`)
+
+        error && console.error(error);
+
+        // upload the files
+        setFiles(data);
+
+        const {data: urlsData, error: urlsError} = await supabase
+                                            .storage 
+                                            .from('exam-papers')
+                                            .createSignedUrls(data?.map(d => (`${paperId}/${d.name}`)) || [], 3600)
+
+        urlsError && console.error(urlsError);
+        const urlDataObject = urlsData?.reduce(
+                                    (prev:{[key:string]:string}, curr)=> {prev[curr.path || 'default'] = curr.signedUrl; return prev},
+                                    {}
+                                    );
+        setUrls(urlDataObject);
+
+    }
+
+
+    useEffect(()=> {
+            if (!supabase){
+                console.log("use-effect::user - no supabase found");
+                return;
+            }
+                
+            if (!user){
+                console.log("use-effect::user - no user found");
+                return;
+            }
+            
+            loadPaper();
+            loadPupilMarks(user.id);
+            
+            
+        }, [user]);
+
+    
+
+    
     const sumMarks = () => {
+        if (!paper || !paper.Questions)
+            return 0;
+
         const tMarks = paper.Questions.reduce((prev:number, curr:Question) => prev + (curr.marks || 0), 0)
         const pMarks = pupilMarks?.reduce((prev:number, curr:PupilMarks) => prev + (curr.marks || 0), 0 )
         return <>
@@ -186,7 +189,7 @@ const DisplayQuestions = ({paperId} : {paperId : number}) => {
     return <>
     {sumMarks()}
     {
-        paper?.Questions?.sort((a:Question, b:Question) => a.question_order! > b?.question_order! ? 1 : -1)
+        paper && paper?.Questions?.sort((a:Question, b:Question) => a.question_order! > b?.question_order! ? 1 : -1)
                 .map(
             (q:Question, i:number) => <DisplayQuestion 
                             key={`q${i}`} 
@@ -198,6 +201,7 @@ const DisplayQuestions = ({paperId} : {paperId : number}) => {
                             />
         )
     }
+    
     </>
 }
 

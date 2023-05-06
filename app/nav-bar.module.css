@@ -1,0 +1,14 @@
+.navbar {
+    background-color: #E4E5FF;
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+   }
+
+.banner {
+    display: flex;
+}

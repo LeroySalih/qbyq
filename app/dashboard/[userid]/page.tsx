@@ -3,7 +3,7 @@ import {headers, cookies} from 'next/headers';
 
 import { GetPaperMarksForPupil, GetPaperMarksForPupilItem } from 'types/alias';
 
-import DisplayClasses from 'components/display-classes';
+//import DisplayClasses from 'components/display-classes';
 import styles from "./page.module.css"
 import Link from "next/link";
 
@@ -57,12 +57,14 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
         return prev;
       }, {})
       
+      console.log(JSON.stringify(pupilDetails, null, 2));
     return pupilDetails;
 
   }
 
   const {data: paperDataForPupil, error: paperDataForPupilError} = await supabase.rpc("fn_get_paper_data_for_pupil", {pupilid: userid});
   
+
   if (paperDataForPupilError) {
     return <pre>{JSON.stringify(paperDataForPupilError, null, 2)}</pre>
   } 
@@ -77,12 +79,19 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
         <div className={styles.page}>
           
           <div className="page-header">
-            <h2>Welcome, {paperDataView.firstName}</h2> 
+            <h2>Welcome, {paperDataView.firstName}  </h2> 
           </div>
 
           {
             Object.keys(paperDataView.classes).map((c, i) => <div key={i}>
-              <div className={styles.classTitle}>{c}</div> 
+              
+              <div className={styles.classTitle}>
+                  {// @ts-ignore
+      
+                  <Link href={`/spec-report/${userid}/${Object.values(paperDataView.classes[c])[0].specId}`} className={styles.link}>{c}</Link>
+                  }
+              </div> 
+              
               <div className={styles.paperDetails}>
                 <div className={styles.paperCellHeader}>Paper</div>
                 <div className={styles.paperCellHeader}>Available From</div>
@@ -97,7 +106,7 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
                     
                     <div key={`${i}1`} className={styles.paperCell}>
                       {//@ts-ignore
-                      <Link href={`/paper-form/${r.paperId}`} className={styles.link}>{r.year}-{r.month}-{r.paper}</Link>
+                      <Link href={`/paper-form/${r.paperId}/${r.classId}`} className={styles.link}>{r.year}-{r.month}-{r.paper}</Link>
                       }
                       </div>
                     

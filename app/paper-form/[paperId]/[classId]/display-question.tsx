@@ -1,7 +1,10 @@
+"use client";
+
 import {useEffect, useState, useRef} from 'react';
 import {  SpecItem,  PupilMarks, Question} from "types/alias";
-import {InputNumber} from 'primereact/inputnumber';
+//import {InputNumber} from 'primereact/inputnumber';
 import styles from './display-question.module.css';
+import TextField from '@mui/material/TextField';
 
 
 type DisplayQuestionProps = {
@@ -24,7 +27,7 @@ type FieldData = {
 
 const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: DisplayQuestionProps) => {
 
-    const [value, setValue] = useState<number | null>(null);
+    const [value, setValue] = useState<number>(0);
     const [fieldData, setFieldData] = useState<FieldData>({isValid : null, errorMessage: null });
     const [specItem, setSpecItem] = useState<SpecItem | null>(null);
     
@@ -32,7 +35,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
 
     const setValueState = () => {}
     useEffect(()=> {
-        setValue(pupilMarks?.filter(pm => pm.questionId === question.id)[0]?.marks);
+        setValue(pupilMarks?.filter(pm => pm.questionId === question!.id)[0]?.marks || 0);
 
         setSpecItem (specItems.filter(sp => sp.id === question.specItemId)[0])
     }, [pupilMarks]);
@@ -63,7 +66,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
             //setValue(0);
             
             onChange(question.id, question.marks || 0);
-            setValue(question.marks);
+            setValue(question.marks || 0);
 
             // @ts-ignore
             textInput?.current.focus();
@@ -76,17 +79,21 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
         onBlur(question.id)    
     }
 
+    useEffect(()=> {
+        // console.log("question", question);
+    }, [question])
 
     return <div className="question">
         <div className="question-number">{question.question_number}</div>
-        <InputNumber 
+        <TextField
+            variant='outlined' 
             className={`${styles['p-inputtext']} input ${fieldData.isValid === false && 'p-invalid'}`}
             name={question.id.toString()} 
             value={value}
             id={question.id.toString()} 
             
             ref={textInput}
-            onChange={(e)=>onChange(question.id, e.value || 0)}
+            onChange={(e)=>onChange(question.id, parseInt(e.target.value) || 0)}
             onBlur={handleOnBlur}/>
         <div className="question-marks">
             out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}

@@ -13,6 +13,7 @@ type PagePropsType = {
 const PageForm = async ({params}: PagePropsType) => {
 
     const {paperId} = params;
+    
     // const [paperId, setPaperId] = useState<number>(1);
     // const [paper, setPaper] = useState<any>()
     // const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
