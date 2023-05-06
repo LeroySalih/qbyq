@@ -1,0 +1,30 @@
+.sideBar {
+    background-color: white;
+    border: silver 1px solid;
+    border-radius: 2rem;
+    padding: 0.5rem;
+}
+
+.sideBar > ul > li {
+   
+   list-style-type: none;
+   margin-top: 1rem;
+   
+   
+
+}
+
+.sideBar > ul > li > a {
+    color: rgb(109, 110, 133);
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sideBar > ul > li > a:hover {
+    color: rgb(20, 20, 27);
+    text-decoration:dotted;
+    
+}

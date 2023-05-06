@@ -36,7 +36,7 @@ const MainPage = async () => {
             {
                 JSON.stringify(session?.user.id, null, 2)
             }
-            {session && <Link href={`/dashboard/${session?.user.id}`}><span>Dashboard</span></Link>}
+            {session && <Link href={`/app/dashboard/${session?.user.id}`}><span>Dashboard</span></Link>}
             </div>
           </div>
         </>

@@ -1,0 +1,48 @@
+.page {
+    max-width: 80vw;
+    margin: auto;
+}
+
+.paperDetails {
+    display : grid;
+    grid-template-columns: repeat(4, 3fr) 1fr;
+}
+
+.welcome {
+    font-size : 2rem;
+    margin: 0.5rem;
+}
+
+
+.classTitle {
+    font-size : 1.5rem;
+    margin: 0.5rem;
+}
+
+.paperCellHeader {
+    font-size: 0.7rem;
+    font-family: Poppins;
+    font-weight: bold;
+    border-bottom: silver 1px solid;
+    margin-bottom: 0.5rem;
+}
+
+.paperCell {
+    font-size: 0.7rem;
+    font-family: Poppins;
+}
+
+.link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link:hover{
+    color : red;
+    text-decoration: solid;
+}
+
+.right {
+    text-align: right;
+}

@@ -11,9 +11,11 @@
     "refresh-types": "npx supabase gen types typescript --project-id 'fmudvzcqkiqjyprmtozz' --schema public > types/supabase.ts"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@mui/material": "^5.11.16",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^4.5.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.3",
     "@mui/x-date-pickers": "^6.0.4",
     "@next/font": "13.1.4",
     "@supabase/auth-helpers-nextjs": "^0.6.1",

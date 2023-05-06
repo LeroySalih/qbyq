@@ -12,7 +12,10 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 import { TestContext } from "components/context/test-context";
 
-
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 import NavBar from "./nav-bar";
 
