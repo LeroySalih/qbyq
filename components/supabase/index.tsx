@@ -8,7 +8,7 @@ const supabaseUrl = String(process.env.NEXT_PUBLIC_SUPABASE_URL)
 
 const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
-console.log("Supabase created")
+
 
 export default supabase;
 

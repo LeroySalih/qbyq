@@ -59,7 +59,7 @@ const LandingPage = () => {
 
 
         error && console.error(error);
-        console.log("QuestionSets", data)
+        // console.log("QuestionSets", data)
         setQuestionSets(data.map((qs) => ({...qs, "specTitle": qs.Spec.title, create:'Create'})));
     }
 
@@ -72,17 +72,17 @@ const LandingPage = () => {
     const [loading, setLoading] = useState(false);
 
     const handleShowNewQuizDlg = () => {
-        console.log("Clicked")
+        // console.log("Clicked")
         setNewQuizDlgOpen(true);
     }
 
     const handleNewQuizDlgCancel = (v) => {
-        console.log(v);
+        // console.log(v);
         setNewQuizDlgOpen(false);
     }
 
     const handleNewQuizDlgCreate = async (v) => {
-        console.log("Creating...", email);
+        // console.log("Creating...", email);
         // set loading spinner = true
         setLoading(true);
         
@@ -92,13 +92,13 @@ const LandingPage = () => {
                                                             .select()
                                                             .eq("questionSetId", selectedRow.id);
 
-        console.log("QSQuestions", qsQuestions);
+        // console.log("QSQuestions", qsQuestions);
 
         // create a quiz from the sample
 
         const quiz = createQuiz(qsQuestions, 10);
 
-        console.log("Quiz", quiz);
+        // console.log("Quiz", quiz);
         // write the questions to db, using type and JSON
         // redirect to the quiz
 
@@ -114,7 +114,7 @@ const LandingPage = () => {
     }
 
     const handleCellClick = (cell) => {
-        console.log("Cell Clicked", cell)
+        // console.log("Cell Clicked", cell)
 
         if (cell.key = 'create'){
             setSelectedRow(cell.row);

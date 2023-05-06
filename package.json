@@ -29,7 +29,7 @@
     "eslint-config-next": "^13.3.1",
     "faker": "^6.6.6",
     "luxon": "^3.3.0",
-    "next": "^13.3.3",
+    "next": "^13.4.1",
     "perf_hooks": "^0.0.1",
     "primeicons": "^6.0.1",
     "primereact": "^9.0.0-beta.1",
@@ -37,7 +37,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-data-grid": "^7.0.0-beta.27",
     "react-dom": "^18.2.0",
-    "supabase": "^1.36.7",
+    "supabase": "^1.55.1",
     "supabase-cli": "^0.0.21",
     "typescript": "^5.0.4",
     "use-file-picker": "^1.6.1"

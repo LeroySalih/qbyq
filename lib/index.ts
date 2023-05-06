@@ -51,7 +51,7 @@ export const getAllSpecs = async () => {
 
     error && console.error(error);
 
-    console.log("Specs", data)
+    
     return data;
 
 }
@@ -64,7 +64,7 @@ export const getPaper = async (paperId: number) => {
 
     error && console.error(error);
 
-    console.log("Paper", data)
+    
     return data;
 
 }
@@ -78,7 +78,7 @@ export const getQuestionsForPaper = async (paperId: number) => {
 
     error && console.error(error);
 
-    console.log("Questions", data)
+    
     return data;
 
 }
@@ -91,7 +91,7 @@ export const getSpecItemsForSpec = async (specId: number) => {
 
     error && console.error(error);
 
-    console.log("Specitems", data)
+    
     return data;
 
 }

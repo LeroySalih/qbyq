@@ -42,7 +42,7 @@ export
 // @ts-ignore
 const Chart = ({data, labels}) => {
 
-    console.log("Data:", data)
+    
     const dataObj = {
         labels,
         datasets: [

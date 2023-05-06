@@ -16,9 +16,9 @@ import { TestContext } from "components/context/test-context";
 
 import NavBar from "./nav-bar";
 
-const RootLayout = async ({children}: {children: React.ReactNode}) => {
+const RootLayout = ({children} : {children: React.ReactNode}) => {
 
-  console.log("Layout Running");
+  //console.log("Layout Running");
   
   return (
     

@@ -31,7 +31,7 @@ const DisplayFiles = async ({paperId} : {paperId : number}) => {
 
         error && console.error(error)
                 
-        console.log("Files", downloadUrls);
+        // console.log("Files", downloadUrls);
 
         setUserFiles(listFiles?.map(
                 (lf, i) => (
@@ -45,7 +45,7 @@ const DisplayFiles = async ({paperId} : {paperId : number}) => {
     }
 
     const handleFileChange = async (e:any) => {
-        console.log(e.target.files[0])
+        // console.log(e.target.files[0])
 
         const uploadFile = e.target.files[0];
         const {data, error} = await supabase!
@@ -57,7 +57,7 @@ const DisplayFiles = async ({paperId} : {paperId : number}) => {
                                             });
 
         error && console.error(error);
-        console.log(data)
+        // console.log(data)
 
         loadFiles();
     }

@@ -57,7 +57,7 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
         return prev;
       }, {})
       
-      console.log(JSON.stringify(pupilDetails, null, 2));
+      // console.log(JSON.stringify(pupilDetails, null, 2));
     return pupilDetails;
 
   }

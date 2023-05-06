@@ -54,7 +54,7 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
  
       const loadUser = async () => {
         const {data: {user}} = await supabase.auth.getUser();
-        console.log("User is...", user);
+        // console.log("User is...", user);
         setUser(user);
       }
 
@@ -63,11 +63,11 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
       loadUser();
 
       const {data} = supabase.auth.onAuthStateChange((event, session) => {
-        console.log("display-tabs::updating user", session)
+        // console.log("display-tabs::updating user", session)
         if (session && session.user){
           setUser(session.user);
         } else {
-          console.log("Setting user to null");
+          // console.log("Setting user to null");
           setUser(null);
         }
       });
@@ -79,7 +79,7 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
      }, []) 
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        console.log("Changing")
+        // console.log("Changing")
         setValue(newValue);
     };
 

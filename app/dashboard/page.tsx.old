@@ -94,7 +94,7 @@ const MainPage: React.FunctionComponent<ProfileProps> = (): JSX.Element => {
                                             
         
         error && console.error(error);
-        console.log("Data", data);  
+        // console.log("Data", data);  
         // @ts-ignore                                  
         setSpecData(data);
 
@@ -282,8 +282,8 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
           const result = openFileSelector();
           
         } catch (err) {
-          console.log(err);
-          console.log('Something went wrong or validation failed');
+          console.error(err);
+          console.error('Something went wrong or validation failed');
         }
       }
 
@@ -307,7 +307,7 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
 
         if (!createPaperData) return;
 
-        console.log("CreatePaperData", createPaperData);
+        // console.log("CreatePaperData", createPaperData);
 
         setStatus(`Created paper ${createPaperData[0].id}`);
 
@@ -332,7 +332,7 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
           fileUploadError && console.error(fileUploadError); 
 
           if (fileUploadData){
-            console.log("Upload Data", fileUploadData)
+            // console.log("Upload Data", fileUploadData)
           }
 
         }
@@ -344,7 +344,7 @@ const CreatePaperDlg = ( {open, onClose, onCreatePaper} : CreatePaperDlgProps) =
         specs && setSpecId(specs[0].id);
       }, [specs])
       useEffect (()=> {
-        console.log("Checking")
+        // console.log("Checking")
         if (title !== '' && 
             year !== '' && 
             month !== '' && 

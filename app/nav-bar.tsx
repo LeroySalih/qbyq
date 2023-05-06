@@ -50,13 +50,13 @@ const NavBar = () => {
     
     
         error && console.error(error);
-        console.log(data);
+        // console.log(data);
     }
     
     const handleSignOut = async () => {
         const error = await supabase.auth.signOut();
     
-        console.log("Error", error);
+        error && console.error("Error", error);
     }
       
     return <>

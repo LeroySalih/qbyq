@@ -68,7 +68,7 @@ const EditPaperPage = ({params}) => {
     }, [paper])
 
     const handleQuestionsChange = (q) => {
-        console.log("Row Changed", q);
+        // console.log("Row Changed", q);
         setQuestions(q);
     }
 

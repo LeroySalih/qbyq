@@ -19,14 +19,13 @@ const EditPage = ({params}:PagePropsType) => {
 
     const loadPaper = async (paperId:number) => {
 
-        console.log("loadPaper")
+        
         if (paperId == 0){
             const {data, error} = await supabase.from("Papers")
                                                 .insert({"title": "New Paper"})
                                                 .select()
             
             error && console.error(error);
-            console.log("New Paper is", data);
             // @ts-ignore
             setPaper(data);                                                
         } else {
@@ -37,7 +36,7 @@ const EditPage = ({params}:PagePropsType) => {
 
             error && console.error(error);
 
-            console.log("Paper is", data);
+            // console.log("Paper is", data);
             // @ts-ignore
             setPaper(data)
         }

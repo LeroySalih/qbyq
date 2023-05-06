@@ -43,7 +43,7 @@ const SpecReport = ({params}: SpecReportType) => {
         const {data:classes, error} = await supabase.from("Classes").select()
 
         
-        console.log("Classes", classes);
+        // console.log("Classes", classes);
 
         error && console.error(error);
 
@@ -86,6 +86,10 @@ const SpecReport = ({params}: SpecReportType) => {
 
         // @ts-ignore
         setAllPupils(tmp);
+
+        if (tmp.length > 0){
+            setPupilId(tmp[0].pupilId);
+        }
     }
 
     const loadUser = async () => {
@@ -148,7 +152,18 @@ const SpecReport = ({params}: SpecReportType) => {
             getAllPupils(currentClassId);
         }
 
-    }, [profile, allClasses, currentClassId])
+    }, [profile, allClasses, currentClassId]);
+
+
+    const getSpecId = (classId: number) => {
+        if (!allClasses)  
+            return null;
+
+        console.log("allClasses", allClasses, classId)
+        //@ts-ignore
+        return allClasses.filter((c) => c.id == classId)[0].specId;
+
+    }
 
     return <>
         <div><Link href="/">Home</Link></div>
@@ -165,13 +180,17 @@ const SpecReport = ({params}: SpecReportType) => {
                 <span>
                     {allClasses && 
                         <select value={currentClassId} onChange={(e) => {setCurrentClassId(parseInt(e.target.value))}}>
-                            {allClasses.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
+                            {
+                                //@ts-ignore
+                                allClasses.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
                         </select>
                     }
 
                     {allPupils && 
                         <select value={pupilId} onChange={(e) => {setPupilId(e.target.value)}}>
-                            {allPupils.map((p, i) => <option value={p.pupilId} key={i}>{p.firstName} {p.familyName}</option>)}
+                            {
+                                //@ts-ignore
+                                allPupils.map((p, i) => <option value={p.pupilId} key={i}>{p.firstName} {p.familyName}</option>)}
                         </select>
                     }
                 </span>
@@ -182,16 +201,18 @@ const SpecReport = ({params}: SpecReportType) => {
         <hr></hr>
         <div className={styles.display}>
             <div style={{gridArea:"a"}}>
-                {//<DisplaySpecProgress pupilId={pupilId} specId={specId}/>
+                {
+                    <DisplaySpecProgress pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
             </div>
             <div style={{gridArea:"c"}}>
                 {
-                //<DisplaySpecDataByMarks pupilId={pupilId} specId={specId}/>
+                <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
                 </div>
             <div style={{gridArea:"b"}}>
-                {//<DisplaySpecDataByItem pupilId={pupilId} specId={specId}/>
+                {//@ts-ignore
+                allClasses && allPupils && <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
             </div>
         

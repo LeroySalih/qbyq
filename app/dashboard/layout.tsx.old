@@ -45,7 +45,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
       
       const data = await getClasses(user.id);
 
-      console.log("Classes", data);
+      // console.log("Classes", data);
 
       setClasses(data);
     }
@@ -57,7 +57,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
 
       const  data = await getAllPupilMarks(user.id);
 
-      console.log("Pupil Marks", data);
+      // console.log("Pupil Marks", data);
 
       setPupilMarks(data);
 
@@ -104,7 +104,7 @@ export default function RootLayout({children,}: {children: React.ReactNode}) {
   }, []);
 
   useEffect(()=> {
-    console.log("User useEffect", user);
+    // console.log("User useEffect", user);
 
     if (user === undefined)
       return;
