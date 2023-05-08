@@ -6,6 +6,7 @@ import { useSupabase } from 'components/context/supabase-context';
 import { useEffect, useState, useContext, Profiler } from 'react';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import Card from "components/card";
 import DisplaySpecDataByMarks from './display-spec-data-by-marks';  
@@ -24,21 +25,62 @@ type SpecReportType = {
 const SpecReport = ({params}: SpecReportType) => {
 
     const {__pupilId, specId} = params;
+    
+    const searchParams = useSearchParams();
+    const __classid =  parseInt(searchParams && searchParams.get('classid') || "0");
+    console.log("__classid", __classid, searchParams?.has("clientid"));
+    // Display the key/value pairs
+    for (const [key, value] of searchParams!.entries()) {
+        console.log(`${key}, ${value}`);
+    }
+
     const {supabase} = useSupabase();
 
     //const {profile, classes, pupilMarks} = useContext(UserContext);
 
     const [user, setUser] = useState<User | null>(null);
 
+    const [currentClassId, setCurrentClassId] = useState(__classid || null);
 
-    const [currentClassId, setCurrentClassId] = useState(0);
     const [pupilId, setPupilId] = useState(__pupilId);
 
-    const [allClasses, setAllClasses] = useState(null);
+    const [classes, setClasses] = useState(null);
     const [allPupils, setAllPupils] = useState(null);
     const [pupilMarks, setPupilMarks] = useState(null);
     const [profile, setProfile] = useState<Profile | null>(null);
 
+    
+    const getClassesForPupil = async (pupilId: string) => {
+
+        const {data, error} = await supabase.from("ClassMembership")
+                                            .select("Classes(*)")
+                                            .eq("pupilId", pupilId);
+                                            
+        error && console.error(error);
+        data && console.log(data);
+        if (!data || data === null || data.length == 0){
+            setClasses(null);
+            return;
+        }
+
+        // @ts-ignore
+        const shapedData = data.map((c) => ({id: c.Classes.id, tag: c.Classes.tag, title: c.Classes.title, specId: c.Classes.specId}));
+        console.log("shapedData", shapedData);
+
+        // @ts-ignore
+        setClasses(shapedData);
+
+        if (__classid) {
+            setCurrentClassId(__classid)
+        } else {
+            //@ts-ignore
+            console.log("Setting currentClassId to ", data[0].Classes.id);
+
+            //@ts-ignore
+            setCurrentClassId(data[0].Classes.id);
+        }
+    }
+    
     const getAllClasses = async () => {
         const {data:classes, error} = await supabase.from("Classes").select()
 
@@ -51,10 +93,24 @@ const SpecReport = ({params}: SpecReportType) => {
             return;
 
         //@ts-ignore
-        setAllClasses(classes);
-        setCurrentClassId(classes[0].id)
+        setClasses(classes.map(c => ({id: c.id, tag: c.tag, title: c.title, specId: c.specId})));
+
+        if (currentClassId == null){
+            setCurrentClassId(classes[0].id)
+        }
+        //setCurrentClassId(classes[0].id)
     }
 
+    const getSpecId = (classId: number) => {
+        if (!classes || !classId)  
+            return null;
+
+        // console.log("looking for", classId, " in ", classes);
+        //console.log("classes", classes, classId)
+        //@ts-ignore
+        return classes.filter((c) => c.id == classId)[0].specId;
+
+    }
 
     const getAllPupils = async (classId: number) => {
 
@@ -107,7 +163,7 @@ const SpecReport = ({params}: SpecReportType) => {
 
         setProfile(data);
     }
-
+    
     useEffect(()=> {
         loadUser();
 
@@ -123,7 +179,6 @@ const SpecReport = ({params}: SpecReportType) => {
 
     }, []);
 
-
     useEffect(()=> {
         console.log("User Changed to", user);
         if (!user){
@@ -138,9 +193,15 @@ const SpecReport = ({params}: SpecReportType) => {
         console.log("specId Changed to", specId);
 
 
-         if (profile && profile.isAdmin) {
+        if (!profile){
+            return;
+        }
+
+        if (profile && profile.isAdmin) {
             getAllClasses();
-         }
+        } else {
+            getClassesForPupil(profile.id);
+        }
         
         
     }, [profile, specId]);
@@ -148,71 +209,61 @@ const SpecReport = ({params}: SpecReportType) => {
 
     useEffect(()=> {
 
-        if (profile && profile.isAdmin) {
-            getAllPupils(currentClassId);
+        if (!profile)
+        {
+            return;
         }
 
-    }, [profile, allClasses, currentClassId]);
+        if (profile.isAdmin) {
+            getAllPupils(currentClassId!);
+        } 
 
-
-    const getSpecId = (classId: number) => {
-        if (!allClasses)  
-            return null;
-
-        console.log("allClasses", allClasses, classId)
-        //@ts-ignore
-        return allClasses.filter((c) => c.id == classId)[0].specId;
-
-    }
+    }, [profile, classes, currentClassId]);
 
     return <>
-        <div><Link href="/">Home</Link></div>
-        
+        <div>
+            <Link href="/">Home</Link>
+        </div>
         
         <h1>
             <span>Spec Report for </span>
         
+            {profile &&  classes && 
+                        <select value={currentClassId!} onChange={(e) => {setCurrentClassId(parseInt(e.target.value))}}>
+                            {
+                                //@ts-ignore
+                                classes.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
+                        </select>
+            }
+
             { profile && (
                 (!profile?.isAdmin) && `${profile?.firstName} ${profile?.familyName}`)
             }
-            
-            {profile && profile.isAdmin && 
-                <span>
-                    {allClasses && 
-                        <select value={currentClassId} onChange={(e) => {setCurrentClassId(parseInt(e.target.value))}}>
-                            {
-                                //@ts-ignore
-                                allClasses.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
-                        </select>
-                    }
 
-                    {allPupils && 
+            {
+                allPupils && 
                         <select value={pupilId} onChange={(e) => {setPupilId(e.target.value)}}>
                             {
                                 //@ts-ignore
                                 allPupils.map((p, i) => <option value={p.pupilId} key={i}>{p.firstName} {p.familyName}</option>)}
                         </select>
-                    }
-                </span>
             }
-            
-        
         </h1>
         <hr></hr>
         <div className={styles.display}>
             <div style={{gridArea:"a"}}>
                 {
-                    <DisplaySpecProgress pupilId={pupilId} specId={getSpecId(currentClassId)}/>
+                    <DisplaySpecProgress pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
             <div style={{gridArea:"c"}}>
                 {
-                <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId)}/>
+                    <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
-                </div>
+            </div>
             <div style={{gridArea:"b"}}>
                 {//@ts-ignore
-                allClasses && allPupils && <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
+                 <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
             </div>
         

@@ -86,9 +86,10 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
             Object.keys(paperDataView.classes).map((c, i) => <div key={i}>
               
               <div className={styles.classTitle}>
+                  
                   {// @ts-ignore
-      
-                  <Link href={`/spec-report/${userid}/${Object.values(paperDataView.classes[c])[0].specId}`} className={styles.link}>{c}</Link>
+
+                  <Link href={`/app/spec-report/${userid}?classid=${Object.values(paperDataView.classes[c])[0].classId}`} className={styles.link}>{c}</Link>
                   }
               </div> 
               
@@ -106,9 +107,9 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
                     
                     <div key={`${i}1`} className={styles.paperCell}>
                       {//@ts-ignore
-                      <Link href={`/paper-form/${r.paperId}/${r.classId}`} className={styles.link}>{r.year}-{r.month}-{r.paper}</Link>
+                      <Link href={`/app/paper-form/${r.paperId}/${r.classId}`} className={styles.link}>{r.year}-{r.month}-{r.paper}</Link>
                       }
-                      </div>
+                    </div>
                     
                     
                     {//@ts-ignore
