@@ -3,6 +3,8 @@
     border: silver 1px solid;
     border-radius: 2rem;
     padding: 0.5rem;
+
+    margin: 1rem;
 }
 
 .sideBar > ul > li {
@@ -21,6 +23,7 @@
     align-items: center;
     text-decoration: none;
     cursor: pointer;
+    
 }
 
 .sideBar > ul > li > a:hover {

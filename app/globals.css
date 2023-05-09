@@ -5,6 +5,8 @@ html, body {
     background-color: rgb(247, 247, 247);
     font-family: Montserrat;
     scroll-behavior: smooth;
+    margin: 0px;
+    padding: 0px;
 }
 
 

@@ -2,6 +2,6 @@
     display: grid;
     grid-template-columns: 300px 1fr;
     grid-gap: 2rem;
-    max-width: 80vw;
-    margin: auto;
+    
+    
 }

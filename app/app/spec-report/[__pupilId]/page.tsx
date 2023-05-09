@@ -16,6 +16,9 @@ import DisplaySpecDataByItem from './dispaly-spec-data-by-item';
 import {User} from "@supabase/supabase-js";
 import {Profile} from "types/alias";
 
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 type SpecReportType = {
     params : {
         __pupilId : string
@@ -221,19 +224,16 @@ const SpecReport = ({params}: SpecReportType) => {
     }, [profile, classes, currentClassId]);
 
     return <>
-        <div>
-            <Link href="/">Home</Link>
-        </div>
-        
         <h1>
-            <span>Spec Report for </span>
+            Spec Report for
         
             {profile &&  classes && 
-                        <select value={currentClassId!} onChange={(e) => {setCurrentClassId(parseInt(e.target.value))}}>
+                        //@ts-ignore
+                        <Select className={styles.select} value={currentClassId!} onChange={(e) => {setCurrentClassId(parseInt(e.target.value!))}}>
                             {
                                 //@ts-ignore
-                                classes.map((ac, i) => <option value={ac.id} key={i}>{ac.title}</option>)}
-                        </select>
+                                classes.map((ac, i) => <MenuItem value={ac.id} key={i}>{ac.title}</MenuItem>)}
+                        </Select>
             }
 
             { profile && (
@@ -242,11 +242,11 @@ const SpecReport = ({params}: SpecReportType) => {
 
             {
                 allPupils && 
-                        <select value={pupilId} onChange={(e) => {setPupilId(e.target.value)}}>
+                        <Select className={styles.select} value={pupilId} onChange={(e) => {setPupilId(e.target.value)}}>
                             {
                                 //@ts-ignore
-                                allPupils.map((p, i) => <option value={p.pupilId} key={i}>{p.firstName} {p.familyName}</option>)}
-                        </select>
+                                allPupils.map((p, i) => <MenuItem value={p.pupilId} key={i}>{p.firstName} {p.familyName}</MenuItem>)}
+                        </Select>
             }
         </h1>
         <hr></hr>

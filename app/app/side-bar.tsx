@@ -42,7 +42,7 @@ const SideBar = () => {
                 <li className={isActive('home') ? styles.active : styles.inactive}><Link href={`/`}><HomeOutlinedIcon />Home</Link></li>
                 <li className={isActive('dashboard') ? styles.active : styles.inactive}><Link href={`/app/dashboard/${user.id}`} ><ArticleOutlinedIcon />Past papers</Link></li>
                 <li className={isActive('spec-report') ? styles.active : styles.inactive}><Link href={`/app/spec-report/${user.id}`}><GradingOutlinedIcon />Analysis</Link></li>
-                <li className={isActive('flashcards') ? styles.active : styles.inactive}><Link href={`/app/flashcards/${user.id}`}><FlashOnOutlinedIcon/>Flashcards</Link></li>
+                
             </ul>
         )}
         

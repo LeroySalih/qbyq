@@ -3,3 +3,8 @@
     grid-template-columns: 1fr 2fr;
     grid-template-areas : "a b" "c b"
 }
+
+.select {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}

@@ -5,6 +5,9 @@ import styles from "./nav-bar.module.css";
 import {useEffect, useState} from "react";
 import {User} from "@supabase/supabase-js";
 
+import IconButton from '@mui/material/IconButton';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Logout';
 
 const NavBar = () => {
 
@@ -67,8 +70,12 @@ const NavBar = () => {
         </div>
         <div>
           
-          {user && <button onClick={handleSignOut}>Sign Out</button>}
-          {!user && <button onClick={handleSignIn}>Sign In</button>}
+          {user && <IconButton onClick={handleSignOut} aria-label="delete" size="small">
+                    <LogoutIcon fontSize="large" />
+                  </IconButton>}
+          {!user && <IconButton onClick={handleSignIn} aria-label="delete" size="small">
+                    <LoginIcon fontSize="large" />
+                  </IconButton>}
 
         </div>  
     </div>
