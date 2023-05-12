@@ -2,7 +2,9 @@ import styles from "./page.module.css";
 
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import {headers, cookies} from 'next/headers';
+
 import Link from 'next/link';
+import CardButton from "./card-button";
 
 type ProfileProps = {}
 
@@ -24,20 +26,16 @@ const MainPage = async () => {
   
   error && console.error(error);
 
+    if (!session || !(session.user)){
+      return <>
+      <h1>User not logged in.</h1>
+      </>
+    }
+
     return (
         <>
-          <div className={styles.page}>
-          <div className={styles.leftPanel}>Side Bar</div>
-          <div className={styles.rightPanel}>
-            {papers && <div>There are currently {papers.length} {papers.length == 1 ? 'paper' : 'papers'} available.</div>}
-          </div>
           <div>
-            <h1>Session Data</h1>
-            {
-                JSON.stringify(session?.user.id, null, 2)
-            }
-            {session && <Link href={`/app/dashboard/${session?.user.id}`}><span>Dashboard</span></Link>}
-            </div>
+            <CardButton title={'Dashboard'} href={`/app/dashboard/${session?.user.id}`}/>
           </div>
         </>
     )

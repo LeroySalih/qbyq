@@ -1,0 +1,12 @@
+
+.gridContainer {
+
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 250px;
+    font-size: 0.7rem;
+    align-content: center;
+}

@@ -7,7 +7,7 @@ import { GetPaperMarksForPupil, GetPaperMarksForPupilItem } from 'types/alias';
 import styles from "./page.module.css"
 import Link from "next/link";
 
-
+import Card from "/components/card"
 
 type PupilDetails = {
       pupilId : string,
@@ -79,11 +79,11 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
         <div className={styles.page}>
           
           <div className="page-header">
-            <h2>Welcome, {paperDataView.firstName}  </h2> 
+            <h1>Welcome, {paperDataView.firstName}  </h1> 
           </div>
 
           {
-            Object.keys(paperDataView.classes).map((c, i) => <div key={i}>
+            Object.keys(paperDataView.classes).map((c, i) => <Card key={i}>
               
               <div className={styles.classTitle}>
                   
@@ -124,20 +124,12 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
                     {//@ts-ignore
                     <div key={`${i}6`} className={`${styles.paperCell} ${styles.right}`}>{((r.pMarks / r.qMarks)*100).toFixed(0)}%</div>
                     }
-                    </>
+                  </>
                   )
               }</div>
               
-              </div>)
+              </Card>)
           }
-          
-          
-          {// @ts-ignore
-          /*
-          <DisplayClasses classes={classesForPupil} pupilMarks={pupilMarks}/>
-          */
-          }
-
           
           
           </div>

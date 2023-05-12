@@ -1,0 +1,27 @@
+.navbar-panel {
+    display: flex;
+    align-items: center;
+  }
+
+
+  .navSpacer {
+    display: flex;
+    font-size: 2rem;
+    color: blue;
+  }
+
+  .question-nav-btn {
+    border-radius: 2rem;
+    font-size:0.6rem;
+    border : blue solid 1px;
+    height : 1rem;
+    width : 1rem;
+    display: flex;
+    justify-content : center;
+    cursor: pointer;
+  }
+
+  .answered {
+    color: white;
+    background-color: blue;
+  }

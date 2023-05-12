@@ -7,7 +7,7 @@ import {User} from "@supabase/supabase-js";
 
 import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
-import LoginIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 
 const NavBar = () => {
 
@@ -61,6 +61,8 @@ const NavBar = () => {
     
         error && console.error("Error", error);
     }
+
+    console.log(user);
       
     return <>
     <div className={styles.navbar}>
@@ -73,7 +75,7 @@ const NavBar = () => {
           {user && <IconButton onClick={handleSignOut} aria-label="delete" size="small">
                     <LogoutIcon fontSize="large" />
                   </IconButton>}
-          {!user && <IconButton onClick={handleSignIn} aria-label="delete" size="small">
+          {user == null && <IconButton onClick={handleSignIn} aria-label="delete" size="small">
                     <LoginIcon fontSize="large" />
                   </IconButton>}
 

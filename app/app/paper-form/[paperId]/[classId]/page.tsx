@@ -51,7 +51,7 @@ const PageForm = async ({params}: PagePropsType) => {
 
     return <>
         <div className="page">
-            <Link href="/">Home</Link>
+            
             <h1>{paper?.title} - {paper?.paper}</h1>
             <hr></hr>
             <h3>{paper?.year} - {paper?.month}</h3>

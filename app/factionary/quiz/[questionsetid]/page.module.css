@@ -1,0 +1,51 @@
+.pageHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #c0c0c0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .pageHeader button {
+    height: 2rem;
+    border: 1px solid blue;
+    background-color: white;
+    border-radius: 0.5rem;
+  }
+
+  .pageDisplay {
+    max-height: calc(100vh - 85px);
+    overflow: scroll;
+    margin-top: 85px;
+  }
+
+  .submitPanel {
+    display: flex;
+    justify-content : center;
+  }
+
+  .submitButton {
+    width: 100%;
+    background-color: #5a5adc;
+    border-radius: 1rem;
+    color: yellow;
+    font-size: 1.2rem;
+    padding: 1rem;
+    margin: 2rem;
+    margin-right: 2rem;
+    max-width: 250px;
+    border : none;
+  }
+
+
+  .resultsPanel {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }

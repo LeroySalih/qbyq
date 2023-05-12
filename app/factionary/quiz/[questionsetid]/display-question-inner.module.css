@@ -1,0 +1,53 @@
+.card {
+    border: silver 1px solid;
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    background-color: white;
+  }
+
+  .layoutGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "term def" "panel panel";
+  }
+
+  .item {
+    font-size: 1.5rem;
+    text-align: center;
+    min-height: 5rem;
+    padding: 1rem;
+  }
+
+  .term {
+    grid-area: term;
+    border-right: solid 1px silver;
+  }
+  .def {
+    grid-area: def;
+  }
+  .panel {
+    grid-area: panel;
+    display: flex;
+  }
+
+  .panel button {
+    width: 100%;
+    background-color: white;
+    border: silver 1px solid;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .selected {
+    border: blue 5px solid !important;
+  }
+
+  .correct {
+    background-color: #abebab !important;
+  }
+
+  .incorrect {
+    background-color: #ebc6c7 !important;
+  }
