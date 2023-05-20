@@ -1,9 +1,9 @@
 import styles from "./display-queues.module.css";
 import dayjs from 'dayjs'
 
-import {Queue} from "./types";
+import {FCQueue} from "types/alias";
 
-const DisplayQueues = ({queue}:{queue:Queue}) => {
+const DisplayQueues = ({queue}:{queue:FCQueue}) => {
     
     if (!queue)
         return <h1>No Queues Passed</h1>
@@ -12,9 +12,9 @@ const DisplayQueues = ({queue}:{queue:Queue}) => {
     const week = dayjs().add(1, 'week').toDate();
     const month = dayjs().add(1, 'month').toDate();
 
-    const todayCount = queue.filter(q => q.dueDate <= today).length;
-    const weekCount = queue.filter(q => today < q.dueDate && q.dueDate <= week).length;
-    const monthCount = queue.filter(q => q.dueDate > week).length;
+    const todayCount = queue.filter(q => dayjs(q.dueDate).toDate() <= today).length;
+    const weekCount = queue.filter(q => today < dayjs(q.dueDate).toDate() && dayjs(q.dueDate).toDate() <= week).length;
+    const monthCount = queue.filter(q => dayjs(q.dueDate).toDate() > week).length;
 
     return <div className={styles.gridContainer}>
         <div className={styles.grid}>

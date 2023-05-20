@@ -15,6 +15,11 @@ export type ClassPaperResources = Database["public"]["Tables"]["ClassPaperResour
 export type GetPupilMarksBySpecItem = Database["public"]["Functions"]["fn_pupil_marks_by_spec_item"]["Returns"]
 export type GetPupilMarksByAvailableMarks = Database["public"]["Functions"]["fn_pupil_marks_by_available_marks"]["Returns"]
 export type GetPaperMarksForPupil = Database["public"]["Functions"]["fn_get_paper_data_for_pupil"]["Returns"]
+export type FCGetQueuesReturn = Database["public"]["Functions"]["fn_fc_get_queues"]["Returns"]
+export type FCGetQueueReturn = Database["public"]["Functions"]["fn_fc_get_queue"]["Returns"]
+export type FCQueue = FCGetQueueReturn;
+export type FCQueueItem = ArrayElement<FCGetQueueReturn>;
+
 export type GetPaperMarksForPupilItem = ArrayElement<GetPaperMarksForPupil>;
 export type ClassPaper = Database["public"]["Tables"]["ClassPapers"]["Row"];
 export type Paper = Database["public"]["Tables"]["Papers"]["Row"];

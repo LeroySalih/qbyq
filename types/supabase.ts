@@ -104,6 +104,78 @@ export interface Database {
           paperId?: number
         }
       }
+      FCQuestions: {
+        Row: {
+          created_at: string
+          id: string
+          specItemId: number
+          term: string
+          text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          specItemId: number
+          term: string
+          text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          specItemId?: number
+          term?: string
+          text?: string
+        }
+      }
+      FCUSerQueueEntries: {
+        Row: {
+          created_at: string
+          currentQueue: number
+          dueDate: string
+          history: Json
+          id: number
+          questionId: string
+          specItemId: number
+          userId: string
+        }
+        Insert: {
+          created_at?: string
+          currentQueue: number
+          dueDate: string
+          history: Json
+          id?: number
+          questionId: string
+          specItemId: number
+          userId: string
+        }
+        Update: {
+          created_at?: string
+          currentQueue?: number
+          dueDate?: string
+          history?: Json
+          id?: number
+          questionId?: string
+          specItemId?: number
+          userId?: string
+        }
+      }
+      FCUserQueues: {
+        Row: {
+          created_at: string | null
+          specItemId: number
+          userid: string
+        }
+        Insert: {
+          created_at?: string | null
+          specItemId: number
+          userid: string
+        }
+        Update: {
+          created_at?: string | null
+          specItemId?: number
+          userid?: string
+        }
+      }
       Papers: {
         Row: {
           created_at: string | null
@@ -167,8 +239,8 @@ export interface Database {
       }
       PupilMarks: {
         Row: {
-          created_at?: string | null
-          id?: number
+          created_at: string | null
+          id: number
           marks: number | null
           paperId: number
           questionId: number
@@ -315,84 +387,6 @@ export interface Database {
           paperId?: number | null
         }
       }
-      TDFQuestions: {
-        Row: {
-          AO: number | null
-          created_at: string | null
-          def: string | null
-          id: number
-          questionSetId: number | null
-          specItemId: number | null
-          term: string | null
-        }
-        Insert: {
-          AO?: number | null
-          created_at?: string | null
-          def?: string | null
-          id?: number
-          questionSetId?: number | null
-          specItemId?: number | null
-          term?: string | null
-        }
-        Update: {
-          AO?: number | null
-          created_at?: string | null
-          def?: string | null
-          id?: number
-          questionSetId?: number | null
-          specItemId?: number | null
-          term?: string | null
-        }
-      }
-      TDFQuestionSets: {
-        Row: {
-          created_at: string | null
-          id: number
-          owner: string | null
-          specId: number | null
-          title: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          owner?: string | null
-          specId?: number | null
-          title?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          owner?: string | null
-          specId?: number | null
-          title?: string | null
-        }
-      }
-      TDFQueue: {
-        Row: {
-          created_at: string | null
-          dueDate: string | null
-          questionId: number
-          queueType: number | null
-          result: boolean | null
-          userId: string
-        }
-        Insert: {
-          created_at?: string | null
-          dueDate?: string | null
-          questionId: number
-          queueType?: number | null
-          result?: boolean | null
-          userId: string
-        }
-        Update: {
-          created_at?: string | null
-          dueDate?: string | null
-          questionId?: number
-          queueType?: number | null
-          result?: boolean | null
-          userId?: string
-        }
-      }
     }
     Views: {
       vw_duplicate_pupil_marks: {
@@ -504,6 +498,45 @@ export interface Database {
           firstName: string
           familyName: string
           pMarks: number
+        }[]
+      }
+      fn_fc_get_distractors: {
+        Args: {
+          _specid: number
+          _qid: string
+        }
+        Returns: unknown
+      }
+      fn_fc_get_queue: {
+        Args: {
+          _userid: string
+          _specitemid: number
+        }
+        Returns: {
+          userId: string
+          specItemId: number
+          tag: string
+          title: string
+          dueDate: string
+          currentQueue: number
+          history: Json
+          questionId: string
+          term: string
+          text: string
+          distractors: string[]
+        }[]
+      }
+      fn_fc_get_queues: {
+        Args: {
+          _userid: string
+        }
+        Returns: {
+          specItemId: number
+          specItemTag: string
+          specItemTitle: string
+          specId: number
+          specTitle: string
+          specSubject: string
         }[]
       }
       fn_get_paper_data_for_pupil: {

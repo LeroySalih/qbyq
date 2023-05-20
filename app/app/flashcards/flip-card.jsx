@@ -85,8 +85,10 @@ const FlipCard = ({ state, question, options, onClick, onNext }) => {
           animate={textControls}
         >
           <div className={styles.text}>{displayText}</div>
-          {options && state==='front' && options.map((o, i) => <Button key={i} onClick={()=> {handleOnClick(o)}}>{o}</Button>)}
-          {options && state==='back' &&  <Button onClick={handleOnNext}>Next Question</Button>}
+          {question && state==='front' && [question.term, ...question.distractors]
+                .sort((a, b)=> a > b ? 1 : -1)
+                .map((o, i) => <Button key={i} onClick={()=> {handleOnClick(o)}}>{o}</Button>)}
+          {question && state==='back' &&  <Button onClick={handleOnNext}>Next Question</Button>}
         </motion.div>
       </motion.div>
 

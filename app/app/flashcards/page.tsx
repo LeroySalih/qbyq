@@ -3,7 +3,7 @@
 
 import styles from "./page.module.css";
 
-import {useState, useEffect} from "react";
+import {useState, useEffect, MouseEvent} from "react";
 
 import Button from '@mui/material/Button';
 
@@ -11,11 +11,14 @@ import DisplayQueues from "./display-queues";
 import DisplayQuestion from "./display-question";
 import FlipCard, {FlipCardContainer} from './flip-card';
 
+import { FCGetQueueReturn, FCGetQueuesReturn } from "types/alias";
 import {Question, Questions, QueueItem, Queue, QueueType, QueueTypeFilter, QueueTypeFilters, QueueDescriptor, QueueDescriptors} from './types'
 import dayjs from "dayjs";
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useSupabase } from "components/context/supabase-context";
+
 
 const _questions: Questions = {
     1: {id: 1, term:"Paris" , text: "... is the capital of France.", specItemId: 0},
@@ -38,7 +41,7 @@ const _queue:Queue = [
     {userId: 1, queueId: 1, dueDate: dayjs().subtract(40, 'minute').toDate(), qId: 3, currentQueue: 0, history: []}
 ];
 
-const qt:QueueType = 0;
+const qt:QueueType = 0; 
 
 const _queues: QueueTypeFilters = {
     [0] : {
@@ -76,32 +79,56 @@ const getQueueItems = (queue: Queue, queueType: QueueType) => {
     return queue.filter(_queues[queueType].filterFn).sort((a, b)=> a.dueDate > b.dueDate ? 1 : -1)
 }
 
-const FlashCardPage = () => {
-
-    const getCurrentQuestion = (queue: Queue, questions: Questions, type: QueueType) => {
+const getCurrentQuestion = (queue: Queue, questions: Questions, type: QueueType) => {
         
-        const queueItems = getQueueItems(queue,type);
+    const queueItems = getQueueItems(queue,type);
 
-        return queueItems.length > 0 ? 
-            // get the first question that matches the qId of the first queueItem
-            Object.values(questions).filter(q => q.id == queueItems[0].qId)[0] : 
+    return queueItems.length > 0 ? 
+        // get the first question that matches the qId of the first queueItem
+        Object.values(questions).filter(q => q.id == queueItems[0].qId)[0] : 
 
-            // else return null, as there were no matching queue Items found
-            null;
+        // else return null, as there were no matching queue Items found
+        null;
 
-        
+    
+}
+
+type UserQueuResponse = {
+    SpecItem: { 
+        id: number, 
+        tag : string | null,
+        title: string | null,
+        Spec: {
+            title: string | null,
+            subject: string | null
+        }
     }
+}
 
+
+const FlashCardPage = () => {
     
+    const [userId, setUserId] = useState<string>('0d65c82d-e568-450c-a48a-1ca71151e80f')
     
+    //Holds a list of all possible queues for this user
+    const [userQueues, setUserQueues] = useState<FCGetQueuesReturn | null>(null);
+
+    //Holds the specItemId of the current queue
+    const [currentUserQueue, setCurrentUserQueue] = useState(0);
+
+    const [userQueue, setUserQueue] = useState<FCGetQueueReturn | null>(null);
+
     const [questions, setQuestions] = useState<Questions>(_questions);
-    const [currentQueueId, setCurrentQueueId] = useState<number>(0);
+    const [currentQueueId, setCurrentQueueId] = useState<number>();
+    
 
     const [currentQueueType, setCurrentQueueType] = useState<QueueType>(0);
     const [queue, setQueue] = useState<Queue>(_queue);
     const [currentQuestion, setCurrentQuestion] = useState<Question | null>(getCurrentQuestion(_queue, _questions, currentQueueType))
     
     const [state, setState] = useState<string>("front");
+
+    const {supabase} = useSupabase();
 
     const handleOnClick = (isCorrect: boolean, question: Question) => {
 
@@ -175,6 +202,55 @@ const FlashCardPage = () => {
         
     }
 
+    const loadUserQueues = async (userid: string) => {
+
+        const {data, error} = await supabase
+                                        .rpc("fn_fc_get_queues", {_userid: userid})
+                                        
+        console.log("Data", data);
+        error && console.error("Error", error);
+
+        //@ts-ignore
+        setUserQueues(data);
+
+    }
+
+    const loadUserQueue = async (userid: string, specItemId: number) => {
+        const {data, error} = await supabase.rpc("fn_fc_get_queue", {_userid: userid, _specitemid: specItemId});
+
+        error && console.error(error);
+        console.log("read from db:", userid, specItemId, data);
+        //@ts-ignore
+        setUserQueue(data);
+
+    }
+
+    useEffect(()=> {
+        // load a list of all queues for this user
+        loadUserQueues(userId);
+    }, [userId]);
+
+    // list of user queues has changed, so update the current user queue
+    useEffect(()=> {
+
+        
+        if (!userQueues )
+            return;
+
+        
+        console.log("Setting userQueue to ", userQueues[0].specItemId);
+        setCurrentUserQueue(userQueues[0].specItemId);
+    }, [userQueues])
+
+
+    useEffect(()=> {
+        console.log("Get Queue", userId, currentUserQueue)
+        loadUserQueue(userId, currentUserQueue)
+    }, [
+        currentUserQueue
+    ])
+
+
     useEffect(()=> {
         setCurrentQuestion(getCurrentQuestion(queue, questions, currentQueueType))
     }, [questions])
@@ -184,45 +260,51 @@ const FlashCardPage = () => {
     },[queue, currentQueueType]);
 
     return <>
-        <h1>Flash Cards</h1>
-        {
-            <Select value={currentQueueId} onChange={(e) => setCurrentQueueId(e.target.value as number)}>
-                {
-                    Object.values(queueDescriptions).map((qd, i) => <MenuItem key={i} value={qd.id}>{qd.label}</MenuItem>)
-                }
-            </Select>
-
-        }
-        { //@ts-ignore
-        <Select value={currentQueueType} onChange={(e) => setCurrentQueueType(parseInt(e.target.value))}>
-            {Object.values(_queues).map((qi:QueueTypeFilter,i) => <MenuItem key={i} value={qi.id.toString()}>{qi.label}</MenuItem>)}
-        </Select>
-        }
         
         <div className={styles.pageGrid}>
 
+        {userQueues &&
+            <div>
+                {currentUserQueue! > 0 && <Select value={currentUserQueue} onChange={(e)=> {setCurrentUserQueue(e.target.value as number)}}>
+                    {userQueues.map(
+                        (uq, i) => 
+                        <MenuItem key={i} value={uq.specItemId}>{uq.specItemTitle} ({uq.specItemTag})</MenuItem>
+                    )
+                    }
+                </Select>
+                }
+            
+                <Select value={currentQueueType} onChange={(e) => setCurrentQueueType(e.target.value as QueueType)}>
+                    {Object.values(_queues).map((qi:QueueTypeFilter,i) => <MenuItem key={i} value={qi.id.toString()}>{qi.label}</MenuItem>)}
+                </Select>
+            </div>
+        }
+        <div></div>
         {!currentQuestion && <h1>No more questions in queue</h1>}
-        {questions && currentQuestion && <FlipCardContainer> 
+        {userQueue && currentQuestion && <FlipCardContainer> 
             <FlipCard 
                 state={state} 
-                question={currentQuestion} 
+                question={userQueue[0]} 
                 options={Object.values(questions).map(q => q.term)}
                 onClick={handleAnswer}
                 onNext={handleNext}
             />
         </FlipCardContainer>
         }
-        <DisplayQueues queue={queue}/>
-        <pre>{JSON.stringify(queue, null, 2)}</pre>
+        <div>
+                       
+            <div>
+                {userQueue && <DisplayQueues queue={userQueue}/>}
+            </div>
+        </div>
+        <div>
+            <pre>current user queue: {JSON.stringify(currentUserQueue)}</pre>
+            <pre>current user queue: {JSON.stringify(userQueue, null, 2)}</pre>
+        </div>
         
         </div>
     </>
 }
-
-
-
-
-
 
 
 export default FlashCardPage;
