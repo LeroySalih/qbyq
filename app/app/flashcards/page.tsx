@@ -11,7 +11,7 @@ import DisplayQueues from "./display-queues";
 import DisplayQuestion from "./display-question";
 import FlipCard, {FlipCardContainer} from './flip-card';
 
-import { FCGetQueueReturn, FCGetQueuesReturn } from "types/alias";
+import { FCGetQueueReturn, FCGetQueuesReturn, FCQueueItem } from "types/alias";
 import {Question, Questions, QueueItem, Queue, QueueType, QueueTypeFilter, QueueTypeFilters, QueueDescriptor, QueueDescriptors} from './types'
 import dayjs from "dayjs";
 
@@ -65,13 +65,15 @@ const _queues: QueueTypeFilters = {
 }
 
 
-const moveUpQueue = (qi: QueueItem) : QueueItem => {
+const moveUpQueue = (qi: FCQueueItem) : FCQueueItem => {
     console.log("Current Queue", qi.currentQueue, " will be ", qi.currentQueue == 0 ? 1 : 2)
+    const {currentQueue} = qi;
+    //@ts-ignore
     return {...qi, ['dueDate']: _queues[qi.currentQueue].moveUpFn(qi), currentQueue: qi.currentQueue == 0 ? 1 : 2}
 }
 
-const resetToToday = (qi: QueueItem) : QueueItem => {
-    return {...qi, ['dueDate']: dayjs().toDate(), currentQueue: 0}
+const resetToToday = (qi: FCQueueItem) : FCQueueItem => {
+    return {...qi, ['dueDate']: dayjs().toDate().toString(), currentQueue: 0}
 }
 
 const getQueueItems = (queue: Queue, queueType: QueueType) => {
@@ -158,10 +160,24 @@ const FlashCardPage = () => {
         setState(prev => prev == 'front' ? 'back' : 'front')
     }
 
-    const handleAnswer = (choice: string) => {
-        // update queue history 
+    const handleAnswer = async (choice: string) => {
+        console.log("in handleAnswer", choice)
+        if (!userQueue)
+            return;
 
-        const tmpQueue = queue.map((q => {
+        // update queue history in db (FCUserQuestionHistory)
+        const {data: historyData, error: historyError}= await supabase.from("FCUserQuestionHistory").insert({
+            userid: userId,
+            specItemId: currentUserQueue,
+            questionId: userQueue[0].questionId,
+            answer: choice,
+            result: choice == userQueue[0].term
+        });
+
+        historyError && console.error(historyError);
+        historyData && console.log(historyData);
+        
+        /* const tmpQueue = queue.map((q => {
             if (q.qId == currentQuestion?.id){
                 return {...q, history: [...q.history, {date: dayjs().toDate(), result: choice === currentQuestion.term}]}
             } else {
@@ -169,36 +185,60 @@ const FlashCardPage = () => {
             }
         }))
         
-        console.log(tmpQueue);
-        setQueue(tmpQueue);
+        // console.log(tmpQueue);
+
+        
+        // setUserQueue(tmpQueue);
+        */
 
         handleToggle();
 
     }
 
-    const handleNext = (choice: string) => {
-        const tmp = queue.map((qi) => {
-            
-            if (qi.qId === currentQuestion!.id) {
-                console.log("Matched!");
+    const updateDb = async (qi: FCQueueItem)=>{
+        const {data, error} = await supabase
+        .from ("FCUSerQueueEntries")
+        .update({dueDate: qi.dueDate})
+        .eq("userId", qi.userId)
+        .eq("specItemId", qi.currentQueue)
+        .eq("questionId", qi.questionId)
+        .select()
 
-                // answer is incorrect, so add to tomorrow queue.
-                if (choice !== currentQuestion!.term){
-                    console.log("Resetting to queue 0", choice, currentQuestion!.term)
-                    return resetToToday(qi);
-                }
-                    
-                // answer is correct so move up dueDate
-                console.log("Moving Up Queue")
-                return moveUpQueue(qi);
+        error && console.error("Update Error", error);
+        console.log("Update Date",data);
+    }
+
+    const handleNext = async (choice: string) => {
+        // update the order of the queue in the data base and locally
+
+        console.log("In Handle Next")
+        if (!userQueue)
+            return;
+
+        
+        console.log("Updating queue", userQueue);
+        const tmpUserQueue = userQueue.map((q, i) => {
+            if (i == 0){
+                // update the first queue item in the database
                 
+                const qi = (choice !== q.term) ? moveUpQueue(q): resetToToday(q);
+                updateDb(qi);
+                return qi;
+
+                return 
             }
-            return qi;
-        });
+            return q;
+        })
+        
+        
 
         setState("front")
-        console.log("tmp",tmp)
-        setQueue(tmp.sort((a,b) => a.dueDate > b.dueDate ? 1 : -1));
+        
+        console.log("tmpUserQueue", tmpUserQueue.sort((a,b) => a.dueDate > b.dueDate ? 1 : -1))
+        
+        // re-order the local queue
+        //@ts-ignore
+        setUserQueue(tmpUserQueue.sort((a,b) => a.dueDate > b.dueDate ? 1 : -1));
         
     }
 

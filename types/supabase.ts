@@ -127,6 +127,35 @@ export interface Database {
           text?: string
         }
       }
+      FCUserQuestionHistory: {
+        Row: {
+          answer: string
+          created_at: string
+          id: number
+          questionId: string
+          result: boolean
+          specItemId: number
+          userid: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: number
+          questionId: string
+          result: boolean
+          specItemId: number
+          userid: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: number
+          questionId?: string
+          result?: boolean
+          specItemId?: number
+          userid?: string
+        }
+      }
       FCUSerQueueEntries: {
         Row: {
           created_at: string
