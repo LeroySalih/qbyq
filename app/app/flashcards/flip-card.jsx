@@ -17,7 +17,7 @@ const TextVariants = {
   hide: { opacity: 0, transition: { duration: 0.3 } }
 };
 
-const FlipCard = ({ state, question, options, onClick, onNext }) => {
+const FlipCard = ({ state, question,  onClick, onNext }) => {
   const textControls = useAnimation();
   const cardControls = useAnimation();
   const [displayText, setDisplayText] = useState("");
