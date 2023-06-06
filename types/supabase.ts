@@ -536,6 +536,25 @@ export interface Database {
         }
         Returns: unknown
       }
+      fn_fc_get_next_question: {
+        Args: {
+          _userid: string
+          _specitemid: number
+        }
+        Returns: {
+          userId: string
+          specItemId: number
+          tag: string
+          title: string
+          dueDate: string
+          currentQueue: number
+          history: Json
+          questionId: string
+          term: string
+          text: string
+          distractors: string[]
+        }[]
+      }
       fn_fc_get_queue: {
         Args: {
           _userid: string
@@ -553,6 +572,16 @@ export interface Database {
           term: string
           text: string
           distractors: string[]
+        }[]
+      }
+      fn_fc_get_queue_summary: {
+        Args: {
+          _userid: string
+          _specitemid: number
+        }
+        Returns: {
+          isDue: string
+          count: number
         }[]
       }
       fn_fc_get_queues: {

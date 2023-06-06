@@ -1,6 +1,10 @@
 
 .gridContainer {
-
+    border: silver solid 1px;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    margin-right: 2rem;
 }
 
 .grid {

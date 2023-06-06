@@ -136,6 +136,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
         // console.log(marks);
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
+            //@ts-ignore
             tmpPupilMarks.push({
                 userId : user!.id ,
                 questionId, 

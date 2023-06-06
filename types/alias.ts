@@ -20,6 +20,10 @@ export type FCGetQueueReturn = Database["public"]["Functions"]["fn_fc_get_queue"
 export type FCQueue = FCGetQueueReturn;
 export type FCQueueItem = ArrayElement<FCGetQueueReturn>;
 
+export type FCGetQueueSummaryReturn = Database["public"]["Functions"]["fn_fc_get_queue_summary"]["Returns"]
+export type FCGetNextQuestionReturn = Database["public"]["Functions"]["fn_fc_get_next_question"]["Returns"]
+export type FCGetNextQuestionItem = ArrayElement<FCGetNextQuestionReturn>;
+
 export type GetPaperMarksForPupilItem = ArrayElement<GetPaperMarksForPupil>;
 export type ClassPaper = Database["public"]["Tables"]["ClassPapers"]["Row"];
 export type Paper = Database["public"]["Tables"]["Papers"]["Row"];

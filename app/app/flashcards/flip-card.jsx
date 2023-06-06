@@ -1,4 +1,4 @@
-import { motion, useAnimation, AnimatePresence } from "framer-motion";
+import { motion, useAnimationControls, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import styles from './flip-card.module.css';
@@ -18,13 +18,13 @@ const TextVariants = {
 };
 
 const FlipCard = ({ state, question,  onClick, onNext }) => {
-  const textControls = useAnimation();
-  const cardControls = useAnimation();
+  const textControls = useAnimationControls();
+  const cardControls = useAnimationControls();
   const [displayText, setDisplayText] = useState("");
   const [choice, setChoice] = useState();
 
   const toggleAnimation = async () => {
-    console.log("state", state, question);
+    //console.log("state", state, question);
     if (!question){
       return
     }
@@ -39,15 +39,19 @@ const FlipCard = ({ state, question,  onClick, onNext }) => {
     await textControls.start(state);
 
     // set the correct display text
-    setDisplayText(state === "front" ? question.text : displayAnswer(question.term, question.text));
+    setDisplayText(state === "front" ? <div>{question.text}</div> : <div dangerouslySetInnerHTML={{ __html: displayAnswer(question.term, question.text, choice) }}/>);
 
     // show the text
     return textControls.start("show");
   };
 
+  useEffect(()=> {
+
+  }, [displayText])
+
   useEffect(() => {
     if (question){
-      console.log("Question", question)
+     
       toggleAnimation();
     }
   }, [state, question]);
@@ -67,9 +71,11 @@ const FlipCard = ({ state, question,  onClick, onNext }) => {
     onNext(choice);
   }
 
-  const displayAnswer = (term, text) => {
-    return text.replace('...', term);
+  const displayAnswer = (term, text, choice) => {
+    return choice == term ? text.replace('...', `<span style="color: green">${term}</span>`) : text.replace('...', `<span style="color: red">${term}</span>`) ;
   }
+
+  //console.log("Question", question);
 
   return (
     <>

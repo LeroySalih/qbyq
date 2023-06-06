@@ -5,12 +5,13 @@ import styles from "./page.module.css";
 
 import {useState, useEffect} from "react";
 
+import {RealtimePostgresChangesPayload} from '@supabase/supabase-js';
 
-import DisplayQueues from "./display-queues";
+import DisplayQueueSummary from "./display-queue-summary";
 
 import FlipCard, {FlipCardContainer} from './flip-card';
 
-import { FCGetQueueReturn, FCGetQueuesReturn, FCQueue, FCQueueItem } from "types/alias";
+import { FCGetNextQuestionReturn, FCGetNextQuestionItem,  FCGetQueueReturn, FCGetQueueSummaryReturn, FCGetQueuesReturn, FCQueue, FCQueueItem } from "types/alias";
 import {Questions, QueueItem, Queue, QueueType, QueueTypeFilter, QueueTypeFilters, QueueDescriptors} from './types'
 import dayjs from "dayjs";
 
@@ -24,30 +25,39 @@ const _queues: QueueTypeFilters = {
         id: 0,
         label: "Today",
         filterFn: (qi:QueueItem) => dayjs(qi.dueDate).toDate() < dayjs().toDate(),
-        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'day').subtract(1, 'minute').toDate()  
+        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'day').subtract(1, 'minute').toISOString()  
     },
     [1] : {
         id: 1,
         label: "This Week",
         filterFn: (qi:QueueItem) =>  dayjs().toDate() < dayjs(qi.dueDate).toDate() && dayjs(qi.dueDate).toDate() <= dayjs().add(7,'day').toDate(),
-        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'week').subtract(1, 'minute').toDate()  
+        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'week').subtract(1, 'minute').toISOString()  
     },
     [2] : {
         id: 2,
         label: "This Month",
         filterFn: (qi:QueueItem) =>  dayjs(qi.dueDate).toDate() > dayjs().add(7,'day').toDate(),
-        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'month').subtract(1, 'minute').toDate()    
+        moveUpFn: (qi: QueueItem) => dayjs().add(1, 'month').subtract(1, 'minute').toISOString()    
     },
 }
 
 const moveUpQueue = (qi: FCQueueItem) : FCQueueItem => {
-    const {currentQueue} = qi;
+    
+    let newDueDate = qi.dueDate;
+    let newQueue = qi.currentQueue;
+
+    switch(qi.currentQueue) {
+        case 0: newDueDate = dayjs().add(1, 'day').toISOString();  newQueue = 1; break;
+        case 1: newDueDate = dayjs().add(1, 'week').toISOString(); newQueue = 2; break;
+        case 2: newDueDate = dayjs().add(1, 'month').toISOString(); break;
+    }
+
     //@ts-ignore
-    return {...qi, ['dueDate']: _queues[qi.currentQueue].moveUpFn(qi), currentQueue: qi.currentQueue == 0 ? 1 : 2}
+    return {...qi, ['dueDate']: newDueDate, currentQueue: newQueue}
 }
 
 const resetToToday = (qi: FCQueueItem) : FCQueueItem => {
-    return {...qi, ['dueDate']: dayjs().toDate().toString(), currentQueue: 0}
+    return {...qi, ['dueDate']: dayjs().toDate().toISOString(), currentQueue: 0}
 }
 
 
@@ -57,12 +67,15 @@ const FlashCardPage = () => {
     
     //Holds a list of all possible queues for this user
     const [userQueues, setUserQueues] = useState<FCGetQueuesReturn | null>(null);
+    const [userQuestion, setUserQuestion] = useState<FCGetNextQuestionItem | null>(null);
 
     //Holds the specItemId of the current queue
     const [currentUserQueue, setCurrentUserQueue] = useState(0);
-    const [userQueue, setUserQueue] = useState<FCGetQueueReturn | null>(null);
+    //const [userQueue, setUserQueue] = useState<FCGetQueueReturn | null>(null);
 
-    const [currentQueueType, setCurrentQueueType] = useState<QueueType>(0);
+    const [userQueueSummary, setUserQueueSummary] = useState<FCGetQueueSummaryReturn | null>(null);
+    
+    //const [currentQueueType, setCurrentQueueType] = useState<QueueType>(0);
     const [state, setState] = useState<string>("front");
     const {supabase} = useSupabase();
 
@@ -72,16 +85,17 @@ const FlashCardPage = () => {
 
     const handleAnswer = async (choice: string) => {
         console.log("in handleAnswer", choice)
-        if (!userQueue)
+        
+        if (!userQuestion)
             return;
 
         // update queue history in db (FCUserQuestionHistory)
         const {data: historyData, error: historyError}= await supabase.from("FCUserQuestionHistory").insert({
             userid: userId,
             specItemId: currentUserQueue,
-            questionId: userQueue[0].questionId,
+            questionId: userQuestion.questionId,
             answer: choice,
-            result: choice == userQueue[0].term
+            result: choice == userQuestion.term
         });
 
         historyError && console.error(historyError);
@@ -93,52 +107,70 @@ const FlashCardPage = () => {
 
     const updateDb = async (qi: FCQueueItem)=>{
 
-        console.log("Updating", qi.userId,qi.specItemId, qi.questionId );
+        return new Promise(async (res, rej) => {
 
-        const {error} = await supabase
-        .from ("FCUSerQueueEntries")
-        .update({dueDate: qi.dueDate, currentQueue: qi.currentQueue
+            console.log("Updating DB with", qi );
+
+            const {error} = await supabase
+                .from ("FCUSerQueueEntries")
+                .update({dueDate: qi.dueDate, currentQueue: qi.currentQueue
+                        })
+                .match({
+                    "userId" : qi.userId,
+                    "specItemId": qi.specItemId,
+                    "questionId": qi.questionId
                 })
-        .match({
-            "userId" : qi.userId,
-            "specItemId": qi.specItemId,
-            "questionId": qi.questionId
+                
+
+                error && console.error("Update Error", error)
+                error && rej(error);
+                res(true);
+        
         })
         
-
-        error && console.error("Update Error", error);
-        //console.log("Update Date",data);
     }
 
     const handleNext = async (choice: string) => {
         // update the order of the queue in the data base and locally
 
         console.log("In Handle Next")
-        if (!userQueue)
+        if (!userQuestion)
             return;
 
         
-        console.log("Updating queue", userQueue);
-        const tmpUserQueue = userQueue.map((q, i) => {
-            if (i == 0){
-                // update the first queue item in the database
-                
-                const qi = (choice === q.term) ? moveUpQueue(q): resetToToday(q);
-                console.log("qi", choice == q.term, q, qi)
-                updateDb(qi);
-                return qi;
+        const qi = (choice === userQuestion.term) ? moveUpQueue(userQuestion): resetToToday(userQuestion);
+        
+        console.log("Question Editied to", qi)
+        
+        // ensure that updateDb is complete before proceeding
+        await updateDb(qi);
+        
+        loadNextQuestion(userId, currentUserQueue);
+        loadUserQueueSummary(userId, currentUserQueue);
 
-                return 
+        // notify channel that user has submitted a question
+        const channel = supabase.channel('22-10BS1', {
+            config: {
+              broadcast: {
+                self: true,
+              },
+            },
+          });
+
+        console.log("Channel", channel);
+
+        channel
+        .on('broadcast', { event: 'supa' }, (payload) => console.log(payload))
+        .subscribe((status) => {
+            if (status === 'SUBSCRIBED') {
+                channel.send({
+                type: 'broadcast',
+                event: 'QUESTION_ANSWERED',
+                payload: { org: {msg: "User Question Submitted"} },
+                })
             }
-            return q;
         })
-        
-        setState("front")
-        
-        // re-order the local queue
-        //@ts-ignore
-        setUserQueue(tmpUserQueue.sort((a,b) => a.dueDate < b.dueDate ? 1 : -1));
-        
+               
     }
 
     const loadUserQueues = async (userid: string) => {
@@ -154,6 +186,7 @@ const FlashCardPage = () => {
 
     }
 
+    /*
     const loadUserQueue = async (userid: string, specItemId: number) => {
         const {data, error} = await supabase.rpc("fn_fc_get_queue", {_userid: userid, _specitemid: specItemId});
 
@@ -162,6 +195,20 @@ const FlashCardPage = () => {
         //@ts-ignore
         setUserQueue(data?.sort((a, b) => a.dueDate < b.dueDate ? 1 : -1));
     }
+    */
+
+    const loadNextQuestion = async (_userid: string, _specitemid: number) => {
+        const {data, error} = await supabase.rpc("fn_fc_get_next_question", {_userid, _specitemid});
+
+        error && console.error(error);
+        console.log("Next Question", data)
+
+        // @ts-ignore
+        setUserQuestion(data && data.length > 0 ? data[0] : null);
+        setState("front")
+
+    }
+    /*
 
     const getCurrentQuestion = (userQueue: FCQueue) : FCQueueItem | null=> {
         if (!userQueue || userQueue.length == 0){
@@ -170,24 +217,77 @@ const FlashCardPage = () => {
 
         return userQueue.sort((a, b) => a.dueDate > b.dueDate ? 1 : -1)[0]
     }
+    */
+
+    const loadUserQueueSummary = async (_userid: string, _specitemid: number) => {
+
+        const {data, error} = await supabase.rpc("fn_fc_get_queue_summary", {_userid, _specitemid});
+
+        error && console.error(error);
+
+        // @ts-ignore
+        setUserQueueSummary(data);
+    }
+
+    const checkQuestionUpdate = (payload : RealtimePostgresChangesPayload<{ [key: string]: any; }>)  => {
+        
+        //console.log("Payload", payload.eventType === "UPDATE", payload.new.id, payload.new.id === userQuestion?.questionId);
+
+        if (payload.eventType === "UPDATE" && payload.new.id === userQuestion?.questionId){
+
+            console.log("Updating current question");
+
+            const updatedQuestion = Object.assign({}, userQuestion, {term: payload.new.term, text: payload.new.text});
+
+            setUserQuestion(updatedQuestion);
+
+        }
+        //if (payload.new.)
+
+    }
+
+    useEffect(()=> {
+
+        // subscribe to changes in FCQuestion table in case a question changes
+        // while its being read. 
+        const questionUpdateChannel = supabase.channel('schema-db-changes').on(
+            'postgres_changes',
+                {
+                event: '*',
+                schema: 'public',
+                },
+                checkQuestionUpdate
+                ).subscribe();
+
+
+        return () => {
+            questionUpdateChannel.unsubscribe();
+        }
+
+    }, [])
 
     useEffect(()=> {
         // load a list of all queues for this user
         loadUserQueues(userId);
+        
     }, [userId]);
 
     // list of user queues has changed, so update the current user queue
     useEffect(()=> {
         
-        if (!userQueues )
+        if (!userQueues || userQueues.length == 0)
             return;
 
         setCurrentUserQueue(userQueues[0].specItemId);
-    }, [userQueues]);
 
+
+    }, [userQueues]);
+    
 
     useEffect(()=> {
-        loadUserQueue(userId, currentUserQueue)
+        // loadUserQueue(userId, currentUserQueue);
+        loadNextQuestion(userId, currentUserQueue);
+        loadUserQueueSummary(userId, currentUserQueue);
     }, [currentUserQueue]);
 
     return <>
@@ -195,8 +295,9 @@ const FlashCardPage = () => {
         <div className={styles.pageGrid}>
 
         {userQueues &&
-            <div>
-                {currentUserQueue! > 0 && <Select value={currentUserQueue} onChange={(e)=> {setCurrentUserQueue(e.target.value as number)}}>
+            <div className={styles.pageGridHeader}>
+                {currentUserQueue! > 0 && 
+                <Select value={currentUserQueue} onChange={(e)=> {setCurrentUserQueue(e.target.value as number)}}>
                     {userQueues.map(
                         (uq, i) => 
                         <MenuItem key={i} value={uq.specItemId}>{uq.specItemTitle} ({uq.specItemTag})</MenuItem>
@@ -205,17 +306,21 @@ const FlashCardPage = () => {
                 </Select>
                 }
             
-                <Select value={currentQueueType} onChange={(e) => setCurrentQueueType(e.target.value as QueueType)}>
-                    {Object.values(_queues).map((qi:QueueTypeFilter,i) => <MenuItem key={i} value={qi.id.toString()}>{qi.label}</MenuItem>)}
-                </Select>
+                {
+                    userQueueSummary && <DisplayQueueSummary queueSummary={userQueueSummary}/>
+                }
             </div>
         }
         <div></div>
+
+        {
+            !userQuestion && <div className={styles.noMoreQuestions}><h1>No more questions!</h1></div>
+        }
         
-        {userQueue &&  <FlipCardContainer> 
+        {userQuestion &&  <FlipCardContainer> 
             <FlipCard 
                 state={state} 
-                question={userQueue[0]} 
+                question={userQuestion} 
                 onClick={handleAnswer}
                 onNext={handleNext}
             />
@@ -223,17 +328,10 @@ const FlashCardPage = () => {
         }
         <div>        
             <div>
-                {userQueue && <DisplayQueues queue={userQueue}/>}
+                
             </div>
         </div>
 
-        <div>
-            {userqueue && <pre>Current Question: {JSON.stringify(getCurrentQuestion(userQueue), null, 2)}</pre>}
-        </div>
-
-        <div>
-            <pre>current user queue: {JSON.stringify(userQueue, null, 2)}</pre>
-        </div>
         
         </div>
     </>

@@ -38,7 +38,7 @@ export type QueueItem = {
 export type Queue = QueueItem[];
 
 export type QueueTypeFilterFn = (qi:QueueItem) => boolean;
-export type QueueTypeMoveUpFn = (qi:QueueItem) => Date;
+export type QueueTypeMoveUpFn = (qi:QueueItem) => string;
 
 export type QueueTypeFilter = {
     id: QueueType,

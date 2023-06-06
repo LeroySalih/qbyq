@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 
 import supabase from "components/supabase";
 
-import {Paper} from '../../../../types/alias';
+import {Paper} from 'types/alias';
 
 
 type PagePropsType = {
