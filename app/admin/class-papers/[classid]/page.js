@@ -20,7 +20,7 @@ const ClassPapers = ({params}) => {
 
         error && console.error(error);
 
-        console.log("Class Data", data);
+        // console.log("Class Data", data);
         setClassData(data);
     } 
 
@@ -29,7 +29,7 @@ const ClassPapers = ({params}) => {
 
         error && console.error(error);
 
-        console.log("Papers", data);
+        // ("Papers", data);
         setPapers(data);
     }
 
@@ -38,7 +38,7 @@ const ClassPapers = ({params}) => {
 
         error && console.error(error);
 
-        console.log("Class Paper", data);
+        // console.log("Class Paper", data);
         setClassPapers(data);
     }
 

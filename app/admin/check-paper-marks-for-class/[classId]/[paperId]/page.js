@@ -19,7 +19,7 @@ const CheckMarksForClass = ({params}) => {
           // Searched for the function public.fn_check_paper_for_class without parameters or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.
 
         error && console.error(error);
-        console.log("Data", data);
+        // console.log("Data", data);
         setData(data);
     }
 

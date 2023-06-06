@@ -6,7 +6,7 @@ const AuthPage = () => {
 
   const router = useRouter();
   
-    console.log("Visiting Auth Page")
+    // console.log("Visiting Auth Page")
     const handleSignIn = async () => {
         
       
@@ -20,14 +20,14 @@ const AuthPage = () => {
           });
 
         router.push('/')
-        console.log(data)
+        // console.log(data)
     }
 
     const handleSignOut = async () => {
         
       const {  error } = await supabase.auth.signOut();
       error && console.error(error);
-      console.log("Signed Out");
+      // console.log("Signed Out");
       router.push('/')
   }
     return <><h1>Auth Page</h1>

@@ -1,0 +1,10 @@
+.specItemGrid {
+    display : grid;
+
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.footer {
+    border-top : double 1px silver
+    
+}

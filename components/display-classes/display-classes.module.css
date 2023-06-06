@@ -1,0 +1,28 @@
+.display-class {
+    border-bottom:solid 1px silver;
+    margin-bottom: 2rem;
+}
+
+.class-title-block {
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.classTitle {
+    font-size: 1.3rem;
+    font-weight : bold;    
+    margin-top: 1rem;
+}
+
+.classLink {
+    font-size: 0.7rem;
+    text-decoration: none;
+}
+
+
+.display-papers {
+    display : grid;
+    grid-template-columns: 1fr 2fr 3fr 1fr 1fr 1fr 1fr;
+}

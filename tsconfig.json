@@ -24,6 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/spec-report/[__pupilId]/[specId]/page.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/app/spec-report/[__pupilId]/[classid].old/page.js.old", "app/dashboard.old/layout.tsx.old", "app/dashboard.old/page.tsx.old", "app/layout.tsx.old", "app/paper-form/[paperId]/page.tsx.old", "app/dashboard.old/create-paper-dlg.tsx.old", "components/display-classes/index.tsx.old", "app/app/spec-report/[__pupilId]/[classid].old/page.tsx.old"],
   "exclude": ["node_modules"]
 }
