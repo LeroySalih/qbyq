@@ -4,3 +4,9 @@
     height: 100vh;
     grid-template-columns: 3fr 7fr;
   }
+
+.layout {
+  display: flex;
+  max-width: 1000px;
+  margin: auto;
+}

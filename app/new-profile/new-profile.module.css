@@ -1,0 +1,19 @@
+.formLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;;
+    margin: auto;
+    max-width: 400px;
+}
+
+.classesLayout{
+
+    margin: auto;
+    margin-top: 2rem;
+    max-width: 400px;
+}
+
+.formLayout > input {
+    padding: 0.5rem;
+}
+

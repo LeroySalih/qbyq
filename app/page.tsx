@@ -34,8 +34,9 @@ const MainPage = async () => {
 
     return (
         <>
-          <div>
+          <div className={styles.layout}>
             <CardButton title={'Dashboard'} href={`/app/dashboard/${session?.user.id}`}/>
+            <CardButton title={'Profile'} href={`/new-profile`}/>
           </div>
         </>
     )
