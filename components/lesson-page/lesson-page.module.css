@@ -1,0 +1,22 @@
+.layoutPage {
+    background-color: white;
+    max-width: 1048px;
+    margin: auto;
+    border: silver 1px solid;
+    padding: 1rem;
+    border-radius: 1rem;
+
+}
+
+.ImageContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.lessonSection {
+    border: solid silver 1px;
+    margin: 2rem;
+    border-radius: 1rem;
+    padding: 1rem;
+}
