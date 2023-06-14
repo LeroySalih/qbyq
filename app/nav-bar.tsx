@@ -5,15 +5,20 @@ import styles from "./nav-bar.module.css";
 import {useEffect, useState} from "react";
 import {User} from "@supabase/supabase-js";
 
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+
 import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
 
     const {supabase} = useSupabase();
     const [user, setUser] = useState<User | null>(null);
 
+    const router = useRouter();
+    
     const loadUser = async() => {
 
       const {data: {user}} = await supabase.auth.getUser();
@@ -62,6 +67,11 @@ const NavBar = () => {
         error && console.error("Error", error);
     }
 
+    const handleGoToProfile = () => {
+      
+      router.push('/app/new-profile')
+    }
+
     console.log(user);
       
     return <>
@@ -71,6 +81,11 @@ const NavBar = () => {
           <h1>Question By Question (QbyQ)</h1>
         </div>
         <div>
+
+
+          {user && <IconButton onClick={handleGoToProfile} aria-label="delete" size="small">
+                      <AccountBoxOutlinedIcon fontSize="large"/>
+                   </IconButton>}
           
           {user && <IconButton onClick={handleSignOut} aria-label="delete" size="small">
                     <LogoutIcon fontSize="large" />

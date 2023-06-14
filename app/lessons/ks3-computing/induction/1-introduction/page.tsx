@@ -1,12 +1,16 @@
 
 import {LessonPage, LessonTitle, LessonObjective, LessonTasks, LessonTask, LessonSection, LessonSectionTitle, LessonSectionContent, LessonImage} from 'components/lesson-page';
 import {MCQ} from "components/question-pad";
+import QuestionSummary from 'components/question-pad/question-summary';
 
 import Link from 'next/link';
 
 
 const Page = () => {
+    
+    const path = `ks3-computing/induction/1-introduction`
     return <>
+        <QuestionSummary path={path}/>
         <LessonPage>
             <LessonTitle>1. Introductions</LessonTitle>
             <LessonObjective>LO: TBAT complete induction activities</LessonObjective>
@@ -23,13 +27,17 @@ const Page = () => {
                 <LessonSectionTitle>Starter</LessonSectionTitle>
                 <LessonSectionContent>
                    
-                <MCQ    
-                    key={`induction/starter`}
+                <MCQ  
+                    path={path}  
+                    id={`starter`}
                     content={<h1>This is the <u>content</u> </h1>} 
                     answers={[
-                        {id: 0, text: "Answer 1", isCorrect: true},
-                        {id: 1, text: "Answer 2", isCorrect: false},
+                        {id: 0, text: "Answer 1", isCorrect: false},
+                        {id: 1, text: "Answer 2", isCorrect: true},
                     ]}
+                    showLastAnswer={true}
+                    showCorrectAnswer={true}
+                    
                     />
                     
                 </LessonSectionContent>
@@ -63,6 +71,18 @@ const Page = () => {
                             <li>Check that you are a member of the correct classes</li>
                         </ul>
                     </ul>
+
+                    <MCQ  
+                    path={path}  
+                    id={`section-1`}
+                    content={<h1>Completed </h1>} 
+                    answers={[
+                        {id: 0, text: "Yes", isCorrect: true},
+                        {id: 1, text: "Not Yet", isCorrect: false},
+                    ]}
+                    showLastAnswer={true}
+                    showCorrectAnswer={true}
+                    />
                 </LessonSectionContent>
             </LessonSection>
 

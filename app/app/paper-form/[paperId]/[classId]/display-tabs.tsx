@@ -1,7 +1,7 @@
 "use client";
 
 import DisplayQuestions from './display-questions';
-import DisplayFiles from './display-files';
+// import DisplayFiles from './display-files';
 import DisplayResources from "./display-resources";
 import { useEffect , useState, useContext} from "react";
 import {TestContext, TestContextType} from 'components/context/test-context';
@@ -88,8 +88,7 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Questions" {...a11yProps(0)} />
-            <Tab label="Resources" {...a11yProps(1)} />
-            <Tab label="File" {...a11yProps(2)} />
+            <Tab label="Uploads" {...a11yProps(1)} />
             </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -97,14 +96,8 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
              user && <DisplayQuestions paperId={paperId} user={user} />
             }
         </TabPanel>
+        
         <TabPanel value={value} index={1}>
-            {// @ts-ignore
-                    }
-                    {
-                    // <DisplayResources paperId={paperId} profile={profile}/>
-                    }
-        </TabPanel>
-        <TabPanel value={value} index={2}>
         { // ts-expect-error Server Component 
                           // <DisplayFiles paperId={parseInt(paperId)}/> 
                         }

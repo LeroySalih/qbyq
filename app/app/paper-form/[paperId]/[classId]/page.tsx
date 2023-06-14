@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import {headers, cookies} from 'next/headers';
+import DisplayResources from './display-resources';
 
 type PagePropsType = {
        params : {
@@ -14,16 +15,7 @@ const PageForm = async ({params}: PagePropsType) => {
 
     const {paperId} = params;
     
-    // const [paperId, setPaperId] = useState<number>(1);
-    // const [paper, setPaper] = useState<any>()
-    // const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null)
-    // const [activeIndex, setActiveIndex] = useState(0);
-    // const [files, setFiles] = useState<FileObject[] | null>(null)
-    // const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
-    
-    // const {user, profile} = useContext(UserContext);
-
-
+    console.log(paperId);
     const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
 
@@ -54,8 +46,10 @@ const PageForm = async ({params}: PagePropsType) => {
             
             <h1>{paper?.title} - {paper?.paper}</h1>
             <hr></hr>
+            <div style={{display: "flex", flexDirection:"row", alignItems:"center"}}>
             <h3>{paper?.year} - {paper?.month}</h3>
-
+            <DisplayResources />
+            </div>
             <DisplayTabs paperId={parseInt(paperId)}/>
     </div>  
     </>
