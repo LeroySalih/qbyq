@@ -1,4 +1,5 @@
 "use client";
+import 'react-data-grid/lib/styles.css';
 import styles from "./page.module.css";
 
 import { useSupabase } from 'components/context/supabase-context';
