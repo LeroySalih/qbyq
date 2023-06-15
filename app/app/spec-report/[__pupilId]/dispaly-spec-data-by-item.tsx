@@ -8,18 +8,27 @@ import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-next
 import {headers, cookies} from 'next/headers';
 import Link from "next/link";
 import { useSupabase } from "components/context/supabase-context";
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { setDatasets } from "react-chartjs-2/dist/utils";
 import {GetPupilMarksBySpecItem} from 'types/alias';
 import DataGrid, {textEditor, Column} from 'react-data-grid';
+
+interface SummaryRow {
+    id: string;
+    totalCount: number;
+    pMarksTotal: number, 
+    aMarksTotal: number,
+    paperAverage: string;
+  }
+
 
 export interface Row {
     specTag : string,
     specItem : string,
     revisionMaterials : string | null,
     pMarks : number, 
-    qMarks : number,
-    pct: number,
+    aMarks : number,
+    pct: string,
     fcScore : number | string
   }
 
@@ -31,7 +40,7 @@ const renderFCScore = ({row}: {row : Row})  => {
         return <span style={{color: "blue", cursor: "pointer"}} >Add</span>
     return (
       <>
-        <progress max={100} value={value} style={{ inlineSize: 50 }} /> {Math.round(value)}%
+        <progress max={100} value={value} style={{ inlineSize: 50 }} /> {Math.round(value as number)}%
       </>
     );
   }
@@ -43,16 +52,41 @@ const renderFCScore = ({row}: {row : Row})  => {
     
   }
 
+  const renderPaperAverageSummary = ({row} :  {row:SummaryRow}) => {
+    console.log('Row', row)
+    return `${row.paperAverage}%`;
+  }
+
 const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: number}) => {
 
     const {supabase} = useSupabase();
     const [data, setData] = useState<GetPupilMarksBySpecItem | null>(null);
     const columns : readonly Column<Row>[]= [
         {key: 'specTag',name: 'Tag', width: 40},
-        {key: 'specItem',name: 'Item', resizable: true, renderCell: renderSpecItem},
-        {key: 'pMarks', name: 'Actual', width: 80},
-        {key: 'aMarks',name: 'Available', width: 80},
-        {key: 'pct',name: '%', width: 80},
+        {key: 'specItem',name: 'Item', resizable: true, 
+            renderCell: renderSpecItem, 
+            renderSummaryCell () {
+            return <strong>Total</strong>;
+          }},
+        {key: 'pMarks', name: 'Actual', width: 80, 
+          // @ts-ignore
+            renderSummaryCell(props: {row: SummaryRow}) {
+              return props.row.pMarksTotal
+          },
+        },
+        {key: 'aMarks',name: 'Available', width: 80,
+          // @ts-ignore
+          renderSummaryCell(props: {row: SummaryRow}) {
+              return props.row.aMarksTotal
+          },
+        },
+        {
+            key: 'pct',
+            name: '%', 
+            width: 80, 
+            //@ts-ignore
+            renderSummaryCell : renderPaperAverageSummary,
+        },
         {key: 'fcScore', name: 'FC Overdue', width: 120,
         renderCell: renderFCScore },
         
@@ -96,38 +130,39 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
             </>
     }
 
+    const summaryRows = useMemo((): readonly SummaryRow[] => {
+        if (!data)
+            return [{id: 'total_0', totalCount: 0, pMarksTotal: 0, aMarksTotal: 0, paperAverage: 0}];
+
+        const {aMarksTotal, pMarksTotal } = data.reduce((prev, curr) => ({aMarksTotal: prev.aMarksTotal + curr.aMarks, pMarksTotal: prev.pMarksTotal + curr.pMarks, }), {aMarksTotal: 0, pMarksTotal: 0})
+        return [
+          {
+            id: 'total_0',
+            totalCount: data ? data.length : 0,
+            pMarksTotal,
+            aMarksTotal,
+            paperAverage: (( pMarksTotal / aMarksTotal) * 100).toFixed(0)
+          }
+        ];
+      }, [data]);
+
 
     return <>
         <Card title="Spec Items">
+            <div style={{height: '80vh'}}>
         {data && <DataGrid 
+            topSummaryRows={summaryRows}
             rowKeyGetter={rowKeyGetter}
             columns={columns} 
+            className={styles.fillGrid}
             rows={data.map((r) => (
                     {...r, ['pct']: ((r.pMarks / r.aMarks) * 100).toFixed(0), 
                     'fcScore' : (Math.random() > 0.5 ) ? (Math.random() *  100) : "Add",
                     
                 })
             )}/>}
-            {
-            <div className={styles.specItemGrid}>
-                    <div>Tag</div>
-                    <div>Item</div>
-                    <div>Your Marks</div>
-                    <div>Available Marks</div>
-                    <div>%</div>
-
-                {data && data.map((s,i) => [
-                    <div key={`1${i}`}>{s.specTag}</div>,
-                    
-                    <div key={`2${i}`}>{(s.revisionMaterials !== null) ? <Link href={`${s.revisionMaterials}`}>{s.specItem}</Link> : <span>{s.specItem}</span>}</div>,
-                    <div key={`3${i}`}>{s.pMarks}</div>,
-                    <div key={`4${i}`}>{s.aMarks}</div>,
-                    <div key={`5${i}`}>{((s.pMarks / s.aMarks) * 100).toFixed(0)}%</div>
-                ])}
-                { footer() }
+            
             </div>
-                
-                }
         </Card>
     </>
 }
