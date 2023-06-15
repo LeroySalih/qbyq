@@ -132,7 +132,7 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
 
     const summaryRows = useMemo((): readonly SummaryRow[] => {
         if (!data)
-            return [{id: 'total_0', totalCount: 0, pMarksTotal: 0, aMarksTotal: 0, paperAverage: 0}];
+            return [{id: 'total_0', totalCount: 0, pMarksTotal: 0, aMarksTotal: 0, paperAverage: "0"}];
 
         const {aMarksTotal, pMarksTotal } = data.reduce((prev, curr) => ({aMarksTotal: prev.aMarksTotal + curr.aMarks, pMarksTotal: prev.pMarksTotal + curr.pMarks, }), {aMarksTotal: 0, pMarksTotal: 0})
         return [

@@ -1,10 +1,26 @@
 .display {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-areas : "a b" "c b"
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas : "a b c" "d d d";
 }
 
 .select {
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+.progress {
+    grid-area: a;
+}
+
+.byMarks {
+    grid-area: b;
+}
+
+.qPapers {
+    grid-area: c;
+}
+
+.items {
+    grid-area: d;
 }

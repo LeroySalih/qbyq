@@ -252,22 +252,30 @@ const SpecReport = ({params}: SpecReportType) => {
         </h1>
         <hr></hr>
         <div className={styles.display}>
-            <div style={{gridArea:"a"}}>
+            <div className={styles.progress}>
                 {
                     <DisplaySpecProgress pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
-            <div style={{gridArea:"c"}}>
+            
+            <div className={styles.byMarks}>
                 {
                     <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
-            <div style={{gridArea:"b"}}>
+            
+            
+            <div className={styles.qPapers}>
+                {
+                    <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
+                }
+            </div>
+            <div className={styles.items}>
                 {//@ts-ignore
                  <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
             </div>
-        
+            
         </div>
     </>
 }
