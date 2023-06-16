@@ -13,6 +13,7 @@ import Card from "components/card";
 import DisplaySpecDataByMarks from './display-spec-data-by-marks';  
 import DisplaySpecProgress from './display-spec-progress';
 import DisplaySpecDataByItem from './dispaly-spec-data-by-item';
+import DisplayPapersForPupil from './display-papers-for-pupil';
 
 import {User} from "@supabase/supabase-js";
 import {Profile} from "types/alias";
@@ -267,7 +268,7 @@ const SpecReport = ({params}: SpecReportType) => {
             
             <div className={styles.qPapers}>
                 {
-                    <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
+                    <DisplayPapersForPupil classId={currentClassId!} pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
             <div className={styles.items}>

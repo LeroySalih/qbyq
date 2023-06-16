@@ -77,8 +77,8 @@ const NavBar = () => {
     return <>
     <div className={styles.navbar}>
         <div className={styles.banner}>
-          <img className={styles.logo} src="/qbyq-logo.png" width="80px" height="80px" alt="Logo Idea by Ethan Lopez"/>
-          <h1>Question By Question (QbyQ)</h1>
+          <img className={styles.logo} src="/qbyq-logo.png" width="20px" height="20px" alt="Logo Idea by Ethan Lopez"/>
+          <div className={styles.siteTitle}>QbyQ</div>
         </div>
         <div>
 

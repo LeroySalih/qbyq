@@ -55,7 +55,7 @@ const Chart = ({data, labels}) => {
         ],
       };
 
-    return <Line options={options} data={dataObj} />;
+    return <Line style={{height: 250}}options={options} data={dataObj} />;
 }
 
 export default Chart;

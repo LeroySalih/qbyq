@@ -157,7 +157,7 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
             className={styles.fillGrid}
             rows={data.map((r) => (
                     {...r, ['pct']: ((r.pMarks / r.aMarks) * 100).toFixed(0), 
-                    'fcScore' : (Math.random() > 0.5 ) ? (Math.random() *  100) : "Add",
+                    'fcScore' : 0,
                     
                 })
             )}/>}

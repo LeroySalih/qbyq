@@ -1,6 +1,5 @@
 .navbar {
     background-color: #E4E5FF;
-    margin-bottom: 2rem;
     padding: 1rem;
     
     display: flex;
@@ -16,6 +15,10 @@
 
 .logo {
     margin-right: 2rem;
-    width: 70px;
-    height: 70px;
+    width: 40px;
+    height: 40px;
+}
+
+.siteTitle {
+    font-size: 2rem;
 }

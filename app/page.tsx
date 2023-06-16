@@ -2,7 +2,7 @@ import styles from "./page.module.css";
 
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import {headers, cookies} from 'next/headers';
-
+import { redirect } from 'next/navigation'
 
 import Link from 'next/link';
 import CardButton from "./card-button";
@@ -34,24 +34,10 @@ const MainPage = async () => {
       </>
     }
 
+    redirect(`/app/spec-report/${session.user.id}`);
+
     return (
         <>
-          <div className={styles.layout}>
-
-            <div>
-              
-              <div className={styles.displayClassesContainer}>
-                  <DisplayClass title="11IT" /> 
-                  <DisplayClass title="11CS" />
-                  <DisplayClass title="11BS" />
-              </div>
-            </div>
-            <hr/>
-
-            
-            
-          </div>
-          <CardButton title={'Dashboard'} href={`/app/dashboard/${session?.user.id}`}/>
         </>
     )
 }
