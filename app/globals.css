@@ -16,14 +16,14 @@ div, p, ul, li, span, a {
     font-family: 'Poppins', sans-serif; 
 }
 
-h1 {
+h1, h2, h3, h4 {
     font-family: 'Oswald', sans-serif;
 }
 
 
 .page {
     background-color: white;
-    width: 80vw;
+    width: calc(80vw - 300px);
     margin: auto;
     padding: 2rem;
     border: solid silver 0.5px;

@@ -1,4 +1,5 @@
 "use client";
+import 'react-data-grid/lib/styles.css';
 import styles from "./page.module.css";
 
 import { useSupabase } from 'components/context/supabase-context';
@@ -12,6 +13,7 @@ import Card from "components/card";
 import DisplaySpecDataByMarks from './display-spec-data-by-marks';  
 import DisplaySpecProgress from './display-spec-progress';
 import DisplaySpecDataByItem from './dispaly-spec-data-by-item';
+import DisplayPapersForPupil from './display-papers-for-pupil';
 
 import {User} from "@supabase/supabase-js";
 import {Profile} from "types/alias";
@@ -251,22 +253,30 @@ const SpecReport = ({params}: SpecReportType) => {
         </h1>
         <hr></hr>
         <div className={styles.display}>
-            <div style={{gridArea:"a"}}>
+            <div className={styles.progress}>
                 {
                     <DisplaySpecProgress pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
-            <div style={{gridArea:"c"}}>
+            
+            <div className={styles.byMarks}>
                 {
                     <DisplaySpecDataByMarks pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
                 }
             </div>
-            <div style={{gridArea:"b"}}>
+            
+            
+            <div className={styles.qPapers}>
+                {
+                    <DisplayPapersForPupil classId={currentClassId!} pupilId={pupilId} specId={getSpecId(currentClassId!)}/>
+                }
+            </div>
+            <div className={styles.items}>
                 {//@ts-ignore
                  <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
                 }
             </div>
-        
+            
         </div>
     </>
 }

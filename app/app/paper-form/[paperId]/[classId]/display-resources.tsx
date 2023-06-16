@@ -1,54 +1,108 @@
-import supabase from "components/supabase";
-import {ClassPaperResources} from "types/alias";
 
-type DisplayResourcesPropsType = {
-    paperId : number, 
-    classId : number
-}
+"use client";
 
-type LoadResourcesReturn = Promise<ClassPaperResources>;
+import {useState, useEffect} from 'react';
+import { useParams } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
+import { useSupabase } from 'components/context/supabase-context';
+import { Database } from 'types/supabase';
+import styles from "./display-resources.module.css";
+import { DateTime } from 'luxon';
 
-const DisplayResources = async (props: DisplayResourcesPropsType): Promise<JSX.Element> => {
+const DisplayResources = () => {
+
+    const {supabase} = useSupabase();
+
+    const params = useParams();
+    const [user, setUser] = useState<User>();
+    const {classId, paperId} = params as {classId: string, paperId: string};
+
+    const [paper, setPaper] = useState();
+    const [qPaperUrl, setQPaperUrl] = useState(null);
+    const [aPaperUrl, setAPaperUrl] = useState(null);
+
     
-    const {paperId, classId} = props;
+    console.log("In Display Resources", classId, paperId);
     
-    const loadResources = async (classId : number) => {
-
-        const {data, error} = await supabase.from("ClassPaperResources")
-                                        .select()
-                                        .eq("paperId", paperId)
-                                        .eq("classId", classId);
-        
-        return data || [];
-    }
-
-    const resources = await loadResources(classId);
-    
-    const loadUrls = async (resources:ClassPaperResources[]) => {
-
-        
-        const fileNames:string[] = resources!.map<string>(r => `${r.paperId}/${r.label}`);
-
-        const {data, error} = await supabase
-                        .storage
-                        .from('exam-papers')
-                        .createSignedUrls(fileNames, 3600);
+    const loadUser = async () => {
+        const {data: {user}, error} = await supabase.auth.getUser();
 
         error && console.error(error);
 
-        return data || [];
+        //@ts-ignore
+        setUser(user);
     }
 
-    const urls = await loadUrls(resources)
+    const loadResourcesForUser= async (user: User) => {
 
-    return <div>
-        <h1>Page Resources </h1>        
-        <div>
-            {
-                urls && urls.map((r, i) => <div key={i} ><a target="_new" href={r.signedUrl}>{r.path?.split('/')[1]}</a></div>)
-            }
-        </div>
-    </div>
+        const {data, error} = await supabase.from("ClassPapers")
+                                            .select("paperId, completeBy, markBy, availableFrom, Papers(qPaperLabel, aPaperLabel)")
+                                            .match({paperId, classId});
+
+        error && console.error(error);
+        //@ts-ignore
+        setPaper(data[0]);
+
+    }
+
+    const loadResourceUrl = async (paperId: string, label: string, setFn: any) => {
+
+        const fileName = `${paperId}/${label}`;
+
+        const {data, error} = await supabase.storage
+                                .from('exam-papers')
+                                .createSignedUrl(fileName, 3600);
+
+        error && console.error(error);
+        
+        data && setFn(data.signedUrl);
+    }
+
+    useEffect(()=> {
+        loadUser();
+    }, [])
+
+    useEffect(()=> {
+        if (!user)
+            return;
+
+        loadResourcesForUser(user);
+    }, [user]);
+
+
+    useEffect(()=> {
+        if (!paper)
+            return;
+
+        //@ts-ignore
+        const {qPaperLabel, aPaperLabel} = paper?.Papers;
+
+        if (qPaperLabel) {
+            loadResourceUrl(paperId, qPaperLabel, setQPaperUrl);
+        }
+
+        if (aPaperLabel) {
+            loadResourceUrl(paperId, aPaperLabel, setAPaperUrl);
+        }
+
+    }, [paper])
+    
+    return <>
+            <div className={styles.container}>
+                <div className={styles.item}>{
+                    //@ts-ignore
+                    DateTime.fromISO(paper?.availableFrom) <= DateTime.now() && qPaperUrl && <a  target="new" href={qPaperUrl}>{paper?.Papers?.qPaperLabel}</a>
+                }
+                </div>
+                <div className={styles.item}>
+                {
+                    //@ts-ignore
+                    DateTime.fromISO(paper?.completeBy) <= DateTime.now() && aPaperUrl && <a target="new" href={aPaperUrl}>{paper?.Papers?.aPaperLabel}</a>
+                }
+                </div>
+                </div>
+                
+           </>
 }
 
 

@@ -23,7 +23,7 @@ const DisplaySpecProgress = ({pupilId, specId}: {pupilId: string, specId: number
     }, [pupilId, specId]);
 
     // fn_pupil_marks_by_paper 
-    return <Card title="Progess">
+    return <Card>
         {
         // @ts-ignore
         specData && specData.length > 0 && <Chart labels={specData.map(s => s.availableFrom)} data={specData.map(s => (s.pct * 100))}/>

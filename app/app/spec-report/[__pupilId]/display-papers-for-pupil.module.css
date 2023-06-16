@@ -1,0 +1,38 @@
+
+
+.headerPane {
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.active {
+    color: blue;
+    text-decoration: underline;
+    
+}
+
+.inactive {
+    cursor: pointer;
+}
+
+.inactive:hover {
+    color: blue;
+    text-decoration: underline;
+    
+}
+
+.dueDisplay {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.duePaper {
+    font-size: 0.7rem;
+}
+
+.completedDisplay {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+

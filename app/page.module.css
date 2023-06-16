@@ -4,3 +4,48 @@
     height: 100vh;
     grid-template-columns: 3fr 7fr;
   }
+
+.layout {
+  display: flex;
+  max-width: 1000px;
+  margin: auto;
+}
+
+
+.displayClassesContainer {
+  display: flex;
+}
+
+.displayClass {
+  width: 200px;
+  border: solid 1px silver;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 10px 15px #80808050;
+  background-color: white;
+}
+
+.displayClass h3{
+  font-family: Roboto;
+  font-size: 2rem;
+}
+
+.paperDueGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  font-size: 0.6rem;
+}
+
+.flashCardContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;;
+}
+
+.statsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

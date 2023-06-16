@@ -3,3 +3,7 @@
 
     grid-template-columns: 1fr 4fr 1fr 1fr 1fr;
 }
+
+.fillGrid {
+        block-size: 100%;
+}

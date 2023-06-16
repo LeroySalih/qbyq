@@ -34,6 +34,14 @@ export interface Database {
           tag?: string | null
           title?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       ClassMembership: {
         Row: {
@@ -51,6 +59,20 @@ export interface Database {
           created_at?: string | null
           pupilId?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "ClassMembership_classId_fkey"
+            columns: ["classId"]
+            referencedRelation: "Classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       ClassPaperResources: {
         Row: {
@@ -77,6 +99,26 @@ export interface Database {
           paperId?: number | null
           url?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "ClassPaperResources_classId_fkey"
+            columns: ["classId"]
+            referencedRelation: "Classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          }
+        ]
       }
       ClassPapers: {
         Row: {
@@ -103,6 +145,26 @@ export interface Database {
           markBy?: string | null
           paperId?: number
         }
+        Relationships: [
+          {
+            foreignKeyName: "ClassPapers_classId_fkey"
+            columns: ["classId"]
+            referencedRelation: "Classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassPapers_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassPapers_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          }
+        ]
       }
       FCQuestions: {
         Row: {
@@ -126,6 +188,14 @@ export interface Database {
           term?: string
           text?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "FCQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       FCUserQuestionHistory: {
         Row: {
@@ -155,13 +225,26 @@ export interface Database {
           specItemId?: number
           userid?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "FCUserQuestionHistory_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "FCQuestions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
+            columns: ["specItemId"]
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       FCUSerQueueEntries: {
         Row: {
           created_at: string
           currentQueue: number
           dueDate: string
-          history: Json
           id: number
           questionId: string
           specItemId: number
@@ -171,7 +254,6 @@ export interface Database {
           created_at?: string
           currentQueue: number
           dueDate: string
-          history: Json
           id?: number
           questionId: string
           specItemId: number
@@ -181,12 +263,31 @@ export interface Database {
           created_at?: string
           currentQueue?: number
           dueDate?: string
-          history?: Json
           id?: number
           questionId?: string
           specItemId?: number
           userId?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "FCUSerQueueEntries_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "FCQuestions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
+            columns: ["specItemId"]
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_userId_fkey"
+            columns: ["userId"]
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       FCUserQueues: {
         Row: {
@@ -204,41 +305,63 @@ export interface Database {
           specItemId?: number
           userid?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "FCUserQueues_specItemId_fkey"
+            columns: ["specItemId"]
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       Papers: {
         Row: {
+          aPaperLabel: string | null
           created_at: string | null
           id: number
           marks: number | null
           month: string | null
           paper: string | null
+          qPaperLabel: string | null
           specId: number | null
           subject: string | null
           title: string | null
           year: string | null
         }
         Insert: {
+          aPaperLabel?: string | null
           created_at?: string | null
           id?: number
           marks?: number | null
           month?: string | null
           paper?: string | null
+          qPaperLabel?: string | null
           specId?: number | null
           subject?: string | null
           title?: string | null
           year?: string | null
         }
         Update: {
+          aPaperLabel?: string | null
           created_at?: string | null
           id?: number
           marks?: number | null
           month?: string | null
           paper?: string | null
+          qPaperLabel?: string | null
           specId?: number | null
           subject?: string | null
           title?: string | null
           year?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "Papers_specId_fkey"
+            columns: ["specId"]
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       Profile: {
         Row: {
@@ -265,6 +388,14 @@ export interface Database {
           id?: string
           isAdmin?: boolean
         }
+        Relationships: [
+          {
+            foreignKeyName: "Profile_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       PupilMarks: {
         Row: {
@@ -291,6 +422,32 @@ export interface Database {
           questionId?: number
           userId?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "Questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["q_id"]
+          }
+        ]
       }
       "PupilMarks.copy": {
         Row: {
@@ -317,6 +474,50 @@ export interface Database {
           questionId?: number | null
           userId?: string | null
         }
+        Relationships: []
+      }
+      QPAnswer: {
+        Row: {
+          answer: string
+          created_at: string | null
+          id: number
+          isCorrect: boolean
+          max_points: number
+          path: string
+          points: number
+          questionId: string
+          userId: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string | null
+          id?: number
+          isCorrect: boolean
+          max_points?: number
+          path: string
+          points?: number
+          questionId: string
+          userId: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          id?: number
+          isCorrect?: boolean
+          max_points?: number
+          path?: string
+          points?: number
+          questionId?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "QPAnswer_userId_fkey"
+            columns: ["userId"]
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       Questions: {
         Row: {
@@ -346,6 +547,26 @@ export interface Database {
           question_order?: number | null
           specItemId?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "Questions_PaperId_fkey"
+            columns: ["PaperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Questions_PaperId_fkey"
+            columns: ["PaperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          },
+          {
+            foreignKeyName: "Questions_specItemId_fkey"
+            columns: ["specItemId"]
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       Spec: {
         Row: {
@@ -366,6 +587,7 @@ export interface Database {
           subject?: string | null
           title?: string | null
         }
+        Relationships: []
       }
       SpecItem: {
         Row: {
@@ -392,6 +614,14 @@ export interface Database {
           tag?: string | null
           title?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       Tasks: {
         Row: {
@@ -415,6 +645,26 @@ export interface Database {
           isActive?: boolean | null
           paperId?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "Tasks_classId_fkey"
+            columns: ["classId"]
+            referencedRelation: "Classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          }
+        ]
       }
     }
     Views: {
@@ -426,6 +676,32 @@ export interface Database {
           questionId: number | null
           userId: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "Questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["q_id"]
+          }
+        ]
       }
       vw_pupil_marks_for_spec: {
         Row: {
@@ -437,6 +713,14 @@ export interface Database {
           title: string | null
           userId: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       vw_questions_denorm: {
         Row: {
@@ -459,6 +743,14 @@ export interface Database {
           si_tag: string | null
           si_title: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["si_specId"]
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       vw_user_marks_for_paper: {
         Row: {
@@ -470,11 +762,13 @@ export interface Database {
           uMarks: number | null
           userId: string | null
         }
+        Relationships: []
       }
       vw_user_marks_for_paper_clone: {
         Row: {
           "?column?": number | null
         }
+        Relationships: []
       }
       vw_user_marks_for_spec: {
         Row: {
@@ -484,6 +778,7 @@ export interface Database {
           tag: string | null
           title: string | null
         }
+        Relationships: []
       }
     }
     Functions: {
@@ -528,6 +823,13 @@ export interface Database {
           familyName: string
           pMarks: number
         }[]
+      }
+      fn_fc_add_spec_item_to_pupil_queue: {
+        Args: {
+          _userid: string
+          _specitemid: number
+        }
+        Returns: number
       }
       fn_fc_get_distractors: {
         Args: {
@@ -705,6 +1007,19 @@ export interface Database {
           availableMarks: number
         }[]
       }
+      fn_qp_get_current_answers: {
+        Args: {
+          _userid: string
+          _path: string
+        }
+        Returns: {
+          _created_at: string
+          _questionid: string
+          _iscorrect: boolean
+          _max_points: number
+          _points: number
+        }[]
+      }
       fn_tdf_get_queue: {
         Args: {
           pid: string
@@ -723,6 +1038,14 @@ export interface Database {
           result: boolean
           dueDate: string
           inQueue: number
+        }[]
+      }
+      fn_test_vars: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          _count: number
+          _sum: number
+          _avg: number
         }[]
       }
       fn_upsert_pupilmarks: {
