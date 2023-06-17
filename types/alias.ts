@@ -28,6 +28,11 @@ export type GetPaperMarksForPupilItem = ArrayElement<GetPaperMarksForPupil>;
 export type ClassPaper = Database["public"]["Tables"]["ClassPapers"]["Row"];
 export type Paper = Database["public"]["Tables"]["Papers"]["Row"];
 
+
+export type AdminGetPapersForClass = Database["public"]["Functions"]["fn_admin_get_papers_for_class"]["Returns"];
+
+
+
 export type SpecData = {
     spec:Spec,
     specItem: SpecItem[]

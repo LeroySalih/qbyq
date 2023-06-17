@@ -13,26 +13,26 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
-          join_code: string | null
-          specId: number | null
-          tag: string | null
-          title: string | null
+          join_code: string
+          specId: number
+          tag: string
+          title: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          join_code?: string | null
-          specId?: number | null
-          tag?: string | null
-          title?: string | null
+          join_code: string
+          specId: number
+          tag: string
+          title: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          join_code?: string | null
-          specId?: number | null
-          tag?: string | null
-          title?: string | null
+          join_code?: string
+          specId?: number
+          tag?: string
+          title?: string
         }
         Relationships: [
           {
@@ -782,6 +782,23 @@ export interface Database {
       }
     }
     Functions: {
+      fn_admin_get_papers_for_class: {
+        Args: {
+          _classid: number
+        }
+        Returns: {
+          paperId: number
+          year: string
+          month: string
+          subject: string
+          paper: string
+          qpaperlabel: string
+          apaperlabel: string
+          availableFrom: string
+          completeBy: string
+          markBy: string
+        }[]
+      }
       fn_check_class: {
         Args: {
           classid: number

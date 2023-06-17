@@ -65,6 +65,8 @@ const NavBar = () => {
         const error = await supabase.auth.signOut();
     
         error && console.error("Error", error);
+        console.log("Sending to home page")
+        router.push("/");
     }
 
     const handleGoToProfile = () => {
