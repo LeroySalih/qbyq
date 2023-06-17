@@ -18,38 +18,40 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
 
     const {supabase} = useSupabase();
 
+    const getPapers = async (pupilid : string) => {
+        return await supabase.rpc("fn_get_paper_data_for_pupil", {pupilid})
+    } 
+
+    type GetPapersResponse = Awaited<ReturnType<typeof getPapers>>
+    type GetPapersResponseData = GetPapersResponse['data']
+    type GetPapersResponseError = GetPapersResponse['error']
+    
     const loadPapers = async (pupilid : string) => {
 
-        const {data, error} = await supabase.rpc("fn_get_paper_data_for_pupil", {pupilid})
+        const resp: GetPapersResponse = await getPapers(pupilId); 
 
+        const {data, error} = resp;
         error && console.log(error);
+        
 
         // Completed Papers are papers where pMarks are greater than 0.
         // @ts-ignore
-        setCompletedPapers(data?
-            .filter(p => (p.specId === specId) && (p.pMarks > 0))
+        setCompletedPapers(data?.filter(p => (p.specId === specId) && (p.pMarks > 0))
+            //@ts-ignore
             .sort((a, b)=> a.completeBy < b.completeBy ? 1 : -1)
             .map(p => ({
-            paperId: p.paperId, 
-            title: `${p.year}-${p.month}-${p.paper}`,
-            pMarks: p.pMarks,
-            qMarks: p.qMarks,
-            completeBy: p.completeBy,
-            markBy: p.markBy
+            //@ts-ignore
+            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, completeBy: p.completeBy, markBy: p.markBy
             })
             ));
 
         //@ts-ignore
-        setDuePapers(data?
-            .filter(p => (p.specId === specId) && (!p.pMarks))
+        setDuePapers(data?.filter(p => (p.specId === specId) && (!p.pMarks))
+            //@ts-ignore
             .sort((a, b)=> a.completeBy > b.completeBy ? 1 : -1)
             .map(p => ({
-            paperId: p.paperId, 
-            title: `${p.year}-${p.month}-${p.paper}`,
-            pMarks: p.pMarks,
-            qMarks: p.qMarks,
-            completeBy: p.completeBy,
-            markBy: p.markBy
+            //@ts-ignore
+            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, completeBy: p.completeBy, markBy: p.markBy
             })
             )
         );
@@ -89,7 +91,8 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
             <div>Complete </div>
             <div>Mark By</div>
             
-            {duePapers && duePapers.map((dp, i) => [
+            {//@ts-ignore
+            duePapers && duePapers.map((dp, i) => [
                 <div key={`l${i}`} className={styles.duePaper}>
                 <Link href={`/app/paper-form/${dp.paperId}/${classId}`}>{dp.title}</Link>,
                 </div>,
@@ -113,7 +116,8 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
             <div>Marks</div>
             <div>%</div>
             
-            {completedPapers && completedPapers.map((dp, i) => [
+            {//@ts-ignore
+            completedPapers && completedPapers.map((dp, i) => [
                 <div key={`l${i}`} className={styles.duePaper}>
                     <Link href={`/app/paper-form/${dp.paperId}/${classId}`}>{dp.title}</Link>,
                 </div>,

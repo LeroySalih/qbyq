@@ -74,52 +74,6 @@ export interface Database {
           }
         ]
       }
-      ClassPaperResources: {
-        Row: {
-          classId: number | null
-          created_at: string | null
-          id: number
-          label: string | null
-          paperId: number | null
-          url: string | null
-        }
-        Insert: {
-          classId?: number | null
-          created_at?: string | null
-          id?: number
-          label?: string | null
-          paperId?: number | null
-          url?: string | null
-        }
-        Update: {
-          classId?: number | null
-          created_at?: string | null
-          id?: number
-          label?: string | null
-          paperId?: number | null
-          url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ClassPaperResources_classId_fkey"
-            columns: ["classId"]
-            referencedRelation: "Classes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ClassPaperResources_paperId_fkey"
-            columns: ["paperId"]
-            referencedRelation: "Papers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ClassPaperResources_paperId_fkey"
-            columns: ["paperId"]
-            referencedRelation: "vw_questions_denorm"
-            referencedColumns: ["p_id"]
-          }
-        ]
-      }
       ClassPapers: {
         Row: {
           availableFrom: string | null
@@ -660,6 +614,52 @@ export interface Database {
           },
           {
             foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          }
+        ]
+      }
+      "TBD-ClassPaperResources": {
+        Row: {
+          classId: number | null
+          created_at: string | null
+          id: number
+          label: string | null
+          paperId: number | null
+          url: string | null
+        }
+        Insert: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          label?: string | null
+          paperId?: number | null
+          url?: string | null
+        }
+        Update: {
+          classId?: number | null
+          created_at?: string | null
+          id?: number
+          label?: string | null
+          paperId?: number | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "TBD-ClassPaperResources_classId_fkey"
+            columns: ["classId"]
+            referencedRelation: "Classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
             columns: ["paperId"]
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
