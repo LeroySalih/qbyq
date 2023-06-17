@@ -29,17 +29,16 @@ const Page = () => {
                 <LessonSectionTitle>Starter</LessonSectionTitle>
                 <LessonSectionContent>
                     <h3>What is the cloud?</h3>
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/TTNgV0O_oTg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_a6us8kaq0g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/TTNgV0O_oTg" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_a6us8kaq0g" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                     
                     <h3>What is OneDrive?</h3>
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/x_n3OD1AsaE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/x_n3OD1AsaE" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
 
                 </LessonSectionContent>
             </LessonSection>
 
-            <
-
+        
             <LessonSection>
                 <LessonSectionTitle>1. What is OneDrive</LessonSectionTitle>
                 <LessonSectionContent>

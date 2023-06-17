@@ -60,7 +60,7 @@ const Page = () => {
                             <li>Within office.com, open Teams</li>
                             <LessonImage alt="Teams logo" src="/lessons/ks3-computing/induction/1-introduction/teams-logo.png" width={60} height={60}/>
                             <li>Confirm that you are a member of the correct team.</li>
-                            <li>Post a "Hello" message to the general channel.</li>
+                            <li>Post a &quot;Hello&quot; message to the general channel.</li>
                         </ul>
                         <div>&nbsp;</div>
                         <li>Log in to Formative</li>
@@ -89,24 +89,24 @@ const Page = () => {
             <LessonSection>
                 <LessonSectionTitle>Lab Rules</LessonSectionTitle>
                 <LessonSectionContent>
-                    <div>A protocol is a way of doing things that everyone understands.  Saying "Good Morning" is a protocol.  These are the protocols for Computing Lessons.</div>
+                    <div>A protocol is a way of doing things that everyone understands.  Saying &quot;Good Morning&quot; is a protocol.  These are the protocols for Computing Lessons.</div>
                     <LessonImage alt="5Bs" src="/lessons/ks3-computing/induction/1-introduction/lab-rules.png" width={600} height={350}/>
                 </LessonSectionContent>
             </LessonSection>
 
 
             <LessonSection>
-                <LessonSectionTitle>5P's & 5B's</LessonSectionTitle>
+                <LessonSectionTitle>5P&apos;s & 5B&apos;s</LessonSectionTitle>
                 <LessonSectionContent>
-                    <div>The following image shows the 5B's, which describe the places that we can look to get help.</div>
+                    <div>The following image shows the 5B&apos;s, which describe the places that we can look to get help.</div>
                     <LessonImage alt="5Bs" src="/lessons/ks3-computing/induction/1-introduction/5Bs.png" width={600} height={350}/>
                     
-                    <div>The following image shows the 5P's, which describe the behaviours we expect from all pupils during the lessons.</div>
+                    <div>The following image shows the 5P&apos;s, which describe the behaviours we expect from all pupils during the lessons.</div>
                     <LessonImage alt="5Ps" src="/lessons/ks3-computing/induction/1-introduction/5Ps.png" width={600} height={400}/>
                     <div>Open Formative</div>
                     <ul>
                         <li>Open formative <Link href="https://app.formative.com/formatives/632085788749f642d271cfbc">Induction - 1. Introduction</Link></li>                   
-                        <li>Complete the section 5B's and 5P's</li>
+                        <li>Complete the section 5B&apos;s and 5P&apos;s</li>
                     </ul>
                 </LessonSectionContent>
             </LessonSection>
@@ -116,7 +116,7 @@ const Page = () => {
                 <LessonSectionContent>
                     <ul>
                         <li>Complete the survey <Link target="new" href="https://forms.office.com/Pages/ResponsePage.aspx?id=Z-j3EwRiEkCb7LTG7zm2qhSDgWep68xPjl4ukGWFgg5UMlJBRjExRTdFODJJMEIzRjE4RUM4V0ZHRy4u">here</Link></li>
-                        <li>Work with your buddy to learn the 5B's and 5P's. <u>You will be tested</u>.</li>
+                        <li>Work with your buddy to learn the 5B&apos;s and 5P&apos;s. <u>You will be tested</u>.</li>
                     </ul>
                 </LessonSectionContent>
             </LessonSection>
