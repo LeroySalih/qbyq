@@ -44,7 +44,7 @@ const PageForm = async ({params}: PagePropsType) => {
     return <>
         <div className="page">
             
-            <h1>{paper?.title} - {paper?.paper}</h1>
+            <h1>{paper?.title} :: {paper?.paper}</h1>
             <hr></hr>
             <div style={{display: "flex", flexDirection:"row", alignItems:"center"}}>
             <h3>{paper?.year} - {paper?.month}</h3>

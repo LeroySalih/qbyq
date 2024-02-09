@@ -40,6 +40,7 @@ const DisplayResources = () => {
                                             .match({paperId, classId});
 
         error && console.error(error);
+        console.log("Data", data)
         //@ts-ignore
         setPaper(data[0]);
 
@@ -71,11 +72,16 @@ const DisplayResources = () => {
 
 
     useEffect(()=> {
-        if (!paper)
+        if (!paper){
+            console.log("No paper, returning")
             return;
+        }
+            
 
         //@ts-ignore
         const {qPaperLabel, aPaperLabel} = paper?.Papers;
+
+        console.log("Paper Label",qPaperLabel );
 
         if (qPaperLabel) {
             loadResourceUrl(paperId, qPaperLabel, setQPaperUrl);
@@ -90,10 +96,12 @@ const DisplayResources = () => {
     return <>
             <div className={styles.container}>
                 <div className={styles.item}>{
+                    // display url to Paper 
                     //@ts-ignore
                     DateTime.fromISO(paper?.availableFrom) <= DateTime.now() && qPaperUrl && <a  target="new" href={qPaperUrl}>{paper?.Papers?.qPaperLabel}</a>
                 }
                 </div>
+               
                 <div className={styles.item}>
                 {
                     //@ts-ignore

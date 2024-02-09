@@ -29,18 +29,19 @@ export interface Row {
     pMarks : number, 
     aMarks : number,
     pct: string,
-    fcScore : number | string
+   // fcScore : number | string
   }
 
 const renderFCScore = ({row}: {row : Row})  => {
     
-    const value = row.fcScore;
+    const value = "0"; //row.fcScore;
 
-    if (value === 'Add')
-        return <span style={{color: "blue", cursor: "pointer"}} >Add</span>
+    // if (value === 'Add')
+    //    return <span style={{color: "blue", cursor: "pointer"}} >Add</span>
+
     return (
       <>
-        <progress max={100} value={value} style={{ inlineSize: 50 }} /> {Math.round(value as number)}%
+        <progress max={100} value={value} style={{ inlineSize: 50 }} /> {Math.round(value as unknown as number)}%
       </>
     );
   }
@@ -57,7 +58,7 @@ const renderFCScore = ({row}: {row : Row})  => {
     return `${row.paperAverage}%`;
   }
 
-const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: number}) => {
+const DisplaySpecDataByItem = ({pupilId, specId, classId}: {pupilId: string, specId: number, classId: number}) => {
 
     const {supabase} = useSupabase();
     const [data, setData] = useState<GetPupilMarksBySpecItem | null>(null);
@@ -87,16 +88,15 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
             //@ts-ignore
             renderSummaryCell : renderPaperAverageSummary,
         },
-        {key: 'fcScore', name: 'FC Overdue', width: 120,
-        renderCell: renderFCScore },
+        // {key: 'fcScore', name: 'FC Overdue', width: 120, renderCell: renderFCScore },
         
 
     ]
 
     
-    const loadData = async (pupilId: string, specId: number) => {
+    const loadData = async (pupilId: string, specId: number, classid: number) => {
 
-        const {data, error} = await supabase.rpc("fn_pupil_marks_by_spec_item", {userid: pupilId, specid: specId});
+        const {data, error} = await supabase.rpc("fn_pupil_marks_by_spec_item", {userid: pupilId, specid: specId, classid});
 
         error && console.error(error);
 
@@ -105,8 +105,8 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
     }
 
     useEffect(()=> {
-        loadData(pupilId, specId);
-    }, [pupilId, specId]);
+        loadData(pupilId, specId, classId);
+    }, [pupilId, specId, classId]);
     
 
     function rowKeyGetter(row: Row) {
@@ -156,8 +156,8 @@ const DisplaySpecDataByItem = ({pupilId, specId}: {pupilId: string, specId: numb
             columns={columns} 
             className={styles.fillGrid}
             rows={data.map((r) => (
-                    {...r, ['pct']: ((r.pMarks / r.aMarks) * 100).toFixed(0), 
-                    'fcScore' : 0,
+                    {...r, ['pct']: r.aMarks == 0 ? "0" : ((r.pMarks / r.aMarks) * 100).toFixed(0) as string, 
+                     //'fcScore' : 0,
                     
                 })
             )}/>}

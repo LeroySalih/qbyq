@@ -273,7 +273,7 @@ const SpecReport = ({params}: SpecReportType) => {
             </div>
             <div className={styles.items}>
                 {//@ts-ignore
-                 <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)}/>
+                 <DisplaySpecDataByItem pupilId={pupilId} specId={getSpecId(currentClassId)} classId={currentClassId}/>
                 }
             </div>
             

@@ -3,10 +3,10 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       Classes: {
@@ -38,6 +38,7 @@ export interface Database {
           {
             foreignKeyName: "Classes_specId_fkey"
             columns: ["specId"]
+            isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
           }
@@ -63,12 +64,14 @@ export interface Database {
           {
             foreignKeyName: "ClassMembership_classId_fkey"
             columns: ["classId"]
+            isOneToOne: false
             referencedRelation: "Classes"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ClassMembership_pupilId_fkey"
             columns: ["pupilId"]
+            isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
           }
@@ -103,22 +106,132 @@ export interface Database {
           {
             foreignKeyName: "ClassPapers_classId_fkey"
             columns: ["classId"]
+            isOneToOne: false
             referencedRelation: "Classes"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ClassPapers_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ClassPapers_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           }
         ]
+      }
+      dqAnswers: {
+        Row: {
+          answer: Json | null
+          attempts: number
+          correct: number
+          created_at: string | null
+          id: string
+          isCorrect: boolean | null
+          likeState: number
+          owner: string
+          questionId: number
+        }
+        Insert: {
+          answer?: Json | null
+          attempts?: number
+          correct?: number
+          created_at?: string | null
+          id?: string
+          isCorrect?: boolean | null
+          likeState?: number
+          owner: string
+          questionId: number
+        }
+        Update: {
+          answer?: Json | null
+          attempts?: number
+          correct?: number
+          created_at?: string | null
+          id?: string
+          isCorrect?: boolean | null
+          likeState?: number
+          owner?: string
+          questionId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dqAnswers_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "dqQuestions"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      dqQuestions: {
+        Row: {
+          correctAnswer: Json | null
+          created_at: string
+          createdBy: string | null
+          id: number
+          questionData: Json | null
+          questionType: number | null
+          specItemId: number | null
+        }
+        Insert: {
+          correctAnswer?: Json | null
+          created_at?: string
+          createdBy?: string | null
+          id?: number
+          questionData?: Json | null
+          questionType?: number | null
+          specItemId?: number | null
+        }
+        Update: {
+          correctAnswer?: Json | null
+          created_at?: string
+          createdBy?: string | null
+          id?: number
+          questionData?: Json | null
+          questionType?: number | null
+          specItemId?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dqQuestions_questionType_fkey"
+            columns: ["questionType"]
+            isOneToOne: false
+            referencedRelation: "dqQuestionType"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      dqQuestionType: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+        }
+        Relationships: []
       }
       FCQuestions: {
         Row: {
@@ -146,6 +259,7 @@ export interface Database {
           {
             foreignKeyName: "FCQuestions_specItemId_fkey"
             columns: ["specItemId"]
+            isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           }
@@ -183,12 +297,14 @@ export interface Database {
           {
             foreignKeyName: "FCUserQuestionHistory_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "FCQuestions"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
             columns: ["specItemId"]
+            isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           }
@@ -226,18 +342,21 @@ export interface Database {
           {
             foreignKeyName: "FCUSerQueueEntries_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "FCQuestions"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
             columns: ["specItemId"]
+            isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "FCUSerQueueEntries_userId_fkey"
             columns: ["userId"]
+            isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
           }
@@ -263,6 +382,7 @@ export interface Database {
           {
             foreignKeyName: "FCUserQueues_specItemId_fkey"
             columns: ["specItemId"]
+            isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           }
@@ -312,6 +432,7 @@ export interface Database {
           {
             foreignKeyName: "Papers_specId_fkey"
             columns: ["specId"]
+            isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
           }
@@ -346,6 +467,7 @@ export interface Database {
           {
             foreignKeyName: "Profile_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -380,24 +502,28 @@ export interface Database {
           {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           },
           {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "Questions"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["q_id"]
           }
@@ -468,6 +594,7 @@ export interface Database {
           {
             foreignKeyName: "QPAnswer_userId_fkey"
             columns: ["userId"]
+            isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
           }
@@ -505,22 +632,64 @@ export interface Database {
           {
             foreignKeyName: "Questions_PaperId_fkey"
             columns: ["PaperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "Questions_PaperId_fkey"
             columns: ["PaperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           },
           {
             foreignKeyName: "Questions_specItemId_fkey"
             columns: ["specItemId"]
+            isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           }
         ]
+      }
+      result_record: {
+        Row: {
+          correctAnswer: Json | null
+          created_at: string | null
+          createdBy: string | null
+          id: number | null
+          questionData: Json | null
+          questionType: number | null
+          specItemId: number | null
+          specTitle: string | null
+          tag: string | null
+          title: string | null
+        }
+        Insert: {
+          correctAnswer?: Json | null
+          created_at?: string | null
+          createdBy?: string | null
+          id?: number | null
+          questionData?: Json | null
+          questionType?: number | null
+          specItemId?: number | null
+          specTitle?: string | null
+          tag?: string | null
+          title?: string | null
+        }
+        Update: {
+          correctAnswer?: Json | null
+          created_at?: string | null
+          createdBy?: string | null
+          id?: number | null
+          questionData?: Json | null
+          questionType?: number | null
+          specItemId?: number | null
+          specTitle?: string | null
+          tag?: string | null
+          title?: string | null
+        }
+        Relationships: []
       }
       Spec: {
         Row: {
@@ -572,6 +741,7 @@ export interface Database {
           {
             foreignKeyName: "SpecItem_SpecId_fkey"
             columns: ["SpecId"]
+            isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
           }
@@ -603,18 +773,21 @@ export interface Database {
           {
             foreignKeyName: "Tasks_classId_fkey"
             columns: ["classId"]
+            isOneToOne: false
             referencedRelation: "Classes"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "Tasks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "Tasks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           }
@@ -649,18 +822,21 @@ export interface Database {
           {
             foreignKeyName: "TBD-ClassPaperResources_classId_fkey"
             columns: ["classId"]
+            isOneToOne: false
             referencedRelation: "Classes"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           }
@@ -680,24 +856,28 @@ export interface Database {
           {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           },
           {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "Questions"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["q_id"]
           }
@@ -717,6 +897,7 @@ export interface Database {
           {
             foreignKeyName: "SpecItem_SpecId_fkey"
             columns: ["SpecId"]
+            isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
           }
@@ -747,6 +928,7 @@ export interface Database {
           {
             foreignKeyName: "SpecItem_SpecId_fkey"
             columns: ["si_specId"]
+            isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
           }
@@ -782,6 +964,39 @@ export interface Database {
       }
     }
     Functions: {
+      dq_getspecitemquestioncount: {
+        Args: {
+          _specid: number
+        }
+        Returns: {
+          specid: number
+          specitemid: number
+          title: string
+          subject: string
+          tag: string
+          specitem_title: string
+          questiondatacount: number
+        }[]
+      }
+      dq_loadnextquestionbyspecitem: {
+        Args: {
+          _specitemid: number
+          _owner: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["dq_loadquestionbyspecitemidreturn"]
+      }
+      dq_loadquestionbyid: {
+        Args: {
+          _questionid: number
+        }
+        Returns: Database["public"]["CompositeTypes"]["dq_loadquestionbyspecitemidreturn"]
+      }
+      dq_loadquestionbyspecitemid: {
+        Args: {
+          _specitemid: number
+        }
+        Returns: Database["public"]["CompositeTypes"]["dq_loadquestionbyspecitemidreturn"]
+      }
       fn_admin_get_papers_for_class: {
         Args: {
           _classid: number
@@ -988,19 +1203,34 @@ export interface Database {
           aMarks: number
         }[]
       }
-      fn_pupil_marks_by_spec_item: {
-        Args: {
-          userid: string
-          specid: number
-        }
-        Returns: {
-          specTag: string
-          specItem: string
-          revisionMaterials: string
-          pMarks: number
-          aMarks: number
-        }[]
-      }
+      fn_pupil_marks_by_spec_item:
+        | {
+            Args: {
+              userid: string
+              specid: number
+            }
+            Returns: {
+              specTag: string
+              specItem: string
+              revisionMaterials: string
+              pMarks: number
+              aMarks: number
+            }[]
+          }
+        | {
+            Args: {
+              userid: string
+              specid: number
+              classid: number
+            }
+            Returns: {
+              specTag: string
+              specItem: string
+              revisionMaterials: string
+              pMarks: number
+              aMarks: number
+            }[]
+          }
       fn_pupil_marks_for_all_papers: {
         Args: {
           _userid: string
@@ -1086,7 +1316,98 @@ export interface Database {
       [_ in never]: never
     }
     CompositeTypes: {
-      [_ in never]: never
+      dq_loadquestionbyspecitemidreturn: {
+        id: number
+        created_at: string
+        createdby: string
+        specitemid: number
+        questiondata: Json
+        questiontype: number
+        correctanswer: Json
+        tag: string
+        title: string
+        spectitle: string
+      }
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
