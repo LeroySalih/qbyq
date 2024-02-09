@@ -167,4 +167,4 @@ const DisplaySpecDataByItem = ({pupilId, specId, classId}: {pupilId: string, spe
     </>
 }
 
-export default DisplaySpecDataByItem;
+export default DisplaySpecDataByItem; 
