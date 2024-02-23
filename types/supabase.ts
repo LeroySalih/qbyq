@@ -1153,6 +1153,23 @@ export type Database = {
           pMarks: number
         }[]
       }
+      fn_get_papers_for_class: {
+        Args: {
+          _classid: number
+        }
+        Returns: {
+          paperId: number
+          year: string
+          month: string
+          subject: string
+          paper: string
+          qpaperlabel: string
+          apaperlabel: string
+          availableFrom: string
+          completeBy: string
+          markBy: string
+        }[]
+      }
       fn_marks_entered: {
         Args: {
           paperid: number
@@ -1309,6 +1326,33 @@ export type Database = {
           questionid: number
           marks: number
           paperid: number
+        }[]
+      }
+      get_class_marks: {
+        Args: {
+          class_tag: string
+          paper_id: number
+        }
+        Returns: {
+          classid: number
+          classtag: string
+          pupilid: string
+          first_name: string
+          family_name: string
+          marks: number
+        }[]
+      }
+      get_papers_class_tag: {
+        Args: {
+          class_tag: string
+        }
+        Returns: {
+          classId: number
+          paperId: number
+          year: string
+          month: string
+          title: string
+          paper: string
         }[]
       }
     }

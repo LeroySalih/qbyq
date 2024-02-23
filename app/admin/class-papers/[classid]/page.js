@@ -12,64 +12,42 @@ const ClassPapers = ({params}) => {
 
     const [classData, setClassData] = useState(null);
     const [papers, setPapers] = useState(null);
-    const [classPapers, setClassPapers] = useState(null);
-    const [rows, setRows] = useState(null);
+    const [assignedPapers, setAssignedPapers] = useState(null);
+
+
+    const [rows, setRows] = useState([{id:1, year: 2020}])
 
     const loadClassData = async (classid) => {
-        const {data, error} = await supabase.from("Classes").select().eq("id", classid).single();
+        const {data, error} = await supabase.from("Classes")
+                                .select("id, tag, specId")
+                                .eq("id", classid)
+                                .maybeSingle()
 
         error && console.error(error);
 
-        // console.log("Class Data", data);
+        console.log("classData", data);
         setClassData(data);
-    } 
-
-    const loadPapersForSpec = async (specId) => {
-        const {data, error} = await supabase.from("Papers").select().eq("specId", specId);
-
-        error && console.error(error);
-
-        // ("Papers", data);
-        setPapers(data);
     }
 
     const loadPapersForClass = async (classid) => {
-        const {data, error} = await supabase.from("ClassPapers").select().eq("classId", classid);
+        const {data, error} = await supabase.from("ClassPapers")
+                                .select("paperId")
+                                .eq("classId", 11)
+                                
+                                
 
         error && console.error(error);
 
-        // console.log("Class Paper", data);
-        setClassPapers(data);
+        console.log("assignedPapers", data);
+
+        setAssignedPapers(data);
     }
 
-    const shapeRows = () => {
-        
-        if (!papers || !classPapers) return null;
-
-        return papers.map(p => ({...p}))
-
-    }
-
-
-    useEffect(()=> {
-
+    useEffect (()=> {
         loadClassData(classid);
         loadPapersForClass(classid);
-
-    }, [classid])
-
-
-    useEffect(()=> {
-        loadPapersForSpec(classData?.specId);
-    }, [classData]);
-
-    useEffect(()=> {
-        setRows(shapeRows())
-    }, [
-        classPapers, papers
-    ])
-
-
+    }, [])
+    
     const cols = [
         {
             key: "id",
@@ -82,12 +60,13 @@ const ClassPapers = ({params}) => {
 
     ] 
 
-    return <><h1>Class Papers for {classData?.tag}(specId: {classData?.specId})</h1>
-        {cols && rows && <DataGrid cols={cols} rows={rows}/>}
-        <h1>Class Papers</h1>
-        <pre>{JSON.stringify(classPapers, null, 2)}</pre>
-        <h1>Papers</h1>
-        <pre>{JSON.stringify(papers, null, 2)}</pre>
+    return <>{
+        classData && <h1>Class Papers for {classData?.tag}(specId: {classData?.specId})</h1>
+        }
+        
+        <h1>Assigned Papers</h1>
+        <pre>{JSON.stringify(assignedPapers, null, 2)}</pre>
+        
     </>
 }
 

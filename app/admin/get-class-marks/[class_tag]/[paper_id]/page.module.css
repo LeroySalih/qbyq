@@ -1,0 +1,11 @@
+
+.page {
+    width: 80vw;
+    margin: auto;
+}
+
+.displayClassMarks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    
+}
