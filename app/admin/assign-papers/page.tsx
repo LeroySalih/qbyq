@@ -1,5 +1,6 @@
 "use client"
-import { useEffect, useState} from "react";
+import { useEffect, useState, useMemo} from "react";
+
 import { useSupabase } from "components/context/supabase-context";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -29,6 +30,28 @@ interface Row {
     markby: string
 }
 
+type Comparator = (a: Row, b: Row) => number;
+
+
+function getComparator(sortColumn: string): Comparator {
+    switch (sortColumn) {
+      
+      case 'availableFrom':
+        return (a, b) => {
+          //@ts-ignore
+          return a[sortColumn].localeCompare(b[sortColumn]);
+        };
+      default:
+        throw new Error(`unsupported sortColumn: "${sortColumn}"`);
+    }
+  }
+
+  export type SortDirection = 'ASC' | 'DESC';
+
+  export interface SortColumn {
+    readonly columnKey: string;
+    readonly direction: SortDirection;
+  }
 
 const Page = () => {
 
@@ -38,9 +61,13 @@ const Page = () => {
     const [classPapers, setClassPapers] = useState<AdminGetPapersForClass[] | null>(null);
     const [allPapers, setAllPapers] = useState<Database["public"]["Tables"]["Papers"]["Row"][] | null> (null);
 
+    const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+
     const renderDate = ({column, row}: any) => {
         return DateTime.fromISO(row[column.key]).toISODate();
     }
+
+    
 
     const columns = [
         {key: 'paperId', name: 'paperId'},
@@ -72,6 +99,8 @@ const Page = () => {
 
         setClassPapers(data);
     }
+
+
 
 
 
@@ -143,6 +172,10 @@ const Page = () => {
         onRowsChange={handleRowsChange}
         columns={columns} 
         rows={classPapers}
+
+        sortColumns={sortColumns}
+        onSortColumnsChange={setSortColumns}
+
         />}
    
    

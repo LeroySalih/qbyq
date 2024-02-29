@@ -41,7 +41,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
             .sort((a, b)=> a.completeBy < b.completeBy ? 1 : -1)
             .map(p => ({
             //@ts-ignore
-            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, completeBy: p.completeBy, markBy: p.markBy
+            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, availableFrom: p.availableFrom, completeBy: p.completeBy, markBy: p.markBy
             })
             ));
 
@@ -51,9 +51,11 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
             .sort((a, b)=> a.completeBy > b.completeBy ? 1 : -1)
             .map(p => ({
             //@ts-ignore
-            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, completeBy: p.completeBy, markBy: p.markBy
+            paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, availableFrom: p.availableFrom, completeBy: p.completeBy, markBy: p.markBy
             })
             )
+            //@ts-ignore
+            .filter((a) => a.availableFrom < DateTime?.now()?.toISODate())
         );
     
     }
@@ -88,6 +90,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
 
         <div className={styles.dueDisplay}>
             <div>Paper</div>
+            <div>Available</div>
             <div>Complete </div>
             <div>Mark By</div>
             
@@ -96,6 +99,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
                 <div key={`l${i}`} className={styles.duePaper}>
                 <Link href={`/app/paper-form/${dp.paperId}/${classId}`}>{dp.title}</Link>,
                 </div>,
+                <div key={`c${i}`} className={styles.duePaper}>{DateTime.fromISO(dp.availableFrom).toFormat("yyyy-MM-dd")}</div>,
                 <div key={`c${i}`} className={styles.duePaper}>{DateTime.fromISO(dp.completeBy).toFormat("yyyy-MM-dd")}</div>,
                 <div key={`m${i}`} className={styles.duePaper}>{DateTime.fromISO(dp.markBy).toFormat("yyyy-MM-dd")}</div>,
             
@@ -112,6 +116,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
 
         <div className={styles.completedDisplay}>
             <div>Paper</div>
+            <div>Available From</div>
             <div>Completed </div>
             <div>Marks</div>
             <div>%</div>
@@ -121,6 +126,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
                 <div key={`l${i}`} className={styles.duePaper}>
                     <Link href={`/app/paper-form/${dp.paperId}/${classId}`}>{dp.title}</Link>,
                 </div>,
+                <div key={`c${i}`} className={styles.duePaper}>{DateTime.fromISO(dp.availableFrom).toFormat("yyyy-MM-dd")}</div>,
                 <div key={`c${i}`} className={styles.duePaper}>{DateTime.fromISO(dp.completeBy).toFormat("yyyy-MM-dd")}</div>,
                 <div key={`m${i}`} className={styles.duePaper}>{dp.pMarks}</div>,
                 <div key={`m${i}`} className={styles.duePaper}>{(dp.pMarks / dp.qMarks * 100).toFixed(0)}%</div>,
