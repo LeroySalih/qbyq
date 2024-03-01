@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect , useState, useContext} from "react";
-import { useSupabase }  from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 
 import DisplayQuestion from "./display-question";
 import { FileObject} from "@supabase/storage-js";
@@ -19,7 +19,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
     const [urls, setUrls] = useState<{[key: string] : string} | undefined>({"path" : ''})
     const [pupilMarks, setPupilMarks] = useState<PupilMarks[] | null>(null);
     
-    const {supabase} = useSupabase();
+    
 
     const loadPupilMarks = async (userId: string | null) => {
             

@@ -4,7 +4,7 @@
 import {useState, useEffect} from 'react';
 import styles from "./display-papers-for-pupil.module.css"
 import Card from "components/card";
-import { useSupabase } from 'components/context/supabase-context';
+import supabase from "app/utils/supabase/client";
 import { DateTime } from 'luxon';
 
 import Link from 'next/link';
@@ -16,7 +16,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
     const [duePapers, setDuePapers] = useState(null);
     const [completedPapers, setCompletedPapers] = useState(null);
 
-    const {supabase} = useSupabase();
+    
 
     const getPapers = async (pupilid : string) => {
         return await supabase.rpc("fn_get_paper_data_for_pupil", {pupilid})

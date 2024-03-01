@@ -4,7 +4,8 @@
 import Card from "components/card";
 import styles from './display-spec-data-by-item.module.css';
 
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
+
 import {useState, useEffect, useMemo} from 'react';
 import {GetPupilMarksBySpecItem} from 'types/alias';
 import DataGrid, {textEditor, Column} from 'react-data-grid';
@@ -56,7 +57,6 @@ const renderFCScore = ({row}: {row : Row})  => {
 
 const DisplaySpecDataByItem = ({pupilId, specId, classId}: {pupilId: string, specId: number, classId: number}) => {
 
-    const {supabase} = useSupabase();
     const [data, setData] = useState<GetPupilMarksBySpecItem | null>(null);
     const columns : readonly Column<Row>[]= [
         {key: 'specTag',name: 'Tag', width: 40},

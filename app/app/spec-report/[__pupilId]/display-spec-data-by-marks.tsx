@@ -2,13 +2,13 @@
 import Card from "components/card";
 import styles from "./display-spec-data-by-marks.module.css"
 import {useEffect, useState} from "react";
-import {useSupabase} from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 
 const DisplaySpecDataByMarks = ({pupilId, specId}: {pupilId: string, specId: number}) => {
 
     const [specData, setSpecData] = useState(null);
 
-    const {supabase} = useSupabase();
+    
 
     const loadData = async (userid: string) => {
 

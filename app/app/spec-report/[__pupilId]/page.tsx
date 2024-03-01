@@ -2,7 +2,7 @@
 import 'react-data-grid/lib/styles.css';
 import styles from "./page.module.css";
 
-import { useSupabase } from 'components/context/supabase-context';
+import supabase from "app/utils/supabase/client";
 
 import { useEffect, useState, useContext, Profiler } from 'react';
 
@@ -39,7 +39,7 @@ const SpecReport = ({params}: SpecReportType) => {
         console.log(`${key}, ${value}`);
     }
 
-    const {supabase} = useSupabase();
+    
 
     //const {profile, classes, pupilMarks} = useContext(UserContext);
 

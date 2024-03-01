@@ -4,14 +4,14 @@
 import {useState, useEffect} from 'react';
 import { useParams } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { useSupabase } from 'components/context/supabase-context';
+import supabase from "app/utils/supabase/client";
 import { Database } from 'types/supabase';
 import styles from "./display-resources.module.css";
 import { DateTime } from 'luxon';
 
 const DisplayResources = () => {
 
-    const {supabase} = useSupabase();
+    
 
     const params = useParams();
     const [user, setUser] = useState<User>();

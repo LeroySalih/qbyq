@@ -5,8 +5,8 @@ import DisplayQuestions from './display-questions';
 import DisplayResources from "./display-resources";
 import { useEffect , useState, useContext} from "react";
 import {TestContext, TestContextType} from 'components/context/test-context';
+import supabase from "app/utils/supabase/client";
 
-import { useSupabase } from 'components/context/supabase-context';
 import {User} from '@supabase/supabase-js';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -48,7 +48,7 @@ interface TabPanelProps {
 const DisplayTabs = ({paperId} : {paperId:number}) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [value, setValue] = useState(0);
-    const {supabase} = useSupabase();
+    
     const [user, setUser] = useState<User | null>(null);
 
  

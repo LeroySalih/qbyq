@@ -14,17 +14,24 @@ const MainPage = async () => {
   //const supabase = createServerComponentClient({ cookies: () => cookieStore }, {supabaseUrl, supabaseKey})
   const supabase = createSupabaseServerClient();
 
+  const {data: {user}} = await supabase.auth.getUser();
+  console.log("User Data", user) 
   const {data: {session}} = await supabase.auth.getSession()
 
   const {data: papers, error} = await supabase.from("Papers").select();
   
   error && console.error(error);
 
-    if (!session || !(session.user)){
-      return <>
-      <h1>User not logged in.</h1>
-      </>
-    }
+  if (user) {
+    console.log("User detected", user)
+    redirect(`/app/spec-report/${user.id}`);
+  }
+
+  if (!session || !(session.user)){
+    return <>
+    <h1>User not logged in.</h1>
+    </>
+  }
 
     redirect(`/app/spec-report/${session.user.id}`);
 
