@@ -1,4 +1,4 @@
-import supabase from "components/supabase";
+import supabase from "app/utils/supabase/client";
 
 export const getClassesForPupil = async (id: string) => {
 

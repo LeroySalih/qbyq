@@ -58,7 +58,18 @@ const Page = () => {
     const {supabase} = useSupabase();
     const [classes, setClasses] = useState<Database["public"]["Tables"]["Classes"]["Row"][] | null>(null);
     const [classId, setClassId] = useState<number>(0);
-    const [classPapers, setClassPapers] = useState<AdminGetPapersForClass[] | null>(null);
+    const [classPapers, setClassPapers] = useState<{
+        paperId: number;
+        year: string;
+        month: string;
+        subject: string;
+        paper: string;
+        qpaperlabel: string;
+        apaperlabel: string;
+        availableFrom: string;
+        completeBy: string;
+        markBy: string;
+    }[] | null >(null);
     const [allPapers, setAllPapers] = useState<Database["public"]["Tables"]["Papers"]["Row"][] | null> (null);
 
     const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);

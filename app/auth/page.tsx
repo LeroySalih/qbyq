@@ -1,5 +1,5 @@
 "use client"
-import supabase from "components/supabase"
+import supabase from "app/utils/supabase/client"
 import {useRouter} from 'next/navigation';
 
 const AuthPage = () => {

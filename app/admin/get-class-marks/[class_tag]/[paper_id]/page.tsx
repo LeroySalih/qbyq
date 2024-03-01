@@ -1,6 +1,6 @@
 "use client"
 
-import supabase from 'components/supabase';
+import supabase from 'app/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import styles from "./page.module.css";
 

@@ -1,5 +1,4 @@
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import {headers, cookies} from 'next/headers';
+
 
 import { GetPaperMarksForPupil, GetPaperMarksForPupilItem } from 'types/alias';
 
@@ -8,6 +7,7 @@ import styles from "./page.module.css"
 import Link from "next/link";
 
 import Card from "components/card"
+import { createSupabaseServerClient } from "app/utils/supabase/server";
 
 type PupilDetails = {
       pupilId : string,
@@ -22,17 +22,7 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
     
   const {userid} = params
 
-  const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
-
-  const supabase = createServerComponentSupabaseClient({
-    supabaseUrl,
-    supabaseKey,
-    headers,
-    cookies
-  });
-
-  
+  const supabase = createSupabaseServerClient();
 
   const shapePaperData = (paperData: GetPaperMarksForPupil) => {
 

@@ -1,9 +1,8 @@
 "use client"
-import supabase from 'components/supabase';
+import supabase from 'app/utils/supabase/client';
 import {useState, useEffect, useMemo} from 'react';
 import 'react-data-grid/lib/styles.css';
-import DataGrid, {textEditor} from 'react-data-grid';
-import { idText } from 'typescript';
+
 
 
 const ClassPapers = ({params}) => {

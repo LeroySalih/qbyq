@@ -1,26 +1,18 @@
 import styles from "./page.module.css";
-
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import {headers, cookies} from 'next/headers';
+import { createSupabaseServerClient } from "./utils/supabase/server";
 import { redirect } from 'next/navigation'
-
-import Link from 'next/link';
-import CardButton from "./card-button";
 
 
 type ProfileProps = {}
 
 const MainPage = async () => {
 
-  const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
+  //const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  // const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
 
-  const supabase = createServerComponentSupabaseClient({
-    supabaseUrl,
-    supabaseKey,
-    headers,
-    cookies
-  });
+  //const cookieStore = cookies()
+  //const supabase = createServerComponentClient({ cookies: () => cookieStore }, {supabaseUrl, supabaseKey})
+  const supabase = createSupabaseServerClient();
 
   const {data: {session}} = await supabase.auth.getSession()
 

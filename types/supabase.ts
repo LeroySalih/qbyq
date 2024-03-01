@@ -997,6 +997,21 @@ export type Database = {
         }
         Returns: Database["public"]["CompositeTypes"]["dq_loadquestionbyspecitemidreturn"]
       }
+      fn_admin_get_all_papers_for_class_spec: {
+        Args: {
+          classTag: string
+        }
+        Returns: {
+          paperId: number
+          year: string
+          month: string
+          title: string
+          paper: string
+          availablefrom: string
+          completeby: string
+          markby: string
+        }[]
+      }
       fn_admin_get_papers_for_class: {
         Args: {
           _classid: number

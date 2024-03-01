@@ -42,6 +42,7 @@ const Page = () => {
             <LessonSection>
                 <LessonSectionTitle>1. What is OneDrive</LessonSectionTitle>
                 <LessonSectionContent>
+                    <div>Lesson Goes Here</div>
                 </LessonSectionContent>
             </LessonSection>
 

@@ -4,12 +4,8 @@
 import Card from "components/card";
 import styles from './display-spec-data-by-item.module.css';
 
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import {headers, cookies} from 'next/headers';
-import Link from "next/link";
 import { useSupabase } from "components/context/supabase-context";
 import {useState, useEffect, useMemo} from 'react';
-import { setDatasets } from "react-chartjs-2/dist/utils";
 import {GetPupilMarksBySpecItem} from 'types/alias';
 import DataGrid, {textEditor, Column} from 'react-data-grid';
 

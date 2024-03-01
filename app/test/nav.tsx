@@ -2,12 +2,14 @@
 
 import {useState, useEffect} from 'react'
 import { useRouter } from 'next/navigation'
-import supabase from 'components/supabase';
+import supabase  from 'app/utils/supabase/client';
 
 const Nav = () => {
 
     const [classes, setClasses] = useState<{ id: number; tag: string; }[] | null>(null)
     const router = useRouter()
+
+    console.log("router")
      
     const handleOnChange = (id: string) => {
         router.push(`/test/${id}`)

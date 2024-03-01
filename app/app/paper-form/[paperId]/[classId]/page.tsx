@@ -1,9 +1,6 @@
 import DisplayTabs from './display-tabs';
 
-import Link from 'next/link';
-
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import {headers, cookies} from 'next/headers';
+import { createSupabaseServerClient } from 'app/utils/supabase/server';
 import DisplayResources from './display-resources';
 
 type PagePropsType = {
@@ -16,15 +13,8 @@ const PageForm = async ({params}: PagePropsType) => {
     const {paperId} = params;
     
     console.log(paperId);
-    const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
-
-    const supabase = createServerComponentSupabaseClient({
-        supabaseUrl,
-        supabaseKey,
-        headers,
-        cookies
-    });
+   
+    const supabase = createSupabaseServerClient()
 
     const loadPaper = async (paperId: number) => {
 

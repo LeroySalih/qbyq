@@ -1,7 +1,7 @@
 "use client"
 import {useState, useEffect} from 'react';
 
-import supabase from "components/supabase";
+import supabase from "app/utils/supabase/client";
 
 import {Paper} from 'types/alias';
 

@@ -1,5 +1,4 @@
 
-import supabase from "components/supabase";
 import TextField  from "@mui/material/TextField";
 import  Button  from "@mui/material/Button";
 import {useState, useEffect, ChangeEventHandler, ChangeEvent} from 'react';

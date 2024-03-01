@@ -1,20 +1,77 @@
-import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
+
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse } from "next/server";
 
 import { NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
-    const requestHeaders = new Headers(req.headers);
-    // Store current request pathname in a custom header
-    requestHeaders.set('x-pathname', req.nextUrl.pathname);
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-    const res = NextResponse.next({
-        request: {
-          headers: requestHeaders,
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
         },
-      });
-    const supabase = createMiddlewareSupabaseClient({req, res});
-    await supabase.auth.getSession();
-    //console.log("Middleware completed.")
-    return res;
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    }
+  )
+
+  const user = await supabase.auth.getUser()
+  console.log("Middleware !! User", user);
+
+  return response
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }
