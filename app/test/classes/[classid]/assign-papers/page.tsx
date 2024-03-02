@@ -20,7 +20,4 @@ const Page = async ({params} : {params: {classid: string}}) => {
     </>
 }
 
-
-
-
 export default Page;

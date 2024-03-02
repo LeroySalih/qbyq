@@ -9,7 +9,7 @@ const Nav = () => {
     const [classes, setClasses] = useState<{ id: number; tag: string; }[] | null>(null)
     const router = useRouter()
 
-    console.log("router")
+    
      
     const handleOnChange = (id: string) => {
         router.push(`/test/classes/${id}`)

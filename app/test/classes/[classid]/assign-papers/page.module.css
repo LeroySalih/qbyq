@@ -1,4 +1,4 @@
 .papersDisplay {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr 1fr 1fr;
 }
