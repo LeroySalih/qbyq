@@ -1,6 +1,7 @@
 
-import {useSupabase } from "components/context/supabase-context";
+// import {useSupabase } from "components/context/supabase-context";
 import {useEffect, useState} from 'react';
+import supabase from "app/utils/supabase/client";
 
 type ClassDescriptor = {
     id: number,
@@ -13,7 +14,7 @@ type ClassDescriptorList = ClassDescriptor[];
 
 const ClassList = ({userid}:{userid: string}) => {
 
-    const {supabase} = useSupabase();
+    // const {supabase} = useSupabase();
     const [classes, setClasses] = useState<ClassDescriptorList>([]);
     const [classToJoin, setClassToJoin] = useState<ClassDescriptor | null>(null);
     const [classCode, setClassCode] = useState<string>('');

@@ -14,9 +14,18 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+
+type Profile = {
+  id: string;
+  isAdmin: boolean;
+  firstName: string;
+  familyName: string;
+} | null
+
 const NavBar = () => {
 
     const [user, setUser] = useState<User | null>(null);
+    const [profile, setProfile] = useState<Profile>(null);
 
     const router = useRouter();
     
@@ -25,6 +34,20 @@ const NavBar = () => {
       const {data: {user}} = await supabase.auth.getUser();
 
       setUser(user);
+
+    }
+
+    const loadProfile = async () => {
+      if (!user) return;
+
+      const {data: profile, error} = await supabase.from("Profile")
+                .select("id, isAdmin, firstName, familyName")
+                .eq("id", user.id)
+                .maybeSingle()
+
+      error && console.error(error);
+
+      setProfile(profile);
 
     }
 
@@ -54,6 +77,12 @@ const NavBar = () => {
         subscription.unsubscribe();
       }
     }, []);
+
+    useEffect(()=>{
+      if (user) {
+        loadProfile();
+      }
+    }, [user])
 
 
     const handleSignIn = async () => {
@@ -97,6 +126,8 @@ const NavBar = () => {
         </div>
         <div>
           {user && <span>{user.email?.substring(0, 10)} {user?.email?.length || 0 > 10 ? "..." : ""}</span>}
+
+          {profile && <span>{profile.isAdmin && <Link href="/test">Admin Pages</Link>}</span>}
 
           {user && <IconButton onClick={handleGoToProfile} aria-label="delete" size="small">
                       <AccountBoxOutlinedIcon fontSize="large"/>

@@ -1,7 +1,8 @@
 "use client";
 
 import {useState, useEffect} from 'react';
-import {useSupabase } from "components/context/supabase-context";
+//import {useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import {useRouter} from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import styles from './new-profile.module.css';
@@ -14,11 +15,8 @@ const NewProfilePage = () => {
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(null);
 
-    
-    
-    const {supabase} = useSupabase();
+    // const {supabase} = useSupabase();
 
-    
     useEffect(()=> {
         const loadUser = async () => {
             const {data: {user}} = await supabase.auth.getUser()
