@@ -4,7 +4,7 @@ import supabase from "app/utils/supabase/client";
 
 import styles from "./nav-bar.module.css";
 import {useEffect, useState} from "react";
-import {User} from "@supabase/supabase-js";
+import {AuthChangeEvent, Session, User} from "@supabase/supabase-js";
 
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 
@@ -28,21 +28,27 @@ const NavBar = () => {
 
     }
 
+    const handleAuthChanged = ( event: AuthChangeEvent, session: Session | null) => {
+
+      if (session){
+        const user = session.user;
+        setUser(user);
+
+        // refresh the current page in case it's a server side page.
+        router.refresh();
+
+      } else {
+        setUser(null);
+
+        // no user (logged out), so redirect to home
+        router.push(`/`);
+      }
+    }
+
     useEffect(()=>{
       loadUser();
 
-      const {data: {subscription} } = supabase.auth.onAuthStateChange((event, session)=> {
-      
-        if (session){
-          const u = session.user;
-          setUser(u);
-          router.push(`/app/spec-report/${u.id}`);
-        } else {
-          setUser(null);
-          router.push(`/`);
-        }
-      
-      });
+      const {data: {subscription} } = supabase.auth.onAuthStateChange(handleAuthChanged);
 
       return ()=> {
         subscription.unsubscribe();
@@ -62,8 +68,8 @@ const NavBar = () => {
     
     
         error && console.error(error);
-        console.log("Sending to home page")
-       // router.push("/");
+        // console.log("Sending to home page")
+        // router.push("/");
         // console.log(data);
     }
     
@@ -76,7 +82,6 @@ const NavBar = () => {
     }
 
     const handleGoToProfile = () => {
-
       router.push('/app/new-profile')
     }
 
@@ -91,7 +96,7 @@ const NavBar = () => {
           <div className={styles.siteTitle}>QbyQ</div>
         </div>
         <div>
-          {user && <span>{user.email}</span>}
+          {user && <span>{user.email?.substring(0, 10)} {user?.email?.length || 0 > 10 ? "..." : ""}</span>}
 
           {user && <IconButton onClick={handleGoToProfile} aria-label="delete" size="small">
                       <AccountBoxOutlinedIcon fontSize="large"/>
