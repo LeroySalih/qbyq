@@ -1,13 +1,13 @@
 "use client"
 import NewPaper from "./new-paper";
 import {useState} from "react";
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 
 const Page = () => {
 
     const [paper, setPaper] = useState();
 
-    const {supabase} = useSupabase();
+    
 
 
     const writeQuestion = async (id: number, q: any) => {

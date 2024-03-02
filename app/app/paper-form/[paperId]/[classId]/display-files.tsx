@@ -2,11 +2,11 @@
 
 import {useState, useEffect, useContext} from 'react';
 import Link from "next/link";
-import { useSupabase } from 'components/context/supabase-context';
+import supabase from "app/utils/supabase/client"
 
 const DisplayFiles = async ({paperId} : {paperId : number}) => {
 
-    const {supabase} = useSupabase();    
+        
     const {data: {user}} = await supabase?.auth.getUser() || {data: {user: null}};
     
     const [userFiles, setUserFiles] = useState<{ name: string; signedUrl: string; }[] | undefined>([]);

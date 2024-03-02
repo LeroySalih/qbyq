@@ -10,7 +10,7 @@ import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
 import FlashOnOutlinedIcon from '@mui/icons-material/FlashOnOutlined';
 
 import { usePathname } from "next/navigation";
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 const SideBar = () => {
@@ -18,7 +18,7 @@ const SideBar = () => {
     const [user, setUser] = useState<User | null>();
 
     const pathName = usePathname();
-    const {supabase} = useSupabase();
+    
 
     const loadUser = async () => {
         const {data: {user}} = await supabase.auth.getUser();

@@ -2,7 +2,7 @@
 
 import { ReactElement } from "react";
 import { useState, useEffect} from "react";
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import { User} from "@supabase/supabase-js";
 
 export const MCQ = ({path, id, content, answers, showLastAnswer, showCorrectAnswer}: 
@@ -19,7 +19,7 @@ export const MCQ = ({path, id, content, answers, showLastAnswer, showCorrectAnsw
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [answer, setAnswer] = useState<string | null>(null);
     const [lastAnswer, setLastAnswer] = useState< string | null>(null);
-    const {supabase} = useSupabase();
+    
 
     useEffect(()=> {
         

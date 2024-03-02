@@ -7,6 +7,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import NavBar from "./nav-bar";
+import styles from "./layout.module.css"
 
 const RootLayout = ({children} : {children: React.ReactNode}) => {
 
@@ -19,6 +20,7 @@ const RootLayout = ({children} : {children: React.ReactNode}) => {
         <body>
           <NavBar />
           {children}
+          <div className={styles.footer}>1</div>
         </body>
     </html>
     

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState, useMemo} from "react";
 
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {Database} from "types/supabase";
@@ -55,7 +55,7 @@ function getComparator(sortColumn: string): Comparator {
 
 const Page = () => {
 
-    const {supabase} = useSupabase();
+    
     const [classes, setClasses] = useState<Database["public"]["Tables"]["Classes"]["Row"][] | null>(null);
     const [classId, setClassId] = useState<number>(0);
     const [classPapers, setClassPapers] = useState<{

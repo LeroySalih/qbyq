@@ -1,12 +1,12 @@
 "use client";
 
 import {useState, useEffect} from "react";
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 
 const QuestionSummary = ({path} : {path: string}) => {
 
-    const {supabase} = useSupabase();
+    
     const [answers, setAnswers] = useState(null);
     const [user, setUser] = useState<User | null>(null);
     

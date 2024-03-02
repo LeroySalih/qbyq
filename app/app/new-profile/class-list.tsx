@@ -14,7 +14,7 @@ type ClassDescriptorList = ClassDescriptor[];
 
 const ClassList = ({userid}:{userid: string}) => {
 
-    // const {supabase} = useSupabase();
+    // 
     const [classes, setClasses] = useState<ClassDescriptorList>([]);
     const [classToJoin, setClassToJoin] = useState<ClassDescriptor | null>(null);
     const [classCode, setClassCode] = useState<string>('');

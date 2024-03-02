@@ -1,10 +1,10 @@
 "use client";
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 import {useEffect} from 'react';
 
 const Page = () => {
 
-    const {supabase} = useSupabase();
+    
 
     useEffect(()=> {
         // cant subscribe to a class, as a pupil will belong to more than 1 class.

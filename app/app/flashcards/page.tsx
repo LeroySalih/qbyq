@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { useSupabase } from "components/context/supabase-context";
+import supabase from "app/utils/supabase/client";
 
 
 const _queues: QueueTypeFilters = {
@@ -77,7 +77,7 @@ const FlashCardPage = () => {
     
     //const [currentQueueType, setCurrentQueueType] = useState<QueueType>(0);
     const [state, setState] = useState<string>("front");
-    const {supabase} = useSupabase();
+    
 
     const handleToggle = () => {
         setState(prev => prev == 'front' ? 'back' : 'front')

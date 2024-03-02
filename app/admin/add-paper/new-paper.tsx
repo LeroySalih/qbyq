@@ -2,7 +2,8 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useState, useEffect } from "react";
 import React from "react";
-import { useSupabase } from "components/context/supabase-context";
+//import supabase from "app/utils/supabase/client";
+import supabase from "app/utils/supabase/client";
 
 type FormValues = {
   SpecId: number;
@@ -68,7 +69,7 @@ const PaperForm = ({
     control,
   });
 
-  const {supabase} = useSupabase();
+  
 
   const onSubmit = (data: FormValues) => {
     console.log(onPaperChange);

@@ -15,7 +15,7 @@ const NewProfilePage = () => {
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(null);
 
-    // const {supabase} = useSupabase();
+    // 
 
     useEffect(()=> {
         const loadUser = async () => {
