@@ -9,7 +9,7 @@ export default function TestLayout({children, params}: {children: React.ReactNod
             <Link href={`/test/classes/${classid}/assign-papers`}>Assign papers</Link> | &nbsp;
             <Link href={`/test/classes/${classid}/pupil-reports`}>Pupils</Link> | &nbsp;
             {children}
-            
+             
         </>
     )
 }
