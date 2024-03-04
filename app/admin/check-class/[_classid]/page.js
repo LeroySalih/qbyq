@@ -25,7 +25,7 @@ const CheckClass = ({params}) => {
                 name:"Name", 
                 width: 320,
                 resizable: true,
-                frozen: true,
+                frozen: false,
                 summaryFormatter : ({row}) => {return <strong>Complete By:</strong>}
             }, 
             ...(papers.map((p, i) => ({
@@ -128,6 +128,9 @@ const CheckClass = ({params}) => {
             rows={paperMarks} 
             topSummaryRows={summaryRows}
             />}
+
+            <pre>{JSON.stringify(papersForClass, null, 2)}</pre>
+            <pre>{JSON.stringify(paperMarks, null, 2)}</pre>
             
             
         </>
