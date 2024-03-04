@@ -127,7 +127,7 @@ const NavBar = () => {
         <div>
           {user && <span>{user.email?.substring(0, 10)} {user?.email?.length || 0 > 10 ? "..." : ""}</span>}
 
-          {profile && <span>{profile.isAdmin && <Link href="/test">Admin Pages</Link>}</span>}
+          {profile && <span>{profile.isAdmin && <Link href="/admin">Admin Pages</Link>}</span>}
 
           {user && <IconButton onClick={handleGoToProfile} aria-label="delete" size="small">
                       <AccountBoxOutlinedIcon fontSize="large"/>

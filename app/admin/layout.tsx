@@ -1,8 +1,7 @@
-import styles from './layout.module.css'
+import styles from "./page.module.css"
 
-
-const Layout = ({children} : {children: React.ReactNode}) => {
-    return <div className={styles.container}>{children}</div>
+const RootLayout = ({children} : {children: React.ReactNode}) => {
+    return <div className={styles.layout}>{children}</div>
 }
 
-export default Layout;
+export default RootLayout

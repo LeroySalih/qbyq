@@ -4,7 +4,7 @@ import {useState, useEffect, useMemo} from 'react';
 import 'react-data-grid/lib/styles.css';
 import DataGrid, {textEditor} from 'react-data-grid';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const CheckClass = ({params}) => {

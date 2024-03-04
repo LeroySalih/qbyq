@@ -9,13 +9,9 @@ const MainPage = async () => {
 
   const {data: {user}} = await supabase.auth.getUser();
   console.log("User Data", user) 
-  const {data: {session}} = await supabase.auth.getSession()
-  
-  console.log("Session", session)
 
-  const {data: papers, error} = await supabase.from("Papers").select();
-  
-  error && console.error(error);
+  const {data: {session}} = await supabase.auth.getSession()
+  console.log("Session", session)
 
   if (user) {
     console.log("User detected", user)

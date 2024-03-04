@@ -92,7 +92,7 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
         <Button variant="contained" color="primary" onClick={handleAddNew}>Add New</Button>
 
         <div>
-        {paperQuestions && paperQuestions.map((q, i) => <DisplayPaperQuestion key={i} question={q} specItems={specItems} currentPaperId={currentPaperId} currentSpecId={currentSpecId}/>)}
+        {paperQuestions && paperQuestions.sort((a, b) => (a.question_order || 0) > (b.question_order || 0) ? 1 : -1).map((q, i) => <DisplayPaperQuestion key={i} question={q} specItems={specItems} currentPaperId={currentPaperId} currentSpecId={currentSpecId}/>)}
         </div>
 
         
