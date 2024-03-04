@@ -7,6 +7,10 @@ export const insertQuestion = async ( question: Question ) => {
 
     const supabase = createSupabaseServerClient();
 
+    if (!supabase) {
+        return;
+    }
+
     const {data, error} = await supabase.from("Questions").insert({
         PaperId: question.paperId,
         question_number: question.questionNumber,
@@ -25,6 +29,10 @@ export const updateQuestion = async (question : Question) => {
     console.log("Updating ", question);
     
     const supabase = createSupabaseServerClient();
+
+    if (!supabase) {
+        return;
+    }
 
     const {data, error} = await supabase.from("Questions").update({
         PaperId: question.paperId,

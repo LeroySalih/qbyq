@@ -6,6 +6,10 @@ const Page = async () => {
     
     const supabase = createSupabaseServerClient();
 
+    if (!supabase) {
+        return <h1>Error Creating Supabase</h1>;
+    }
+
     const {data: papers, error} = await supabase.from("Papers").select("id, year, month, paper, specId")
     const {data: specs, error: specsError} = await supabase.from("Spec").select("id, title")
     const {data: specItems, error: specItemsError} = await supabase.from("SpecItem").select("id, tag, title, SpecId")

@@ -24,6 +24,10 @@ const MainPage = async ({params} : {params : {userid: string}}) => {
 
   const supabase = createSupabaseServerClient();
 
+  if (!supabase) {
+    return <h1>Error Creating Supabase</h1>;
+  } 
+
   const shapePaperData = (paperData: GetPaperMarksForPupil) => {
 
     if (!paperData || paperData.length == 0)

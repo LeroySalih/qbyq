@@ -7,6 +7,10 @@ const MainPage = async () => {
 
   const supabase = createSupabaseServerClient(true);
 
+  if (!supabase) {
+    return <h1>Error: Creating supabase. </h1>
+  }
+
   const {data: {user}} = await supabase.auth.getUser();
   console.log("User Data", user) 
 

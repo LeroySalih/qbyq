@@ -16,7 +16,13 @@ const PageForm = async ({params}: PagePropsType) => {
    
     const supabase = createSupabaseServerClient()
 
+    if (!supabase) {
+        return <h1>Error: Creating Supabase</h1>;
+    }
+
     const loadPaper = async (paperId: number) => {
+
+    
 
         const {data, error} = await supabase
                                     .from("Papers")

@@ -12,6 +12,10 @@ const updateData = async (classTag: string, paperId: string, availableFromStr: s
     // const cookieStore = cookies()
     const supabase = createSupabaseServerClient()
 
+    if (!supabase) {
+        return;
+    }
+
     const {data : classId, error} = await supabase.from("Classes").select("id").eq("tag", classTag).maybeSingle();
          
     const {data: upsertData, error: upsertError} = await supabase.from("ClassPapers").upsert({

@@ -68,6 +68,10 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
       questionOrder: null
     });
 
+    if (!result){
+      return;
+    }
+
     const {data} = result;
 
     console.log("data", data);

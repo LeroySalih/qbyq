@@ -10,6 +10,10 @@ const Page = async ({params} : {params: {classid: string}}) => {
 
     const supabase = createSupabaseServerClient()
 
+    if (!supabase) {
+        return;
+    }
+
     const {data, error} = await supabase.rpc("fn_admin_get_all_papers_for_class_spec", {classTag: classid})
 
     error && console.error(error);
