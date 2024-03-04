@@ -5,8 +5,6 @@ import {cookies} from 'next/headers';
 
 export const  createSupabaseServerClient = (inServerAction = true) => {
 
-
-
   try {
     const supabaseUrl:string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey:string = process.env.NEXT_PUBLIC_SUPABASE_KEY!;

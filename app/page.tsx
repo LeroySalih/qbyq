@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 const MainPage = async () => {
 
-  const supabase = createSupabaseServerClient(true);
+  const supabase = createSupabaseServerClient(false);
 
   if (!supabase) {
     return <h1>Error: Creating supabase. </h1>
