@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 const MainPage = async () => {
 
-  const supabase = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient(true);
 
   const {data: {user}} = await supabase.auth.getUser();
   console.log("User Data", user) 
