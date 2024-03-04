@@ -129,8 +129,7 @@ const CheckClass = ({params}) => {
             topSummaryRows={summaryRows}
             />}
 
-            <pre>{JSON.stringify(papersForClass, null, 2)}</pre>
-            <pre>{JSON.stringify(paperMarks, null, 2)}</pre>
+           
             
             
         </>
