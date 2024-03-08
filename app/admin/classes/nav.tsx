@@ -12,7 +12,7 @@ const Nav = () => {
     
      
     const handleOnChange = (id: string) => {
-        router.push(`/test/classes/${id}`)
+        router.push(`/admin/classes/${id}`)
     }
 
     const loadData = async() => {

@@ -29,7 +29,7 @@
     "@supabase/supabase-js": "^2.4.1",
     "@types/mdx": "^2.0.5",
     "@types/node": "18.11.18",
-    "@types/react": "18.0.27",
+    "@types/react": "^18.0.27",
     "@types/react-dom": "18.0.10",
     "chart.js": "^4.2.1",
     "dayjs": "^1.11.7",
@@ -50,7 +50,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
     "supabase-cli": "^0.0.21",
-    "typescript": "^5.0.4",
+    "typescript": "^5.3.3",
     "use-file-picker": "^1.6.1"
   },
   "devDependencies": {

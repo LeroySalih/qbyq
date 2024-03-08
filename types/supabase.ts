@@ -446,6 +446,7 @@ export type Database = {
           firstName: string
           id: string
           isAdmin: boolean
+          isTech: boolean
         }
         Insert: {
           classes?: string[] | null
@@ -454,6 +455,7 @@ export type Database = {
           firstName: string
           id: string
           isAdmin?: boolean
+          isTech?: boolean
         }
         Update: {
           classes?: string[] | null
@@ -462,6 +464,7 @@ export type Database = {
           firstName?: string
           id?: string
           isAdmin?: boolean
+          isTech?: boolean
         }
         Relationships: [
           {
@@ -842,6 +845,42 @@ export type Database = {
           }
         ]
       }
+      WorkQueue: {
+        Row: {
+          complete_date: string | null
+          created_at: string
+          filePath: string
+          id: number
+          machine: string
+          notes: string
+          publicUrl: string
+          status: string
+          userid: string
+        }
+        Insert: {
+          complete_date?: string | null
+          created_at?: string
+          filePath?: string
+          id?: number
+          machine?: string
+          notes?: string
+          publicUrl: string
+          status?: string
+          userid?: string
+        }
+        Update: {
+          complete_date?: string | null
+          created_at?: string
+          filePath?: string
+          id?: number
+          machine?: string
+          notes?: string
+          publicUrl?: string
+          status?: string
+          userid?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       vw_duplicate_pupil_marks: {
@@ -959,6 +998,23 @@ export type Database = {
           q_marks: number | null
           tag: string | null
           title: string | null
+        }
+        Relationships: []
+      }
+      vw_wq_work_queue: {
+        Row: {
+          complete_date: string | null
+          created_at: string | null
+          familyName: string | null
+          filePath: string | null
+          firstName: string | null
+          isAdmin: boolean | null
+          isTech: boolean | null
+          machine: string | null
+          notes: string | null
+          publicUrl: string | null
+          status: string | null
+          userid: string | null
         }
         Relationships: []
       }

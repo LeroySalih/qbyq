@@ -1,0 +1,6 @@
+.queueItem {
+    border: solid silver 1px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem;
+}
