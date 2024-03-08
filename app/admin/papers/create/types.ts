@@ -15,3 +15,16 @@ export type FormValues = {
     paperId: number;
     questions: Question[];
   };
+
+
+export type Paper = {
+  year: string;
+  month:string;
+  specId: number;
+  subject: string;
+  paper: string;
+  title: string;
+  marks: number;
+  qPaperLabel: string;
+  aPaperLabel: string;
+}

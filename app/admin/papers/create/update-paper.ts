@@ -1,7 +1,7 @@
 "use server"
 import {createSupabaseServerClient} from "app/utils/supabase/server";
 import {FormValues, Question} from "./types";
-
+import {Paper} from "./types"
 
 export const insertQuestion = async ( question: Question ) => {
 
@@ -57,6 +57,30 @@ const updatePaper = (data: FormValues) => {
 
     return {msg: "ok"}
     
+}
+
+
+export const createNewPaper = async (data:Paper) => {
+
+    const supabase = createSupabaseServerClient();
+
+    if (!supabase) {
+        return;
+    }
+
+    const {year, month, paper, title, marks, specId, subject } = data;
+    
+    console.log({year, month, paper, title, marks, specId, subject });
+
+    const {data: newPaper, error} = (await supabase.from("Papers").insert({year, month, paper, title, marks, specId, subject }).select("id"));
+
+    error && console.error(error);
+    
+    console.log(newPaper)
+    // @ts-ignore
+    const id = newPaper[0].id;
+
+    return {id, error};
 }
 
     
