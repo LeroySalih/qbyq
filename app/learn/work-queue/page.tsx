@@ -1,12 +1,13 @@
 
 
 import { Suspense } from "react";
-import Upload from "./upload";
+import CreateTicket from "./create-ticket";
 import { createSupabaseServerClient } from "app/utils/supabase/server";
 import Link from 'next/link';
 import DisplayQueueItem from "./display-queue-item";
 
 import {Ticket, Tickets, Profile} from "./types"
+import { Container, Grid } from "@mui/material";
 
 const Page = async () => {
 
@@ -38,7 +39,7 @@ const Page = async () => {
 
     return <>
         <h1>Queue Page</h1>
-        {user && user?.id && <Upload userid={user?.id}/>}
+        {user && user?.id && <CreateTicket userid={user?.id}/>}
         {!user && <div>Not signed in</div>}
         <Suspense fallback={<div>Loading</div>}>
             {/* @ts-expect-error Async server Component*/}
@@ -72,9 +73,18 @@ const DisplayQueue = async ({profile} : {profile: Profile}) => {
     data = result.data;
     error = result.error;
 
-    error && console.error(error)
+    error && console.error(error);
     
-    return data && data.map((ticket: Ticket, i: number) => <DisplayQueueItem key={i} profile={profile} ticket={ticket}/>)
+    return <Container>
+            <Grid>
+                
+               { data && data.map((ticket: Ticket, i: number) => (<Grid key={i}>
+                    <DisplayQueueItem  profile={profile} ticket={ticket}/>
+                    </Grid>)
+                    )
+               }
+            </Grid>
+            </Container>
 }
 
 export default Page;

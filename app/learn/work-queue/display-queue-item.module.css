@@ -4,3 +4,35 @@
     border-radius: 0.5rem;
     margin: 0.5rem;
 }
+
+.statusLabel {
+    padding: 0.2rem;
+    border: silver solid 1px;
+    border-radius: 0.2rem;
+    width: 100px;
+    text-align: center;
+}
+
+.inProgress {
+    background: yellow;
+}
+
+.waiting {
+    background: blue;
+    color: white;
+}
+
+.completed {
+    background: green;
+    color: white;
+}
+
+.failed {
+    background: red;
+    color: white;
+}
+
+.displayTime {
+    font-size: 0.8rem;
+    color: darkgray;
+}

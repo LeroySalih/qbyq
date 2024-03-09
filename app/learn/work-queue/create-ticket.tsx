@@ -20,7 +20,7 @@ type Ticket = {
 }
 
 
-const Upload = ({userid}: {userid: string}) => {
+const CreateTicket = ({userid}: {userid: string}) => {
 
     const [file, setFile] = useState(null);
     const [user, setUser] = useState<User | null>(null);
@@ -113,4 +113,4 @@ const Upload = ({userid}: {userid: string}) => {
     </>
 }
 
-export default Upload;
+export default CreateTicket;
