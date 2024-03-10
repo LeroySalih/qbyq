@@ -5,7 +5,7 @@ import { TextField, Button, Stack, Select, MenuItem, Dialog, DialogTitle, Dialog
 import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
 import supabase from "app/utils/supabase/client";
 
-import { insertQuestion, updateQuestion, createNewPaper} from "./update-paper";
+import { insertQuestion, updateQuestion, createNewPaper, deleteQuestion} from "./update-paper";
 import {FormValues} from "./types";
 import {useRouter} from "next/navigation";
 import { Paper } from "types/alias";
@@ -207,6 +207,12 @@ const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecI
     setIsSaving(false)
   }
 
+  const handleDeleteQuestion = async (id: number) => {
+    setIsSaving(true);
+    await deleteQuestion(id);
+    setIsSaving(false);
+  }
+
   useEffect(()=> {
     
     saveQuestionToDb(paperQuestion)
@@ -214,6 +220,7 @@ const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecI
 
 
   return <div>
+    <Button onClick={() => handleDeleteQuestion(paperQuestion.id)}>X</Button>
     <TextField value={paperQuestion.id} sx={{width: 100}} disabled ></TextField>
     <TextField label="Number" value={paperQuestion.question_number} sx={{width: 100}} onChange={(e)=> handleUpdateQuestion('question_number', e.target.value)}></TextField>
     <TextField label="Marks" value={paperQuestion.marks} sx={{width: 100}}  onChange={(e)=> handleUpdateQuestion('marks', e.target.value)}></TextField>

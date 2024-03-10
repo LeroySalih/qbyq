@@ -2,6 +2,7 @@
 import {createSupabaseServerClient} from "app/utils/supabase/server";
 import {FormValues, Question} from "./types";
 import {Paper} from "./types"
+import { revalidatePath } from "next/cache";
 
 export const insertQuestion = async ( question: Question ) => {
 
@@ -65,7 +66,7 @@ export const createNewPaper = async (data:Paper) => {
     const supabase = createSupabaseServerClient();
 
     if (!supabase) {
-        return;
+        return {id: null, error: "Supabase not created"};
     }
 
     const {year, month, paper, title, marks, specId, subject } = data;
@@ -81,6 +82,28 @@ export const createNewPaper = async (data:Paper) => {
     const id = newPaper[0].id;
 
     return {id, error};
+}
+
+export async function deleteQuestion  (id: number)  {
+
+    const supabase = createSupabaseServerClient();
+
+    if (!supabase) {
+        return {id: null, error: "Supabase not created"};
+    }
+
+    console.log("Deleting record:", id);
+
+    const {data, error} = await supabase.from("Questions").delete().eq("id", id);
+
+    console.log("data", data);
+
+    error && console.error(error);
+
+    revalidatePath("/admin/papers/create");
+    
+    return {data, error};
+
 }
 
     
