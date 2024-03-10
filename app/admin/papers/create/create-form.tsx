@@ -9,10 +9,14 @@ import { insertQuestion, updateQuestion, createNewPaper, deleteQuestion} from ".
 import {FormValues} from "./types";
 import {useRouter} from "next/navigation";
 import { Paper } from "types/alias";
+import { revalidatePath } from "next/cache";
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { CollectionsBookmarkRounded } from "@mui/icons-material";
+
+import styles from "./create-form.module.css"
+
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -60,6 +64,7 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
 
   
   const loadPaperQuestions = async(paperId: number)=> {
+    
     
     const {data, error} = await supabase.from("Questions").select("id, question_number, specItemId, marks, question_order").eq("PaperId", currentPaperId);
 
@@ -144,15 +149,23 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
   }
 
   const handleCancelDlg = async () => {
+    
     setShowDlg(false);
+  }
+
+  const reload = async () => {
+    console.log("Refreshing data");
+    loadPaperQuestions(currentPaperId)
   }
 
   return <>
       <h1>Creating a Paper {currentPaperId}</h1>
-        <Button variant="outlined" onClick={handleNewPaper}>New Paper</Button>
-
+        
+        <button onClick={()=>{loadPaperQuestions(currentPaperId)}}>Refresh</button>
+        <div><Button variant="outlined" onClick={handleNewPaper}>New Paper</Button></div>
+        
         <NewPaperDialog show={showDlg} onCancel={handleCancelDlg} onSave={handleSubmitDlg}/>
-
+        
         <Select value={currentSpecId} defaultValue={currentSpecId} onChange={(e) => setCurrentSpecId(e.target.value as number)}>
           <MenuItem key={0} value={0}>Select a Spec</MenuItem>
           {specs && specs.map((s, i) => <MenuItem key={s.id} value={s.id}>{s.title}</MenuItem>)}
@@ -164,21 +177,25 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
         </Select>
 
         <Button variant="contained" color="primary" onClick={handleAddNew}>Add New</Button>
+        
+        <div className={styles.head}>&nbsp;</div>
 
         <div>
-        {paperQuestions && paperQuestions.sort((a, b) => (a.question_order || 0) > (b.question_order || 0) ? 1 : -1).map((q, i) => <DisplayPaperQuestion key={i} question={q} specItems={specItems} currentPaperId={currentPaperId} currentSpecId={currentSpecId}/>)}
+        {paperQuestions && paperQuestions.sort((a, b) => (a.question_order || 0) > (b.question_order || 0) ? 1 : -1).map((q, i) => <DisplayPaperQuestion key={i} question={q} specItems={specItems} currentPaperId={currentPaperId} currentSpecId={currentSpecId} reload={reload}/>)}
         </div>
 
+        <div className={styles.footer}> &nbsp;</div>
         
       </>
 }
 
 
-const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecId}: {
+const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecId, reload}: {
   question: PaperQuestion, 
   specItems: SpecItems, 
   currentPaperId: number, 
-  currentSpecId: number
+  currentSpecId: number,
+  reload: () => void,
 }) => {
   
   const [paperQuestion, setPaperQuestion] = useState<PaperQuestion>(question)
@@ -210,6 +227,7 @@ const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecI
   const handleDeleteQuestion = async (id: number) => {
     setIsSaving(true);
     await deleteQuestion(id);
+    reload();
     setIsSaving(false);
   }
 

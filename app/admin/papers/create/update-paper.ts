@@ -100,7 +100,7 @@ export async function deleteQuestion  (id: number)  {
 
     error && console.error(error);
 
-    revalidatePath("/admin/papers/create");
+    revalidatePath("/");
     
     return {data, error};
 
