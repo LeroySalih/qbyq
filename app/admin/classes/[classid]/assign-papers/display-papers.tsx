@@ -16,22 +16,45 @@ const DisplayPapers = ({classTag, papers} : {classTag: string, papers : {paperId
 
     let [isPending, startTransition] = useTransition();
 
-    const handleAvailableChange = (classTag: string, paperId: string, availablefrom: DateTime | null) => {
+    const handleDateChange = (classTag: string, paperId: string, field: string, dt: DateTime | null) => {
 
-        if (availablefrom){
-            startTransition(()=> {
-                updateData(classTag, paperId, availablefrom.toISO() );
-            })
-        }
+        startTransition(()=> {
+
+            //@ts-ignore
+            updateData(classTag, paperId, {[field]: dt} );
+        })
             
         
+    }
+
+    const handleAvailableChange = (classTag: string, paperId: string, availablefrom: DateTime | null) => {
+
+        handleDateChange(classTag, paperId, "availableFrom", availablefrom );
+            
         router.refresh();
     }
+
+    const handleCompleteChange = (classTag: string, paperId: string, completeby: DateTime | null) => {
+
+        handleDateChange(classTag, paperId, "completeBy", completeby );
+            
+        router.refresh();
+    }
+
+    const handleMarkChange = (classTag: string, paperId: string, mark: DateTime | null) => {
+
+        handleDateChange(classTag, paperId, "markBy", mark );
+            
+        router.refresh();
+    }
+
+    
 
     const handleUnassign = (paperId : string, classTag: string) => {
         console.log(paperId, classTag);
         startTransition(()=> {
-            updateData(classTag, paperId, null );
+            // @ts-ignore
+            updateData(classTag, paperId, {"completeBy": null, "availableFrom": null, "markBy": null} );
         });
 
         router.refresh();
@@ -72,8 +95,16 @@ const DisplayPapers = ({classTag, papers} : {classTag: string, papers : {paperId
                     <div key={`$available${i}`}>
                         { <DatePicker value={DateTime.fromISO(p.availablefrom)} onChange={(value)=> handleAvailableChange(classTag, p.paperId, value)}/> }
                     </div>,
-                    <div key={`$completeBy${i}`}>{DateTime.fromISO(p.completeby).toISODate()}</div>,
-                    <div key={`$markBy${i}`}>{DateTime.fromISO(p.markby).toISODate()}</div>,
+                    <div key={`$completeBy${i}`}>
+                        { // DateTime.fromISO(p.completeby).toISODate()
+                        }
+                        { <DatePicker value={DateTime.fromISO(p.completeby)} onChange={(value)=> handleCompleteChange(classTag, p.paperId, value)}/> }
+                    </div>,
+                    <div key={`$markBy${i}`}>
+                        { // DateTime.fromISO(p.markby).toISODate()
+                        }
+                        { <DatePicker value={DateTime.fromISO(p.markby)} onChange={(value)=> handleMarkChange(classTag, p.paperId, value)}/> }
+                    </div>,
                     <div key={`null_${i}`}><button onClick={() => handleUnassign(p.paperId, classTag)}>Unassign</button></div>
                 ])
             }
