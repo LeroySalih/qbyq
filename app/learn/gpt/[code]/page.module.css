@@ -1,0 +1,10 @@
+.transcript {
+    white-space: pre-wrap;
+}
+
+.layout {
+    width: 80vw;
+    margin: auto;
+    max-width: 1080px;
+    
+}

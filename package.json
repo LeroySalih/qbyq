@@ -41,6 +41,7 @@
     "linaria": "^4.1.17",
     "luxon": "^3.3.0",
     "next": "^14.1.0",
+    "openai": "^4.28.4",
     "perf_hooks": "^0.0.1",
     "primeicons": "^6.0.1",
     "primereact": "^9.0.0-beta.1",
@@ -51,7 +52,8 @@
     "react-hook-form": "^7.51.0",
     "supabase-cli": "^0.0.21",
     "typescript": "^5.3.3",
-    "use-file-picker": "^1.6.1"
+    "use-file-picker": "^1.6.1",
+    "youtube-transcript": "^1.1.0"
   },
   "devDependencies": {
     "@types/luxon": "^3.3.0",

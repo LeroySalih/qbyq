@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1">
+    <path
+       style="fill:#ffffff;fill-opacity:0.996078;stroke:#000000;stroke-width:1;stroke-linejoin:round;paint-order:fill markers stroke"
+       d="m 30.691666,38.3375 v 92.12916 a 5.0522914,5.0522914 45.298046 0 0 4.999729,5.05202 l 34.979708,0.36393 a 4.9482499,4.9482499 135.29805 0 0 4.999729,-4.94798 V 82.787499 a 8.6602542,8.6602542 60 0 0 -4.330127,-7.5 L 51.679182,63.935913 a 8.6602542,8.6602542 60 0 1 -4.330127,-7.5 v -7.51508 a 5,5 135 0 1 5,-5 h 8.267611 a 5,5 45 0 1 5,5 v 3.229166 a 5,5 45 0 0 5,5 h 0.05417 a 5,5 135 0 0 5,-5 l 0,-13.812499 a 5,5 45 0 0 -5,-5 H 35.691666 a 5,5 135 0 0 -5,5 z"
+       id="path1"
+       transform="matrix(1.5235,0,0,1.6426661,-36.545094,-43.654781)" />
+    <g
+       id="text1"
+       style="font-size:16.9333px;fill:#ff0000;fill-opacity:0.996078;stroke-width:0.55092;stroke-linejoin:round;paint-order:fill markers stroke"
+       transform="scale(1.133991,0.88184122)"
+       aria-label="Seren's&#10;Room" />
+  </g>
+</svg>
