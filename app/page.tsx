@@ -23,6 +23,7 @@ const MainPage = async () => {
   } else {
     return <>
     <h1>User not logged in.</h1>
+    <h1>DT Files</h1><div><a href="/DoorHanger.svg" download={true}>Door Hanger Link</a> </div>
     </>
   }
 
