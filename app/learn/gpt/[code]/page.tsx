@@ -225,7 +225,8 @@ const Page = async ({params}: {params: {code: string}}) => {
     if (error || transcript == null){
       return <h1>Error message: {error}</h1>
     }
-    // const summary = await getSummary(transcript);
+    
+    const summary = await getSummary(transcript);
     // const questions = await getQuestions(transcript);
 
     //const summary = await getSummaryMock(transcript);
@@ -293,6 +294,8 @@ const Page = async ({params}: {params: {code: string}}) => {
             allowFullScreen>
     </iframe>
     </div>
+    <pre>{summary}</pre>
+
     <div className={styles.transcript}>{transcript}</div>
     
     <div>
