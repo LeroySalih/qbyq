@@ -19,15 +19,27 @@ const openai = new OpenAI({
   });
 
 async function getTranscript(url: string){
+  
+  try{
+    
     const response = await YoutubeTranscript.fetchTranscript(url);
   
     const result = response.reduce((prev, curr) => prev + curr.text, "")
   
     return result;
+
+  } catch (error) {
+    
+    console.error(error);
+
+    return null
+  }
     
 }
 
 async function getSummary(transcript: string) {
+
+  try {
 
     const response = await openai.chat.completions.create({
       model: model,
@@ -40,6 +52,14 @@ async function getSummary(transcript: string) {
     });
   
     return (response.choices[0].message.content);
+
+  } catch (error) {
+
+    console.error(error);
+
+    return null;
+
+  }
       
 }
 
@@ -192,6 +212,7 @@ async function getQuestionsMock(transcript: string)
 
 const Page = async ({params}: {params: {code: string}}) => {
 
+  try {
     console.log(params);
     const {code} = params;
 
@@ -224,6 +245,10 @@ const Page = async ({params}: {params: {code: string}}) => {
       // get cache
       const transcript = await getTranscript(url);
 
+      if (transcript === null){
+        return <h1>Error</h1>
+      }
+
       // get summary
       summaryText = await getSummary(transcript) || "";
       console.log("Updating");
@@ -239,7 +264,7 @@ const Page = async ({params}: {params: {code: string}}) => {
 
     questionsError && console.error(questionsError);
 
-    if (questionsData && questionsData.length == 0){
+    if (questionsData && questionsData.length == 0 && transcript != null){
 
       console.log("No questions found in cache, updating...")
       const qData = await getQuestions(transcript);
@@ -272,6 +297,11 @@ const Page = async ({params}: {params: {code: string}}) => {
       <pre>{JSON.stringify(questionsData, null, 2)}</pre>
     </div>
     </div>
+  } catch (error) {
+      console.error(error)
+      return null;
+  }
+    
 }
 
 export default Page;
