@@ -18,21 +18,21 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-async function getTranscript(url: string){
+async function getTranscript(url: string): Promise<{ error: string | null, transcript: string | null}>{
   
   try{
     
     const response = await YoutubeTranscript.fetchTranscript(url);
   
-    const result = response.reduce((prev, curr) => prev + curr.text, "")
+    const transcript = response.reduce((prev, curr) => prev + curr.text, "")
   
-    return result;
+    return {error: null, transcript};
 
   } catch (error) {
     
     console.error(error);
 
-    return null
+    return {error: (error as Error).message, transcript: null}
   }
     
 }
@@ -222,7 +222,11 @@ const Page = async ({params}: {params: {code: string}}) => {
     
 
 
-    const transcript = await getTranscript(url);
+    const {transcript, error} = await getTranscript(url);
+
+    if (error || transcript == null){
+      return <h1>Error message: {error}</h1>
+    }
     // const summary = await getSummary(transcript);
     // const questions = await getQuestions(transcript);
 
@@ -239,14 +243,14 @@ const Page = async ({params}: {params: {code: string}}) => {
     pageError && console.error(pageError);
 
     let summaryText = ''
-    if (pageData?.length == 0)
+    if (pageData?.length == 0 && transcript)
     {
       console.log("Updating Cache")
       // get cache
-      const transcript = await getTranscript(url);
+      const {transcript, error} = await getTranscript(url);
 
-      if (transcript === null){
-        return <h1>Error</h1>
+      if (error || transcript === null){
+        return <h1>Error message: {error}</h1>
       }
 
       // get summary
