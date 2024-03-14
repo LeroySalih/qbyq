@@ -227,61 +227,61 @@ const Page = async ({params}: {params: {code: string}}) => {
     }
     
     const summary = await getSummary(transcript);
-    // const questions = await getQuestions(transcript);
+    const questions = await getQuestions(transcript);
 
     //const summary = await getSummaryMock(transcript);
     //const questions = await getQuestionsMock(transcript);
 
-    //const supabase = createSupabaseServerClient(false);
+    const supabase = createSupabaseServerClient(false);
 
-    //if (!supabase)
-    //  return <h1>Error creating supabase</h1>
+    if (!supabase)
+      return <h1>Error creating supabase</h1>
 
-    //const {data:pageData, error: pageError} = await supabase?.from("dqPage").select("id, summary").eq("id", code);
+    const {data:pageData, error: pageError} = await supabase?.from("dqPage").select("id, summary").eq("id", code);
 
-    //pageError && console.error(pageError);
+    pageError && console.error(pageError);
 
-    //let summaryText = ''
-    //if (pageData?.length == 0 && transcript)
-   // {
-   //   console.log("Updating Cache")
+    let summaryText = ''
+    if (pageData?.length == 0 && transcript)
+    {
+      console.log("Updating Cache")
       // get cache
-    //  const {transcript, error} = await getTranscript(url);
+      const {transcript, error} = await getTranscript(url);
 
-     // if (error || transcript === null){
-     //   return <h1>Error message: {error}</h1>
-     // }
+      if (error || transcript === null){
+        return <h1>Error message: {error}</h1>
+      }
 
-      // get summary
-     // summaryText = await getSummary(transcript) || "";
-     // console.log("Updating");
-      // cache to database
-     // const {data:insertData, error: insertError} = await supabase?.from("dqPage").insert({id: code, summary: summaryText});
-    //} else {
-    //  console.log("Using from cache")
-     // summaryText = pageData && pageData[0].summary;
-    //}
+     // get summary
+     summaryText = await getSummary(transcript) || "";
+     console.log("Updating");
+     // cache to database
+     const {data:insertData, error: insertError} = await supabase?.from("dqPage").insert({id: code, summary: summaryText});
+    } else {
+      console.log("Using from cache")
+      summaryText = pageData && pageData[0].summary;
+    }
 
     //attempt to load questions for page
-    //const {data: questionsData, error: questionsError} = await supabase?.from("dqQuestions").select("id, question_text, choices, correct_answer").eq("pageId", code);
+    const {data: questionsData, error: questionsError} = await supabase?.from("dqQuestions").select("id, question_text, choices, correct_answer").eq("pageId", code);
 
-    //questionsError && console.error(questionsError);
+    questionsError && console.error(questionsError);
 
-    //if (questionsData && questionsData.length == 0 && transcript != null){
+    if (questionsData && questionsData.length == 0 && transcript != null){
 
-    //  console.log("No questions found in cache, updating...")
-    //  const qData = await getQuestions(transcript);
+      console.log("No questions found in cache, updating...")
+      const qData = await getQuestions(transcript);
 
       //@ts-ignore
-    //  const updateObj = qData.questions.map((q, i) => ({pageId: code, question_text: q, choices: qData.choices[i], correct_answer: qData.correct_answers[i]}));
-    //  console.log(updateObj)
-    //  const {data: insertQuestionData, error: insertQuestionError} = await supabase?.from("dqQuestions").insert(updateObj);
+      const updateObj = qData.questions.map((q, i) => ({pageId: code, question_text: q, choices: qData.choices[i], correct_answer: qData.correct_answers[i]}));
+      console.log(updateObj)
+      const {data: insertQuestionData, error: insertQuestionError} = await supabase?.from("dqQuestions").insert(updateObj);
 
-    //  insertQuestionError && console.error(insertQuestionError);
+      insertQuestionError && console.error(insertQuestionError);
 
-    //  revalidatePath(`/learn/gpt/${code}`);
+      revalidatePath(`/learn/gpt/${code}`);
 
-    //}
+    }
 
 
 
@@ -295,7 +295,7 @@ const Page = async ({params}: {params: {code: string}}) => {
     </iframe>
     </div>
     <pre>{summary}</pre>
-
+    <pre>{JSON.stringify(questionsData, null, 2)}</pre>
     <div className={styles.transcript}>{transcript}</div>
     
     <div>
