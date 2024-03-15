@@ -160,57 +160,57 @@ export type Database = {
           owner?: string
           questionId?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "dqAnswers_questionId_fkey"
-            columns: ["questionId"]
-            isOneToOne: false
-            referencedRelation: "dqQuestions"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
+      }
+      dqPage: {
+        Row: {
+          created_at: string
+          id: string
+          summary: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          summary?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          summary?: string | null
+        }
+        Relationships: []
       }
       dqQuestions: {
         Row: {
-          correctAnswer: Json | null
+          choices: string[]
+          correct_answer: string
           created_at: string
-          createdBy: string | null
           id: number
-          questionData: Json | null
-          questionType: number | null
-          specItemId: number | null
+          pageId: string
+          question_text: string
         }
         Insert: {
-          correctAnswer?: Json | null
+          choices: string[]
+          correct_answer: string
           created_at?: string
-          createdBy?: string | null
           id?: number
-          questionData?: Json | null
-          questionType?: number | null
-          specItemId?: number | null
+          pageId: string
+          question_text: string
         }
         Update: {
-          correctAnswer?: Json | null
+          choices?: string[]
+          correct_answer?: string
           created_at?: string
-          createdBy?: string | null
           id?: number
-          questionData?: Json | null
-          questionType?: number | null
-          specItemId?: number | null
+          pageId?: string
+          question_text?: string
         }
         Relationships: [
           {
-            foreignKeyName: "dqQuestions_questionType_fkey"
-            columns: ["questionType"]
+            foreignKeyName: "public_dqQuestions_pageId_fkey"
+            columns: ["pageId"]
             isOneToOne: false
-            referencedRelation: "dqQuestionType"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dqQuestions_specItemId_fkey"
-            columns: ["specItemId"]
-            isOneToOne: false
-            referencedRelation: "SpecItem"
+            referencedRelation: "dqPage"
             referencedColumns: ["id"]
           }
         ]
@@ -855,6 +855,7 @@ export type Database = {
           notes: string
           publicUrl: string
           status: string
+          tech_notes: string | null
           userid: string
         }
         Insert: {
@@ -866,6 +867,7 @@ export type Database = {
           notes?: string
           publicUrl: string
           status?: string
+          tech_notes?: string | null
           userid?: string
         }
         Update: {
@@ -877,12 +879,30 @@ export type Database = {
           notes?: string
           publicUrl?: string
           status?: string
+          tech_notes?: string | null
           userid?: string
         }
         Relationships: []
       }
     }
     Views: {
+      vw_clas_lists: {
+        Row: {
+          familyName: string | null
+          firstName: string | null
+          pupilId: string | null
+          tag: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       vw_duplicate_pupil_marks: {
         Row: {
           count: number | null
@@ -1001,19 +1021,21 @@ export type Database = {
         }
         Relationships: []
       }
-      vw_wq_work_queue: {
+      vw_wq_tickets: {
         Row: {
           complete_date: string | null
           created_at: string | null
           familyName: string | null
           filePath: string | null
           firstName: string | null
+          id: number | null
           isAdmin: boolean | null
           isTech: boolean | null
           machine: string | null
           notes: string | null
           publicUrl: string | null
           status: string | null
+          tech_notes: string | null
           userid: string | null
         }
         Relationships: []
