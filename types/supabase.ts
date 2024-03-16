@@ -74,6 +74,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
           }
         ]
       }
@@ -116,6 +123,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassPapers_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
           },
           {
             foreignKeyName: "ClassPapers_paperId_fkey"
@@ -166,51 +180,85 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          summary: string | null
+          specItemId: number
+          summary: string
+          transcript: string
         }
         Insert: {
           created_at?: string
           id: string
-          summary?: string | null
+          specItemId: number
+          summary: string
+          transcript: string
         }
         Update: {
           created_at?: string
           id?: string
-          summary?: string | null
+          specItemId?: number
+          summary?: string
+          transcript?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_dqPage_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "SpecItem"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       dqQuestions: {
         Row: {
           choices: string[]
+          code: string | null
           correct_answer: string
           created_at: string
+          createdBy: string | null
           id: number
-          pageId: string
           question_text: string
+          specItemId: number | null
         }
         Insert: {
           choices: string[]
+          code?: string | null
           correct_answer: string
           created_at?: string
+          createdBy?: string | null
           id?: number
-          pageId: string
           question_text: string
+          specItemId?: number | null
         }
         Update: {
           choices?: string[]
+          code?: string | null
           correct_answer?: string
           created_at?: string
+          createdBy?: string | null
           id?: number
-          pageId?: string
           question_text?: string
+          specItemId?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "public_dqQuestions_pageId_fkey"
-            columns: ["pageId"]
+            foreignKeyName: "public_dqQuestions_createdBy_fkey"
+            columns: ["createdBy"]
             isOneToOne: false
-            referencedRelation: "dqPage"
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "SpecItem"
             referencedColumns: ["id"]
           }
         ]
@@ -359,6 +407,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
           }
         ]
       }
@@ -513,6 +568,13 @@ export type Database = {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           },
@@ -600,6 +662,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "QPAnswer_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
           }
         ]
       }
@@ -638,6 +707,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Questions_PaperId_fkey"
+            columns: ["PaperId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
           },
           {
             foreignKeyName: "Questions_PaperId_fkey"
@@ -791,6 +867,13 @@ export type Database = {
             foreignKeyName: "Tasks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           }
@@ -835,6 +918,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
           },
           {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
@@ -886,7 +976,7 @@ export type Database = {
       }
     }
     Views: {
-      vw_clas_lists: {
+      vw_class_lists: {
         Row: {
           familyName: string | null
           firstName: string | null
@@ -900,6 +990,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
           }
         ]
       }
@@ -923,6 +1020,13 @@ export type Database = {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
           },
@@ -939,6 +1043,70 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["q_id"]
+          }
+        ]
+      }
+      vw_marks_for_papers_by_tag: {
+        Row: {
+          familyName: string | null
+          firstName: string | null
+          paperId: number | null
+          pupilId: string | null
+          sum: number | null
+          tag: string | null
+          userId: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Profile_id_fkey"
+            columns: ["pupilId"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          }
+        ]
+      }
+      vw_papers_for_classes: {
+        Row: {
+          availableFrom: string | null
+          completeBy: string | null
+          markBy: string | null
+          month: string | null
+          paper: string | null
+          paperId: number | null
+          specId: number | null
+          tag: string | null
+          title: string | null
+          year: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -1054,6 +1222,18 @@ export type Database = {
           tag: string
           specitem_title: string
           questiondatacount: number
+        }[]
+      }
+      dq_loadnextquestionbycode: {
+        Args: {
+          _code: string
+          _owner: string
+        }
+        Returns: {
+          id: number
+          question_text: string
+          choices: string[]
+          correct_answer: string
         }[]
       }
       dq_loadnextquestionbyspecitem: {
