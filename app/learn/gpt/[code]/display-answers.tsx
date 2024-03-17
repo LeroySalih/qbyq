@@ -4,14 +4,15 @@ import supabase from "app/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 import styles from "./display-answers.module.css";
-import { Paper } from "@mui/material";
+import { Paper, Button } from "@mui/material";
 
 type Answer = { id: string; created_at: string, isCorrect: boolean | null; }
 type Answers = Answer[] | null;
 
-const DisplayAnswers = () => {
+const DisplayAnswers = ({userId}: {userId: string | undefined}) => {
 
     const [answers, setAnswers] = useState<Answers>(null);
+    const [correctScore, setCorrectScore] = useState<number | null>(null);
 
     const loadAnswers = async () => {
 
@@ -25,7 +26,23 @@ const DisplayAnswers = () => {
 
         console.log("Answers", data);
 
+        const correctCount = data?.filter((a) => a.isCorrect).length || 0;
+        
+        setCorrectScore(data && data.length > 0 ? correctCount / data?.length: 0)
+
+        // @ts-ignore
         data && setAnswers(data);
+    }
+
+    const handleResetAnswers = async () =>{
+
+        
+        const {error} = await supabase.from("dqAnswers").delete()
+                                .eq("owner", userId!)
+                                .gt("created_at", "2024-03-17 00:00:00");
+
+        error && console.error(error);
+
     }
 
     useEffect (()=> {
@@ -49,20 +66,32 @@ const DisplayAnswers = () => {
             channelA.unsubscribe();
         }
         
-    }, [])
+    }, []);
 
     return <Paper>
         <h1>Todays Answers</h1>
-        <div className={styles.last10Answers}>
-            <div>Last 10 answers</div>
+        <div className={styles.dashboard}>
+        <div className={styles.answersComponent}>
+            <div className={styles.last10AnswerTitle}>Last 10 answers today.</div>
+            
             <div className={styles.container}>
             {
                 answers && answers
                                 .sort((a, b) => a.created_at > b.created_at ? 1 : -1)
                                 .slice(-10)
-                                .map((a,i) => <div className={a.isCorrect? styles.correct : styles.incorrect}></div>)
+                                .map((a,i) => <div key={i} className={a.isCorrect? styles.correct : styles.incorrect}></div>)
             }
             </div>
+        </div>
+        <div  className={styles.answersComponent}>
+            {answers?.length} questions answered.
+        </div>
+        <div  className={styles.answersComponent}>
+            Correct Rate: <div>{((correctScore || 0) * 100)?.toFixed()}%</div>
+        </div>
+        <div>
+            <Button onClick={handleResetAnswers} variant="contained">Reset</Button>
+        </div>
         </div>
     </Paper>
 }

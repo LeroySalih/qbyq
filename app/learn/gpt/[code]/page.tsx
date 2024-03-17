@@ -35,6 +35,10 @@ const Page = async ({params}: {params: {code: string}}) => {
 
   const supabase = createSupabaseServerClient(false);
 
+  const userResponse = await supabase?.auth.getUser()
+
+  const {data: {user}} = userResponse || {data: {user: null}}; 
+  
   const getSummary = async (code: string) => {
     
     if (!supabase) {
@@ -68,7 +72,7 @@ const Page = async ({params}: {params: {code: string}}) => {
       { //@ts-ignore 
       }
       <DisplayVideo code={code} summary={summary}/>
-      <DisplayAnswers />
+      <DisplayAnswers userId={user?.id}/>
       { //@ts-ignore 
       <DisplayQuestion code={code} />
       }
