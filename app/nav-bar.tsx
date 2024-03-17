@@ -58,7 +58,7 @@ const NavBar = () => {
         setUser(user);
 
         // refresh the current page in case it's a server side page.
-        router.refresh();
+        // router.refresh();
 
       } else {
         setUser(null);

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import supabase from "app/utils/supabase/client";
 import {AuthChangeEvent, Session, User} from "@supabase/supabase-js"
 import { QueryStatsOutlined } from "@mui/icons-material";
+import DisplayAnswers from "./display-answers";
 
 
 const DisplayQuestion = ({code} : {code: string}) => {
@@ -170,11 +171,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
               <div className={styles.question_text}>
                 {question && question.question_text}
               </div>
-
-              <div>Selected:{selected}</div>
-              <div>Selected Text: {selectedText}</div>
-              <div>Correct Answer: {question?.correct_answer}</div>
-              <div>UserId: {user?.id}</div>
+              
               <Grid container spacing={3} className={styles.choices}>
               {question && question.choices.map ((c: string, i: number) => <Grid key={i} item xs={12} md={6} lg={3}> 
                 <div className={`${getHoverState()} ${getAnsweredStyles(i)}`} onClick={() => handleClick(i)}>
@@ -185,7 +182,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
       
             </div>
             <div>
-              <Button onClick={handleNextQuestion}>Next Question</Button>
+              {selected != null && <Button onClick={handleNextQuestion}>Next Question</Button>}
             </div>
             </>}
         </Paper>

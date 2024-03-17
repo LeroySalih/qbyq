@@ -16,6 +16,7 @@ import { ReactElement } from 'react';
 
 import DisplayQuestion from "./display-question";
 import DisplayVideo from "./display-video";
+import DisplayAnswers from "./display-answers";
 
 //const model = "gpt-3.5-turbo"
 const model = "gpt-4"
@@ -67,8 +68,8 @@ const Page = async ({params}: {params: {code: string}}) => {
       { //@ts-ignore 
       }
       <DisplayVideo code={code} summary={summary}/>
+      <DisplayAnswers />
       { //@ts-ignore 
-
       <DisplayQuestion code={code} />
       }
     </div>
