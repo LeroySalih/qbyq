@@ -5,21 +5,27 @@ import { useEffect, useState } from "react";
 
 import styles from "./display-answers.module.css";
 import { Paper, Button } from "@mui/material";
+import { DateTime } from "luxon";
 
 type Answer = { id: string; created_at: string, isCorrect: boolean | null; }
 type Answers = Answer[] | null;
 
-const DisplayAnswers = ({userId}: {userId: string | undefined}) => {
+
+// todo - add a report button
+// todo - add a class report to see what pupils have completed between 2 dates
+
+const DisplayAnswers = ({userId, code}: {userId: string | undefined, code: string}) => {
 
     const [answers, setAnswers] = useState<Answers>(null);
     const [correctScore, setCorrectScore] = useState<number | null>(null);
 
     const loadAnswers = async () => {
 
-        const {data, error} = await supabase.from ("dqAnswers")
-                                    .select("id, created_at, isCorrect")
-                                    .gt("created_at","2024-03-17 00:00:00")
-                                    
+        const {data, error} = await supabase.from ("dq_vw_answers")
+                                    .select("id, created_at, isCorrect, code")
+                                    .eq("code", code)
+                                    .gt("created_at",DateTime.now().startOf('day').toISO())
+                                                                        
                                     
 
         error && console.error(error);
@@ -39,7 +45,7 @@ const DisplayAnswers = ({userId}: {userId: string | undefined}) => {
         
         const {error} = await supabase.from("dqAnswers").delete()
                                 .eq("owner", userId!)
-                                .gt("created_at", "2024-03-17 00:00:00");
+                                .gt("created_at",DateTime.now().startOf('day').toISO());
 
         error && console.error(error);
 
@@ -68,7 +74,7 @@ const DisplayAnswers = ({userId}: {userId: string | undefined}) => {
         
     }, []);
 
-    return <Paper>
+    return <Paper className={styles.answerContainer}>
         <h1>Todays Answers</h1>
         <div className={styles.dashboard}>
         <div className={styles.answersComponent}>

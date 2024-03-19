@@ -17,6 +17,7 @@ import { ReactElement } from 'react';
 import DisplayQuestion from "./display-question";
 import DisplayVideo from "./display-video";
 import DisplayAnswers from "./display-answers";
+import Link from 'next/link';
 
 //const model = "gpt-3.5-turbo"
 const model = "gpt-4"
@@ -68,11 +69,11 @@ const Page = async ({params}: {params: {code: string}}) => {
   try {
     
     return <div className={styles.layout}>
-      <h1>Item</h1>
+      <Link href="/learn/gpt">Back to List</Link>
       { //@ts-ignore 
       }
       <DisplayVideo code={code} summary={summary}/>
-      <DisplayAnswers userId={user?.id}/>
+      <DisplayAnswers userId={user?.id} code={code}/>
       { //@ts-ignore 
       <DisplayQuestion code={code} />
       }

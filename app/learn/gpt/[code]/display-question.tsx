@@ -16,6 +16,8 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [question, setQuestion] = useState<Question | null>(null);
+    const [answerId, setAnswerId] = useState<string | null>(null);
+
     const [user, setUser] = useState<User | null>(null);
 
     const [selected, setSelected] = useState<number | null>(null);
@@ -29,6 +31,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
       setSelected(null);
       setSelectedText(null);
+      setAnswerId(null);
 
       if (!user) {
         return;
@@ -74,6 +77,8 @@ const DisplayQuestion = ({code} : {code: string}) => {
       error && console.error(error);
 
       console.log("Insert Response", data)
+      
+      setAnswerId(data ? data[0].id : null);
 
     }
 
@@ -92,6 +97,17 @@ const DisplayQuestion = ({code} : {code: string}) => {
         // no user (logged out), so redirect to home
         // router.push(`/`);
       }
+    }
+
+    const handleReportClicked = async () => {
+      if (!answerId) return;
+
+      const {data, error} = await supabase.from("dqAnswers").update({flag: true}).eq("id", answerId).select("id");
+
+      error && console.error(error);
+
+      console.log("Report set on ", data && data[0].id);
+
     }
 
     useEffect(()=>{
@@ -182,7 +198,10 @@ const DisplayQuestion = ({code} : {code: string}) => {
       
             </div>
             <div>
-              {selected != null && <Button onClick={handleNextQuestion}>Next Question</Button>}
+              {selected != null && <>
+                <Button onClick={handleReportClicked}>Report</Button>
+                <Button onClick={handleNextQuestion}>Next Question</Button>
+                </>}
             </div>
             </>}
         </Paper>

@@ -146,6 +146,7 @@ export type Database = {
           attempts: number
           correct: number
           created_at: string | null
+          flag: boolean | null
           id: string
           isCorrect: boolean | null
           likeState: number
@@ -157,6 +158,7 @@ export type Database = {
           attempts?: number
           correct?: number
           created_at?: string | null
+          flag?: boolean | null
           id?: string
           isCorrect?: boolean | null
           likeState?: number
@@ -168,6 +170,7 @@ export type Database = {
           attempts?: number
           correct?: number
           created_at?: string | null
+          flag?: boolean | null
           id?: string
           isCorrect?: boolean | null
           likeState?: number
@@ -182,6 +185,7 @@ export type Database = {
           id: string
           specItemId: number
           summary: string
+          title: string
           transcript: string
         }
         Insert: {
@@ -189,6 +193,7 @@ export type Database = {
           id: string
           specItemId: number
           summary: string
+          title?: string
           transcript: string
         }
         Update: {
@@ -196,6 +201,7 @@ export type Database = {
           id?: string
           specItemId?: number
           summary?: string
+          title?: string
           transcript?: string
         }
         Relationships: [
@@ -976,6 +982,22 @@ export type Database = {
       }
     }
     Views: {
+      dq_vw_answers: {
+        Row: {
+          answer: Json | null
+          attempts: number | null
+          code: string | null
+          correct: number | null
+          created_at: string | null
+          flag: boolean | null
+          id: string | null
+          isCorrect: boolean | null
+          likeState: number | null
+          owner: string | null
+          questionId: number | null
+        }
+        Relationships: []
+      }
       vw_class_lists: {
         Row: {
           familyName: string | null
