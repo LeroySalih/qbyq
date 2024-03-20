@@ -48,9 +48,10 @@ const Page = async ({params}: {params: {code: string}}) => {
     }
     try {
 
-      const {data: summary, error} = await supabase.from("dqPage").select("id, summary, specItemId").maybeSingle();
+      const {data: summary, error} = await supabase.from("dqPage").select("id, summary, specItemId").eq("id", code).maybeSingle();
 
       if (error) {
+        console.log("Error::getSunmmary", error.message)
         throw(error);
       }
 

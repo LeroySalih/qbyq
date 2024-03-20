@@ -24,11 +24,12 @@ const DisplayAnswers = ({userId, code}: {userId: string | undefined, code: strin
         const {data, error} = await supabase.from ("dq_vw_answers")
                                     .select("id, created_at, isCorrect, code")
                                     .eq("code", code)
+                                    .eq("owner", userId || "not set")
                                     .gt("created_at",DateTime.now().startOf('day').toISO())
                                                                         
                                     
 
-        error && console.error(error);
+        error && console.error("loadAnswers", error);
 
         console.log("Answers", data);
 
