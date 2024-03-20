@@ -20,7 +20,6 @@ const RootLayout = ({children} : {children: React.ReactNode}) => {
         <body>
           <NavBar />
           {children}
-          <div className={styles.footer}>1</div>
         </body>
     </html>
     

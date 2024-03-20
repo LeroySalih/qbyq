@@ -9,6 +9,7 @@ type PagePropsType = {
         paperId: string
        } 
 }
+
 const PageForm = async ({params}: PagePropsType) => {
 
     const {paperId} = params;
@@ -49,7 +50,8 @@ const PageForm = async ({params}: PagePropsType) => {
             
             </div>
             <DisplayTabs paperId={parseInt(paperId)}/>
-    </div>  
+        </div>  
     </>
 }
+
 export default PageForm;

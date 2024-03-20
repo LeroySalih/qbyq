@@ -8,6 +8,7 @@ import supabase from "app/utils/supabase/client";
 import { Database } from 'types/supabase';
 import styles from "./display-resources.module.css";
 import { DateTime } from 'luxon';
+import { Grid } from '@mui/material';
 
 const DisplayResources = () => {
 
@@ -96,21 +97,25 @@ const DisplayResources = () => {
     
     return <>
             <div className={styles.container}>
-                
-                <div className={styles.item}>{
-                    // display url to Paper 
-                    //@ts-ignore
-                    DateTime.fromISO(paper?.availableFrom) <= DateTime.now() && qPaperUrl && <a  target="new" href={qPaperUrl}>{paper?.Papers?.qPaperLabel}</a>
-                }
-                </div>
-               
-                <div className={styles.item}>
-                {
-                    //@ts-ignore
-                    DateTime.fromISO(paper?.completeBy) <= DateTime.now() && aPaperUrl && <a target="new" href={aPaperUrl}>{paper?.Papers?.aPaperLabel}</a>
-                }
-                </div>
-                </div>
+                <Grid container>
+                    <Grid item xs={12} md={6}>
+                        <div className={styles.item}>{
+                            // display url to Paper 
+                            //@ts-ignore
+                            DateTime.fromISO(paper?.availableFrom) <= DateTime.now() && qPaperUrl && <a  target="new" href={qPaperUrl}>{paper?.Papers?.qPaperLabel}</a>
+                        }
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <div className={styles.item}>
+                            {
+                                //@ts-ignore
+                                DateTime.fromISO(paper?.completeBy) <= DateTime.now() && aPaperUrl && <a target="new" href={aPaperUrl}>{paper?.Papers?.aPaperLabel}</a>
+                            }
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
                 
            </>
 }

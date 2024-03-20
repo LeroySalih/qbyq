@@ -5,6 +5,7 @@ import {  SpecItem,  PupilMarks, Question} from "types/alias";
 //import {InputNumber} from 'primereact/inputnumber';
 import styles from './display-question.module.css';
 import TextField from '@mui/material/TextField';
+import {Grid} from "@mui/material";
 
 
 type DisplayQuestionProps = {
@@ -83,26 +84,41 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
         // console.log("question", question);
     }, [question])
 
-    return <div className="question">
-        <div className="question-number">{question.question_number}</div>
-        <TextField
-            variant='outlined' 
-            className={`${styles['p-inputtext']} input ${fieldData.isValid === false && 'p-invalid'}`}
-            name={question.id.toString()} 
-            value={value}
-            id={question.id.toString()} 
+    return <div>
+        <Grid container>
+            <Grid item xs={12} md={3}>
+                <div  className="question-number">{question.question_number}</div>
+            </Grid>
+            <Grid item xs={12} md={3}>
+                <TextField
+                    variant='outlined' 
+                    className={`${styles['p-inputtext']} input ${fieldData.isValid === false && 'p-invalid'}`}
+                    name={question.id.toString()} 
+                    value={value}
+                    id={question.id.toString()} 
+                    
+                    ref={textInput}
+                    onChange={(e)=>onChange(question.id, parseInt(e.target.value) || 0)}
+                    onBlur={handleOnBlur}/>
+            </Grid>
+            <Grid  item xs={12} md={3}>
+                <div className="question-marks">
+                    out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}
+                </div>
+            </Grid>
             
-            ref={textInput}
-            onChange={(e)=>onChange(question.id, parseInt(e.target.value) || 0)}
-            onBlur={handleOnBlur}/>
-        <div className="question-marks">
-            out of {question.marks} {question.marks == 1 ? 'mark' : 'marks'}
-        </div>
+            <Grid xs={12} md={3}>
+                <div className="specItemTag">
+                {specItem?.tag} - {specItem?.title}({question.question_order})
+                </div>
+            </Grid>
+
+            <Grid xs={12} className="errorMessage">
+                <div>{fieldData.errorMessage}</div>
+            </Grid>
+        </Grid>
         
-        <div className="specItemTag">{specItem?.tag}</div>
-        <div className="specItemTitle">{specItem?.title}({question.question_order})</div>
-        
-        <div></div><div className="errorMessage">{fieldData.errorMessage}</div>
+
         <style jsx={true}>{`
         
             .question {
@@ -111,9 +127,10 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
             }
 
             .question-number {
-                text-align : right;
+                text-align : center;
                 margin-right: 1.2rem;
                 align-self:center;
+                justify-items: center;
             }
 
             .input {
@@ -149,7 +166,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
             .specItemTag {
                 color: silver;
                 font-size: 0.8rem;
-                text-align: right;
+                text-align: left;
                 padding-right: 1rem;
                 margin-bottom: 1rem;
 
