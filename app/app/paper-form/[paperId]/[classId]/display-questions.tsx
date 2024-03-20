@@ -9,6 +9,7 @@ import { User} from "@supabase/supabase-js";
 import {  PupilMarks, Question,} from "types/alias";
 import Loading from "components/loading";
 import { setDefaultResultOrder } from "dns";
+import UploadFile from "./upload-file";
 
 
 const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
@@ -188,6 +189,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
     }
 
     return <>
+    
     {sumMarks()}
     {
         paper && paper?.Questions?.sort((a:Question, b:Question) => a.question_order! > b?.question_order! ? 1 : -1)

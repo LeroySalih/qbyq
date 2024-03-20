@@ -2,6 +2,7 @@ import DisplayTabs from './display-tabs';
 
 import { createSupabaseServerClient } from 'app/utils/supabase/server';
 import DisplayResources from './display-resources';
+import UploadFile from './upload-file';
 
 type PagePropsType = {
        params : {
@@ -45,6 +46,7 @@ const PageForm = async ({params}: PagePropsType) => {
             <div style={{display: "flex", flexDirection:"row", alignItems:"center"}}>
             <h3>{paper?.year} - {paper?.month}</h3>
             <DisplayResources />
+            
             </div>
             <DisplayTabs paperId={parseInt(paperId)}/>
     </div>  

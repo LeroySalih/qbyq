@@ -13,6 +13,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { UserResponse } from '@supabase/supabase-js';
+import UploadFile from './upload-file';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -98,9 +99,7 @@ const DisplayTabs = ({paperId} : {paperId:number}) => {
         </TabPanel>
         
         <TabPanel value={value} index={1}>
-        { // ts-expect-error Server Component 
-                          // <DisplayFiles paperId={parseInt(paperId)}/> 
-                        }
+            <UploadFile paperId={paperId} user={user}/>
         </TabPanel>
     </>
 }

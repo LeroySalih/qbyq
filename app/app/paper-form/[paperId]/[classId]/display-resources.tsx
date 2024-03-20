@@ -84,6 +84,7 @@ const DisplayResources = () => {
         console.log("Paper Label",qPaperLabel );
 
         if (qPaperLabel) {
+
             loadResourceUrl(paperId, qPaperLabel, setQPaperUrl);
         }
 
@@ -95,6 +96,7 @@ const DisplayResources = () => {
     
     return <>
             <div className={styles.container}>
+                
                 <div className={styles.item}>{
                     // display url to Paper 
                     //@ts-ignore
