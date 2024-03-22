@@ -1,0 +1,71 @@
+.layout {
+    width: 80vw;
+    margin: auto;
+}
+
+.section {
+    background-color: white;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.sectionTitle {
+    font-family: 'Oswald';
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;   
+}
+
+.spacer {
+    color: silver;
+}
+
+.linkTable {
+    display:grid;
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+.displayLinks {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.answerGrid {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border: solid 1px silver;
+    border-radius: 0.2rem;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    width: 150px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.todayCorrect {
+    color: darkseagreen;
+    font-weight:bold;
+    font-size: 1.3rem;
+}   
+
+.todayIncorrect {
+    color: red;
+    font-weight:bold;
+    font-size: 1.3rem;
+}
+
+.allCorrect {
+    color: green;
+    font-weight:bold;
+    font-size: 1.3rem;
+}
+
+.allIncorrect {
+    color: darkred;
+    font-weight:bold;
+    font-size: 1.3rem;
+}

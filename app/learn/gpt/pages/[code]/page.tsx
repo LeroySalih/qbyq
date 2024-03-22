@@ -70,7 +70,7 @@ const Page = async ({params}: {params: {code: string}}) => {
   try {
     
     return <div className={styles.layout}>
-      <Link href="/learn/gpt">Back to List</Link>
+      <Link href="/learn/gpt/4/1.2">Back to List</Link>
       { //@ts-ignore 
       }
       <DisplayVideo code={code} summary={summary}/>

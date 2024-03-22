@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import styles from "./display-answers.module.css";
 import { Paper, Button } from "@mui/material";
 import { DateTime } from "luxon";
+import { equal } from "assert";
 
 type Answer = { id: string; created_at: string, isCorrect: boolean | null; }
 type Answers = Answer[] | null;
@@ -31,7 +32,6 @@ const DisplayAnswers = ({userId, code}: {userId: string | undefined, code: strin
 
         error && console.error("loadAnswers", error);
 
-        console.log("Answers", data);
 
         const correctCount = data?.filter((a) => a.isCorrect).length || 0;
         
@@ -46,6 +46,7 @@ const DisplayAnswers = ({userId, code}: {userId: string | undefined, code: strin
         
         const {error} = await supabase.from("dqAnswers").delete()
                                 .eq("owner", userId!)
+                                .eq("code", code)
                                 .gt("created_at",DateTime.now().startOf('day').toISO());
 
         error && console.error(error);
@@ -65,7 +66,7 @@ const DisplayAnswers = ({userId, code}: {userId: string | undefined, code: strin
             schema: 'public',
             table: 'dqAnswers'
         },
-        (payload) => {console.log(payload); loadAnswers();}
+        (payload) => { loadAnswers();}
         )
         .subscribe()
 

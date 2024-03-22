@@ -25,7 +25,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
     const loadNextQuestion = async (code: string) => {
 
-      console.log("Loading question");
+     
 
       setIsLoading(true);
 
@@ -37,14 +37,13 @@ const DisplayQuestion = ({code} : {code: string}) => {
         return;
       }
 
-      console.log(code, user.id)
+
 
       //const {data, error} = await supabase.from("dqQuestions").select("id, question_text, choices, correct_answer").eq("code", code).limit(1);
       const {data, error} = await supabase.rpc("dq_loadnextquestionbycode", {_code: code, _owner: user.id})
       
       error  && console.error(error);
-      console.log("Question: ", data);
-
+      
       //@ts-ignore
       setQuestion(data[0]);      
     
@@ -75,8 +74,6 @@ const DisplayQuestion = ({code} : {code: string}) => {
       }).select("id");
 
       error && console.error(error);
-
-      console.log("Insert Response", data)
       
       setAnswerId(data ? data[0].id : null);
 
@@ -149,7 +146,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
         return;
       }
 
-      console.log("Option ", index, "clicked");
+
       saveResponse(index);
       setSelected(index);
     }
