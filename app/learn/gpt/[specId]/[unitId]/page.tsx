@@ -36,7 +36,9 @@ type Sections = {
 type Link = {}
 type Links = Link[] | null;
 
-const Page = async ({params}: {params: {specId: number, unitId: number}}) => {
+const Page = async (
+    {params, searchParams}: {params: {specId: number, unitId: number}, searchParams : {specId : number | undefined }}
+    ) => {
 
     const {specId, unitId} = params;
 
@@ -99,7 +101,7 @@ const Page = async ({params}: {params: {specId: number, unitId: number}}) => {
     
         <SpecSelector specId={specId} unitId={unitId} />
         {data && data.length == 0 && <div>No links found</div>}
-        <DisplayLinks sections={sections} answers={answers}/>        
+        <DisplayLinks sections={sections} answers={answers} specId={specId}/>        
         
         </div>
 }
@@ -130,7 +132,7 @@ const getAnswerData = (code: string, answers: Answers) => {
 
 
 
-const DisplayLinks = ({sections, answers} : {sections: Sections, answers: Answers})=> {
+const DisplayLinks = ({sections, answers, specId} : {sections: Sections, answers: Answers, specId: number})=> {
 
     if (!sections)
     {
@@ -143,7 +145,7 @@ const DisplayLinks = ({sections, answers} : {sections: Sections, answers: Answer
                 <div className={styles.sectionTitle}>{k} - {sections[k].title}</div>
                 {sections && sections[k]?.items?.map((item:Item, index: number) => <>
                     <div className={styles.displayLinks}>
-                        <Link href={`/learn/gpt/pages/${item.code}`}>{item.title}</Link>
+                        <Link href={`/learn/gpt/pages/${item.code}?specid=${specId}`}>{item.title}</Link>
                         <DisplayAnswers code={item.code} answers={answers} />
                     </div>
                 </>)}

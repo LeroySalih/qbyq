@@ -30,7 +30,7 @@ const openai = new OpenAI({
 
 
 
-const Page = async ({params}: {params: {code: string}}) => {
+const Page = async ({params, searchParams}: {params: {code: string}, searchParams: {specid: number}}) => {
 
   const {code} = params;
 
@@ -64,13 +64,15 @@ const Page = async ({params}: {params: {code: string}}) => {
 
   }
 
+
+
   const {summary, error} = await getSummary(code);
   
 
   try {
     
     return <div className={styles.layout}>
-      <Link href="/learn/gpt/4/1.2">Back to List</Link>
+      <Link href={`/learn/gpt/${(searchParams && searchParams.specid) || 2}/1`}>Back to List</Link>
       { //@ts-ignore 
       }
       <DisplayVideo code={code} summary={summary}/>
