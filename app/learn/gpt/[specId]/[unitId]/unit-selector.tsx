@@ -71,7 +71,7 @@ const UnitSelector = ({specId, unitId} :  {specId:number, unitId: number}) => {
             {specs && specs.map((s,i)=><MenuItem key={i} value={s.id}>{s.title}</MenuItem>)}
         </Select>
         <Select  value={currentUnitId} onChange={(e) => handleSpecItemChange(e.target.value as number)}>
-            {units && units.map((u,i)=><MenuItem key={i} value={u.id!}>{u.title}</MenuItem>)}
+            {units && units.sort((a, b) => (a.title || "")> (b.title || "") ? 1 : -1).map((u,i)=><MenuItem key={i} value={u.id!}>{u.title}</MenuItem>)}
         </Select>
     </>
 

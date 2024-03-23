@@ -1,7 +1,7 @@
 import styles from "./page.module.css";
 import { createSupabaseServerClient } from "./utils/supabase/server";
 import { redirect } from 'next/navigation'
-
+import Dashboard from "./dashboard";
 
 const MainPage = async () => {
 
@@ -19,7 +19,8 @@ const MainPage = async () => {
 
   if (user) {
     console.log("User detected", user)
-    redirect(`/app/spec-report/${user.id}`);
+    //redirect(`/app/spec-report/${user.id}`);
+    return <Dashboard user={user}/>
   } else {
     return <>
     <h1>User not logged in.</h1>

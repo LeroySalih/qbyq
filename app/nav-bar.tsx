@@ -64,7 +64,7 @@ const NavBar = () => {
         setUser(null);
 
         // no user (logged out), so redirect to home
-        router.push(`/`);
+        router.refresh();
       }
     }
 

@@ -56,6 +56,10 @@ const Page = async ({params}: {params: {specId: number, unitId: number}}) => {
 
     specItemsError && console.error(specItemsError);
 
+    if (specItems == null || specItems.length == 0){
+        return <h1>No spec items found with a Unit Id {unitId}</h1>
+    }
+
     //@ts-ignore
     const specs = specItems.reduce((prev, curr) => {prev[curr?.Spec?.id] = curr.Spec?.title; return prev}, {})
 
@@ -92,8 +96,7 @@ const Page = async ({params}: {params: {specId: number, unitId: number}}) => {
     }, {})
 
     return <div className={styles.layout}>
-        
-        <h1>Links for {specId} {unitId}</h1>
+    
         <SpecSelector specId={specId} unitId={unitId} />
         {data && data.length == 0 && <div>No links found</div>}
         <DisplayLinks sections={sections} answers={answers}/>        
