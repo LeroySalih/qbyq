@@ -1,0 +1,14 @@
+.displayPupils {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap
+}
+
+.displayPupil {
+    border : silver 1px solid;
+    width: 300px;
+    margin: 1rem;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}

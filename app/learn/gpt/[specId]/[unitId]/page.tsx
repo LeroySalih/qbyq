@@ -141,7 +141,9 @@ const DisplayLinks = ({sections, answers, specId} : {sections: Sections, answers
 
     return <>
         {
-            sections && Object.keys(sections).map((k: string, i: number) => <div className={styles.section} key={i}>
+            sections && Object.keys(sections)
+                    .sort((a, b) => a > b ? 1 : -1)
+                    .map((k: string, i: number) => <div className={styles.section} key={i}>
                 <div className={styles.sectionTitle}>{k} - {sections[k].title}</div>
                 {sections && sections[k]?.items?.map((item:Item, index: number) => <>
                     <div className={styles.displayLinks}>

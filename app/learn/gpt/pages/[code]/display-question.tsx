@@ -1,7 +1,7 @@
 "use client"
 
 import {Paper, Grid, Button} from "@mui/material";
-import styles from "./page.module.css";
+// import styles from "./page.module.css";
 
 import {Question} from "./question-types";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import {AuthChangeEvent, Session, User} from "@supabase/supabase-js"
 import { QueryStatsOutlined } from "@mui/icons-material";
 import DisplayAnswers from "./display-answers";
 
+import styles from "./display-question.module.css"
 
 const DisplayQuestion = ({code} : {code: string}) => {
   
@@ -192,6 +193,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
                 </div>
                 </Grid>)}
               </Grid>
+              {question && <div className={styles.questionId}>question id:{question.id}</div>}
       
             </div>
             <div>
