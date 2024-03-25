@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { DateTime } from "luxon";
 
-const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket; }) => {
+const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket }) => {
 
     const {id, userid, publicUrl, filePath, machine, notes, firstName, familyName, complete_date, created_at, status, isAdmin, isTech, tech_notes} = ticket;
 
@@ -65,6 +65,7 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket;
     }
 
     return <div className={ styles.queueItem}>
+    
     <Grid container>
        <Grid item xs={12} md={4}>{machine}</Grid> 
        <Grid item xs={12} md={4}>{firstName} {familyName}</Grid>
@@ -72,7 +73,8 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket;
        <Grid item xs={12} md={6}>{notes}</Grid>
        <Grid item xs={12} md={6}>{tech_notes}</Grid>
        <Grid item xs={12} md={4}>
-        <a href="https://shiny-giggle-v6r5g9w9r43p6j7-3000.app.github.dev/api/handle-download/0d65c82d-e568-450c-a48a-1ca71151e80f/floorplan.jpeg" download={true}>file</a>
+        <a href={`/api/handle-download/${filePath}`} download={true}>file</a>
+        
        </Grid>
        <Grid item xs={1} md={4}>
         <select disabled={isSaving} value={ticketStatus} onChange={(e)=>setTicketStatus(e.target.value)}>

@@ -29,7 +29,7 @@ export async function GET(request: Request, {params} : {
     const response = new NextResponse(file.data)
 
     response.headers.set('content-type', file.data.type);
-    response.headers.append("content-disposition", `attachment; filename="${firstName}-${familyName}-${filepath})}"`)
+    response.headers.append("content-disposition", `attachment; filename="${firstName}-${familyName}-${filepath}"`)
 
     return response;
 }

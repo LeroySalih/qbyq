@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import CreateTicket from "./create-ticket";
 import { createSupabaseServerClient } from "app/utils/supabase/server";
 import Link from 'next/link';
-import DisplayQueueItem from "./display-queue-item";
+import DisplayQueueItems from "./display-queue-items";
 
 import {Ticket, Tickets, Profile} from "./types"
 import { Container, Grid } from "@mui/material";
@@ -77,12 +77,7 @@ const DisplayQueue = async ({profile} : {profile: Profile}) => {
     
     return <Container>
             <Grid>
-                
-               { data && data.map((ticket: Ticket, i: number) => (<Grid key={i}>
-                    <DisplayQueueItem  profile={profile} ticket={ticket}/>
-                    </Grid>)
-                    )
-               }
+               <DisplayQueueItems tickets={data} profile={profile} />
             </Grid>
             </Container>
 }
