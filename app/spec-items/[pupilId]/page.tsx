@@ -1,5 +1,6 @@
-import styles from "./layout.module.css";
+
 import {Paper, Grid} from "@mui/material";
+import styles from "./page.module.css";
 
 const Page = async ({params} : {params : {pupilId : string}}) => {
      const {pupilId} = params;

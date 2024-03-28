@@ -1,5 +1,10 @@
+import getHeader from "./header";
+
 const Page = async ({params} : {params : {pupilId : string}}) => {
     const {pupilId} = params;
-    return <h1>Header for {pupilId}</h1>
+
+    const header = await getHeader(pupilId);
+
+    return <>{header}</>
 }
-export default Page;
+export default Page;  
