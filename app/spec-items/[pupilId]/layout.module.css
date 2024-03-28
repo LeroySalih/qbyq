@@ -1,0 +1,19 @@
+.layout {
+    margin: auto;
+    width: 80vw;
+    padding: 1rem;
+}
+
+.sidebar {
+    margin-top :2rem;
+    padding: 1rem;
+}
+
+.mainPage {
+    margin-top :2rem;
+    padding: 1rem;
+}
+
+.link {
+    margin: 1rem;
+}
