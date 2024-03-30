@@ -63,7 +63,7 @@ const DisplayAnswers = (
     {answers: Answers, users: Users}
     ) => {
 
-    console.log("Answers", answers);
+
 
     const userAnswers = answers?.map((a) => ({...a, 
         //@ts-ignore
@@ -75,7 +75,6 @@ const DisplayAnswers = (
         Questions: null
     }));
 
-    console.log("userAnswers", userAnswers);
 
     let usersWithAnswers = new Set(answers?.map((a) => a.owner))
 

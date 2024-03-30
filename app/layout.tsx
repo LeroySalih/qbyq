@@ -7,10 +7,13 @@ import '@fontsource/roboto/700.css';
 
 import NavBar from "./nav-bar";
 import styles from "./layout.module.css"
+import {getUser} from "../lib/server";
 
-const RootLayout = ({children} : {children: React.ReactNode}) => {
+const RootLayout = async ({children} : {children: React.ReactNode}) => {
 
-  //console.log("Layout Running");
+  const user = await getUser();
+
+
   
   return (
     
@@ -18,7 +21,13 @@ const RootLayout = ({children} : {children: React.ReactNode}) => {
       <head />
         <body>
           <NavBar />
-          {children}
+          
+          <div className={styles.pageLayout}>
+            {children}
+          </div>
+          <div className={styles.footer}>
+          {user && user.id}
+          </div>
         </body>
     </html>
     

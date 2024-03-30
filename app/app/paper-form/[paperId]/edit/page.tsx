@@ -36,7 +36,7 @@ const EditPage = ({params}:PagePropsType) => {
 
             error && console.error(error);
 
-            // console.log("Paper is", data);
+            // // console.log("Paper is", data);
             // @ts-ignore
             setPaper(data)
         }

@@ -1,5 +1,5 @@
 
-import loadPaperQuestions from "../[classId]/[paperId]/enter-marks/load-paper-questions";
+import {loadPaperQuestions} from "../[classId]/[paperId]/enter-marks/load-paper-questions";
 
 const Page = async ({params} : {params : {pupilId : string, classId: number, paperId: number}}) => {
     const {pupilId, classId, paperId} = params;

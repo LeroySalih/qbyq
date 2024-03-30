@@ -1,4 +1,7 @@
 import supabase from "app/utils/supabase/client";
+import {User} from "@supabase/supabase-js";
+import {Profile} from "./types";
+
 
 export const getClassesForPupil = async (id: string) => {
 
@@ -8,14 +11,26 @@ export const getClassesForPupil = async (id: string) => {
             
 }
 
-export const getProfile = async (id: string) => {
+export const getProfile = async (id: string): Promise<Profile | null> => {
 
-    return await supabase.from("Profile")
-            .select()
+    const {data, error} = await supabase.from("Profile")
+            .select("id, firstName, familyName")
             .eq("id", id)
-            .single();
-            
+            .returns<Profile[]>()
+
+    if (error){
+        throw Error(error.message);
+        return null;
+    }
+
+    if(! data || data.length !== 1){
+        return null;
+    }
+
+    return data[0];
+                    
 }
+
 
 
 export const getAllPupilMarks = async (userId: string) => {
@@ -106,6 +121,9 @@ export type GetClassByTagResponseType = Awaited<ReturnType<typeof getClassByTag>
 export type GetAllSpecsType = Awaited<ReturnType<typeof getAllSpecs>>
 export type GetPaperType = Awaited<ReturnType<typeof getPaper>> 
 export type GetSpecItemsForSpecType = Awaited<ReturnType<typeof getSpecItemsForSpec>> 
+
+
+
 
 
 

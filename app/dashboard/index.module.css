@@ -1,0 +1,22 @@
+.card {
+    padding: 2rem;
+    width : 400px;
+    margin: 2rem;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.cardText {
+    font-family: 'roboto';
+    padding: 0;
+}
+
+.cardLayout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

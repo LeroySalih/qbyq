@@ -1,7 +1,8 @@
 
+export const dynamic = 'force-dynamic'
+
 import { createSupabaseServerClient } from "app/utils/supabase/server";
 import SpecSelector from "./spec-selector";
-
 import styles from "./page.module.css"
 
 

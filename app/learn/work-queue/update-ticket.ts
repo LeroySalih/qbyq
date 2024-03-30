@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { DateTime } from 'luxon';
 
 const updateTicket = async (id: number, updateObject: any) => {
-    console.log("Completing ticket", id);
+    
 
     const supabase = createSupabaseServerClient(true);
 
@@ -20,7 +20,7 @@ const updateTicket = async (id: number, updateObject: any) => {
 
     error && console.error(error);
 
-    console.log("updated", id, data);
+    
 
     
 
@@ -58,7 +58,7 @@ export const ticketRemove = async (id: number) => {
     const supabase = createSupabaseServerClient(true);
 
     if (!supabase){
-        console.log("Error creating supabse");
+        
         return;
 
     }

@@ -108,7 +108,7 @@ const CheckClass = ({params}) => {
     );
 
     const summaryRows = useMemo(() => {
-        // console.log('pfc', papersForClass)
+
         const summaryRow = {
           count: papersForClass?.length
         };

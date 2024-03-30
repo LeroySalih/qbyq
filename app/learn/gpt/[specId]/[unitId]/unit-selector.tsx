@@ -29,7 +29,7 @@ const UnitSelector = ({specId, unitId} :  {specId:number, unitId: number}) => {
         const {data, error} = await supabase.from("Spec").select("id, title");
 
         if (error){
-            console.log(error);
+            console.error(error);
             setSpecs([]);
             return;
         } 
@@ -43,11 +43,11 @@ const UnitSelector = ({specId, unitId} :  {specId:number, unitId: number}) => {
         const {data, error} = await supabase.from("SpecUnits").select("id, title").eq("specId", specId);
 
         if (error){
-            console.log(error);
+            console.error(error);
             setSpecs([]);
             return;
         } 
-        console.log("Units", units)
+
         setUnits(data); 
 
     }

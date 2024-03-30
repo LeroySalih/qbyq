@@ -65,8 +65,6 @@ const Page = async (
     //@ts-ignore
     const specs = specItems.reduce((prev, curr) => {prev[curr?.Spec?.id] = curr.Spec?.title; return prev}, {})
 
-    console.log("Sepc Items", specItems);
-
     const {data, error} = await supabase?.from("dqPage").select("id, title, SpecItem!inner(tag, title, specUnitId)").eq("SpecItem.specUnitId", unitId);
      
     if( error) {

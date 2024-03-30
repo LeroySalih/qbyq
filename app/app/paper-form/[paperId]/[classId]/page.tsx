@@ -14,7 +14,7 @@ const PageForm = async ({params}: PagePropsType) => {
 
     const {paperId} = params;
     
-    console.log(paperId);
+    // console.log(paperId);
    
     const supabase = createSupabaseServerClient()
 

@@ -25,7 +25,7 @@ const Page = async () => {
         return <h1>User not signed in</h1>
     }
 
-    console.log("user id", user.id);
+    
 
     const {data: profile, error: profileError} = await supabase?.from("Profile")
                             .select("id, isAdmin, isTech")

@@ -48,7 +48,7 @@ export const MCQ = ({path, id, content, answers, showLastAnswer, showCorrectAnsw
             .maybeSingle();
 
             error && console.error(error);
-            console.log("Data", data);
+            
 
             if (!data){
                 // first time this user has visited this question, so set it to the db as null

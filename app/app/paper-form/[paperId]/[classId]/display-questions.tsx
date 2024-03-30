@@ -24,14 +24,14 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
 
     const loadPupilMarks = async (userId: string | null) => {
             
-        // console.log("loadPupilMarks running")
+        // // console.log("loadPupilMarks running")
         if (!supabase){
-            console.log("No supabase client");
+            // console.log("No supabase client");
             return;
         }
 
         if (!userId){
-            // console.log("No valid user id", userId);
+            // // console.log("No valid user id", userId);
             return;
         }
             
@@ -44,7 +44,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
             .eq("paperId", paperId);
 
         error && console.error(error);
-        // console.log("Pupil Marks", data);
+        // // console.log("Pupil Marks", data);
         setPupilMarks(data);
     }
 
@@ -53,7 +53,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
         if (!supabase){
             return;
         }
-        // console.log("Loading Paper")
+        // // console.log("Loading Paper")
         const {data: paper, error} = await supabase.from("Papers")
                                             .select('*, Questions!Questions_PaperId_fkey(*), Spec(*, SpecItem(*))')
                                             .eq("id",paperId)
@@ -61,7 +61,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
 
         error && console.error(error);
 
-        // console.log("paper", paper);
+        // // console.log("paper", paper);
 
         setPaper(paper);
 
@@ -100,12 +100,12 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
 
     useEffect(()=> {
             if (!supabase){
-                // console.log("use-effect::user - no supabase found");
+                // // console.log("use-effect::user - no supabase found");
                 return;
             }
                 
             if (!user){
-                // console.log("use-effect::user - no user found");
+                // // console.log("use-effect::user - no user found");
                 return;
             }
             
@@ -134,7 +134,7 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
 
         const tmpPupilMarks = pupilMarks?.filter(pm => pm.questionId == questionId) || []; 
 
-        // console.log(marks);
+        // // console.log(marks);
         // no pupil marks record exists, so create one
         if (tmpPupilMarks.length === 0){
             //@ts-ignore
@@ -175,13 +175,13 @@ const DisplayQuestions = ({paperId, user} : {paperId : number, user: User}) => {
                                                 })
 
         if (upsertError){
-            // console.log(upsertError);
+            // // console.log(upsertError);
             return;
         } else {
-            // console.log("Upserted", pm, "returned", upsertData)
+            // // console.log("Upserted", pm, "returned", upsertData)
         }
 
-        // console.log("Upsert Data", upsertData)
+        // // console.log("Upsert Data", upsertData)
 
         
 

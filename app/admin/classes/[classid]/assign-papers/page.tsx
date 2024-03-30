@@ -37,7 +37,7 @@ const Page = async ({params} : {params: {classid: string}}) => {
 
     const sortedData = data.sort((a: any, b: any) => nullSort(a, b, (a) => a.availablefrom));
 
-    console.log(sortedData);
+
 
     error && console.error(error);
 

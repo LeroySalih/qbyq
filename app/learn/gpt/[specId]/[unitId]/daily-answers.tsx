@@ -15,9 +15,9 @@ const DailyQuestions = () => {
     const loadAnswers = async () => {
         const {data: {user}} = await supabase.auth.getUser();
 
-        console.log("Loading answers", user)
+        
         if (!user) {
-            console.log("No user, returning")
+            console.error("No user, returning")
             return;
         }
 
@@ -34,7 +34,7 @@ const DailyQuestions = () => {
 
     const loadUser = async () => {
         const {data: {user}} = await supabase.auth.getUser();
-        console.log("Setting user", user);
+        
         setUser(user);
     }
 
@@ -44,8 +44,6 @@ const DailyQuestions = () => {
             return curr.isCorrect ? Object.assign ({}, prev, {correct: prev.correct + 1}) :
                                     Object.assign ({}, prev, {incorrect: prev.incorrect + 1}) 
         }, {correct: 0, incorrect: 0});
-
-        console.log("counter", result);
 
         return result;
         
@@ -67,7 +65,6 @@ const DailyQuestions = () => {
 
         });
 
-        console.log("Subscribing to DB")
         const channelB = supabase
         .channel('schema-db-changes_master')
         .on(
@@ -77,11 +74,9 @@ const DailyQuestions = () => {
             schema: 'public',
             table: 'dqAnswers'
         },
-        (payload) => {console.log("Update Detected", payload); loadAnswers();}
+        (payload) => {loadAnswers();}
         )
         .subscribe();
-
-        console.log(channelB);
 
         return ()=> {
             channelB.unsubscribe();
@@ -91,10 +86,9 @@ const DailyQuestions = () => {
 
     useEffect(() => {
         if (!user){
-            console.log("No user, returning from useEffect");
+            console.error("No user, returning from useEffect");
         }
 
-        console.log("Loading Answers in useEffect", user && user.id)
         loadAnswers();
     }, [user]);
 

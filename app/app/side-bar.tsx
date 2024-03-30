@@ -35,7 +35,7 @@ const SideBar = () => {
         return pathName?.includes(path)
     }
 
-    console.log("Pathname", pathName);
+    
     return <div className={styles.sideBar}>
         {user && (
             <ul className={styles.ul}>

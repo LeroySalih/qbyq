@@ -27,7 +27,7 @@ export const insertQuestion = async ( question: Question ) => {
 
 export const updateQuestion = async (question : Question) => {
 
-    console.log("Updating ", question);
+    // console.log("Updating ", question);
     
     const supabase = createSupabaseServerClient();
 
@@ -44,8 +44,8 @@ export const updateQuestion = async (question : Question) => {
     }).eq("id", question.id).select()
 
     error && console.error(error)
-    console.log("Updated")
-    console.log(data)
+    // console.log("Updated")
+    // console.log(data)
 
     return {result:"ok", data: data && data[0]}
 
@@ -71,13 +71,13 @@ export const createNewPaper = async (data:Paper) => {
 
     const {year, month, paper, title, marks, specId, subject } = data;
     
-    console.log({year, month, paper, title, marks, specId, subject });
+    // console.log({year, month, paper, title, marks, specId, subject });
 
     const {data: newPaper, error} = (await supabase.from("Papers").insert({year, month, paper, title, marks, specId, subject }).select("id"));
 
     error && console.error(error);
     
-    console.log(newPaper)
+    // console.log(newPaper)
     // @ts-ignore
     const id = newPaper[0].id;
 
@@ -92,11 +92,11 @@ export async function deleteQuestion  (id: number)  {
         return {id: null, error: "Supabase not created"};
     }
 
-    console.log("Deleting record:", id);
+    // console.log("Deleting record:", id);
 
     const {data, error} = await supabase.from("Questions").delete().eq("id", id);
 
-    console.log("data", data);
+    // console.log("data", data);
 
     error && console.error(error);
 

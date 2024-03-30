@@ -31,7 +31,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
         const resp: GetPapersResponse = await getPapers(pupilId); 
 
         const {data, error} = resp;
-        error && console.log(error);
+        error && // console.log(error);
         
 
         // Completed Papers are papers where pMarks are greater than 0.
@@ -39,7 +39,7 @@ const Comp = ({classId, pupilId, specId} : {classId : number, pupilId: string, s
         setCompletedPapers(data?.filter(p => (p.specId === specId) && (p.pMarks > 0))
             //@ts-ignore
             .sort((a, b)=> a.completeBy < b.completeBy ? 1 : -1)
-            .map(p => ({
+            .map((p:any) => ({
             //@ts-ignore
             paperId: p.paperId, title: `${p.year}-${p.month}-${p.paper}`, pMarks: p.pMarks, qMarks: p.qMarks, availableFrom: p.availableFrom, completeBy: p.completeBy, markBy: p.markBy
             })

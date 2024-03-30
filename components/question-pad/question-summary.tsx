@@ -19,7 +19,7 @@ const QuestionSummary = ({path} : {path: string}) => {
     }
       
 
-    console.log("Summary::Data Change Detected")
+    
     //const {data, error} = await supabase.from ("QPAnswer").select().match({userId: user.id, path} );
     const {data, error} = await supabase.rpc("fn_qp_get_current_answers", {_userid: user.id, _path: path});
 
@@ -45,7 +45,7 @@ const QuestionSummary = ({path} : {path: string}) => {
 
 
     useEffect(() => {
-      console.log("Summary subscribing...")
+      
       const channel = supabase
   .channel('schema-db-changes')
   .on(

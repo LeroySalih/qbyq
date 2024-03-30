@@ -22,7 +22,7 @@ const SpecSelector = ({specId} : {specId: number}) => {
     
             const {data, error} = await supabase?.from("Spec").select("id, title");
             
-            console.log("loadSpecs", data);
+            
     
             setSpecs(data);
     

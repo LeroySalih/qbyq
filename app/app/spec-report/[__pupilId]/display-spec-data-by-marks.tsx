@@ -16,7 +16,7 @@ const DisplaySpecDataByMarks = ({pupilId, specId}: {pupilId: string, specId: num
 
         error && console.error(error);
 
-        // console.log(data);
+        // // console.log(data);
         // @ts-ignore
         setSpecData(data)
     }

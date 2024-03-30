@@ -30,7 +30,7 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
 
     const loadFiles = async () => {
 
-        console.log("Loading Files");
+        // console.log("Loading Files");
 
         if (!user) {
             return;
@@ -48,7 +48,7 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
 
         // "work-upload/0d65c82d-e568-450c-a48a-1ca71151e80f/25/2024-03-19/data-files.zip"
         if (uploads.length == 0){
-            console.log("No uploads found");
+            // console.log("No uploads found");
             setUrls([]);
             return;
         }
@@ -56,8 +56,8 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
         const {data:urls, error: urlsError} = await supabase.storage.from("work-upload").createSignedUrls(uploads.map(f => f.path), 3600);
 
         urlsError && console.error(urlsError);
-        console.log("uploads", uploads);
-        console.log("urls", urls);
+        // console.log("uploads", uploads);
+        // console.log("urls", urls);
 
         
         //@ts-ignore
@@ -84,7 +84,7 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
             return;
         }
         
-        console.log("Creating resource in storage")
+        // console.log("Creating resource in storage")
         // "work-upload/0d65c82d-e568-450c-a48a-1ca71151e80f/25/2024-03-19/data-files.zip"
         // 
         const {data, error} = await supabase.storage.from("work-upload").upload(`${user.id}/${paperId}/${dt}/${file.name}`, file, {
@@ -98,9 +98,9 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
         }
 
         const {path} = data;
-        console.log(path);
+        // console.log(path);
 
-        console.log("Writing to db")
+        // console.log("Writing to db")
         await supabase.from("WorkUploads").delete()
                             .eq("owner", user.id)
                             .eq("paperId", paperId)
@@ -114,7 +114,7 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
 
         uploadError && console.error(uploadError);
 
-        console.log("Updated", data, uploadData);
+        // console.log("Updated", data, uploadData);
 
         loadFiles();
         
@@ -122,14 +122,14 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
 
     const handleDeleteFile = async (id: string, path: string) => {
 
-        console.log("Deleting", id, path);
+        // console.log("Deleting", id, path);
 
         const {data, error } = await supabase.storage.from("work-upload").remove([path]);
 
         error && console.error(error);
-        console.log(data);
+        // console.log(data);
         
-        console.log("Deleting upload:", id, "from table");
+        // console.log("Deleting upload:", id, "from table");
         const {data: deleteData, error: deleteError} = await supabase.from("WorkUploads").delete().eq("id", id).select("id");
 
         error && console.error(deleteError);

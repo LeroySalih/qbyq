@@ -23,7 +23,7 @@ const DisplayResources = () => {
     const [aPaperUrl, setAPaperUrl] = useState(null);
 
     
-    console.log("In Display Resources", classId, paperId);
+    // console.log("In Display Resources", classId, paperId);
     
     const loadUser = async () => {
         const {data: {user}, error} = await supabase.auth.getUser();
@@ -41,7 +41,7 @@ const DisplayResources = () => {
                                             .match({paperId, classId});
 
         error && console.error(error);
-        console.log("Data", data)
+        // console.log("Data", data)
         //@ts-ignore
         setPaper(data[0]);
 
@@ -74,7 +74,7 @@ const DisplayResources = () => {
 
     useEffect(()=> {
         if (!paper){
-            console.log("No paper, returning")
+            // console.log("No paper, returning")
             return;
         }
             
@@ -82,7 +82,7 @@ const DisplayResources = () => {
         //@ts-ignore
         const {qPaperLabel, aPaperLabel} = paper?.Papers;
 
-        console.log("Paper Label",qPaperLabel );
+        // console.log("Paper Label",qPaperLabel );
 
         if (qPaperLabel) {
 

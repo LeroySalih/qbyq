@@ -33,7 +33,7 @@ const updateData = async (classTag: string, paperId: string, updateObject: {[key
     updateObject["paperId"] = paperId;
     updateObject["classId"] = classId?.id;
 
-    console.log("UpdateObject", updateObject);
+
 
     const {data: upsertData, error: upsertError} = await supabase.from("ClassPapers").upsert(updateObject).select("*");
 

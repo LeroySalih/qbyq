@@ -18,7 +18,7 @@ const Page =async () => {
             throw(error.message);
         } 
 
-        console.log(data);
+
 
         return data;
 

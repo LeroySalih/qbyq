@@ -81,7 +81,7 @@ const DisplayQuestion = ({question, specItems, pupilMarks, onChange, onBlur}: Di
     }
 
     useEffect(()=> {
-        // console.log("question", question);
+        // // console.log("question", question);
     }, [question])
 
     return <div>

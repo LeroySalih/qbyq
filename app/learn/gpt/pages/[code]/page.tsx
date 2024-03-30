@@ -22,8 +22,6 @@ import Link from 'next/link';
 //const model = "gpt-3.5-turbo"
 const model = "gpt-4"
 
-// console.log("Open Api Key", process.env.OPENAI_API_KEY );
-
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -51,7 +49,7 @@ const Page = async ({params, searchParams}: {params: {code: string}, searchParam
       const {data: summary, error} = await supabase.from("dqPage").select("id, summary, specItemId").eq("id", code).maybeSingle();
 
       if (error) {
-        console.log("Error::getSunmmary", error.message)
+        console.error("Error::getSunmmary", error.message)
         throw(error);
       }
 

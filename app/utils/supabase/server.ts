@@ -31,7 +31,9 @@ export const  createSupabaseServerClient = (inServerAction = true) => {
       }
     )
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw(error);
+    return null;
   }
     
 }

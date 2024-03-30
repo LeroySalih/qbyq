@@ -33,7 +33,7 @@ const NewProfilePage = () => {
         const loadProfile = async () => {
             if (!user)
                 return;
-            console.log(user)
+            // console.log(user)
             const {data, error} = await supabase.from("Profile").select().eq("id", user!.id).maybeSingle();
 
             error && console.error(error);
@@ -61,7 +61,7 @@ const NewProfilePage = () => {
 
         const upsertObj = {id, firstName, familyName, isAdmin: false};
 
-        console.log("Upsert Object", upsertObj); 
+        // console.log("Upsert Object", upsertObj); 
 
         const {data, error} = await supabase
                                 .from("Profile")
@@ -69,7 +69,7 @@ const NewProfilePage = () => {
                                 .select()
                                 ;
 
-        console.log("Upsert result", data)
+        // console.log("Upsert result", data)
 
         error && console.error(error);
 

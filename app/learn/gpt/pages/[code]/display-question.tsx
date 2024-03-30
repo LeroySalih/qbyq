@@ -64,8 +64,6 @@ const DisplayQuestion = ({code} : {code: string}) => {
       if (!question)
         return;
 
-      // update answers database
-      console.log("Saving Response")
 
       const {data, error} = await supabase.from("dqAnswers").insert({
         owner: user?.id || "", 
@@ -104,8 +102,6 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
       error && console.error(error);
 
-      console.log("Report set on ", data && data[0].id);
-
     }
 
     useEffect(()=>{
@@ -129,8 +125,6 @@ const DisplayQuestion = ({code} : {code: string}) => {
     }, [user])
 
     useEffect(()=>{
-
-      console.log("Loading code:", code)
       loadNextQuestion(code);
 
     }, [code]);

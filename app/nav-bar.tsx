@@ -13,7 +13,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { revalidatePath } from "next/cache";
+import {Button } from "@mui/material";
 
 type Profile = {
   id: string;
@@ -58,10 +59,12 @@ const NavBar = () => {
         setUser(user);
 
         // refresh the current page in case it's a server side page.
-        // router.refresh();
+        revalidatePath('/')
+        router.refresh();
 
       } else {
         setUser(null);
+        setProfile(null);
 
         // no user (logged out), so redirect to home
         router.refresh();
@@ -79,8 +82,12 @@ const NavBar = () => {
     }, []);
 
     useEffect(()=>{
+
       if (user) {
         loadProfile();
+      } else {
+        // no user so reset profile.
+        setProfile(null);
       }
     }, [user])
 
@@ -97,16 +104,16 @@ const NavBar = () => {
     
     
         error && console.error(error);
-        // console.log("Sending to home page")
-        // router.push("/");
-        // console.log(data);
+
+        
     }
     
     const handleSignOut = async () => {
         const error = await supabase.auth.signOut();
     
         error && console.error("Error", error);
-        console.log("Sending to home page")
+
+        //revalidatePath('/');
         router.push("/");
     }
 
@@ -125,20 +132,21 @@ const NavBar = () => {
           <div className={styles.siteTitle}>QbyQ</div>
         </div>
         <div>
-          {user && <span>{user.email?.substring(0, 10)} {user?.email?.length || 0 > 10 ? "..." : ""}</span>}
-
-          {profile && <span>{profile.isAdmin && <Link href="/admin">Admin Pages</Link>}</span>}
+          
+          {profile && <Link href={`/app/new-profile`}>{profile.firstName} {profile.familyName}</Link>}
+          {profile && <span>&nbsp; | &nbsp;{profile.isAdmin === true && <Link href="/admin">Admin Pages</Link>} &nbsp;</span>}
 
           {user && <IconButton onClick={handleGoToProfile} aria-label="delete" size="small">
                       <AccountBoxOutlinedIcon fontSize="large"/>
                    </IconButton>}
           
-          {user && <IconButton onClick={handleSignOut} aria-label="delete" size="small">
-                    <LogoutIcon fontSize="large" />
-                  </IconButton>}
-          {user == null && <IconButton onClick={handleSignIn} aria-label="delete" size="small">
-                    <LoginIcon fontSize="large" />
-                  </IconButton>}
+          {profile && <Button variant="contained" onClick={handleSignOut} aria-label="delete" size="small">
+                    Sign Out
+                    </Button>}
+
+          {profile == null && <Button  variant="contained" onClick={handleSignIn} aria-label="delete" size="small">
+                    Sign In
+                  </Button>}
 
         </div>  
     </div>

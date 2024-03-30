@@ -51,7 +51,7 @@ const DisplayPapers = ({classTag, papers} : {classTag: string, papers : {paperId
     
 
     const handleUnassign = (paperId : string, classTag: string) => {
-        console.log(paperId, classTag);
+
         startTransition(()=> {
             // @ts-ignore
             updateData(classTag, paperId, {"completeBy": null, "availableFrom": null, "markBy": null} );

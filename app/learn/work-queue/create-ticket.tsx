@@ -36,10 +36,9 @@ const CreateTicket = ({userid}: {userid: string}) => {
 
     const uploadFile = async ({machine, file, notes}: Ticket) => {
 
-        console.log("Uploading file")
+        
 
         if (!file) {
-            console.log("File is null, returning")
             return;
         }
 
@@ -48,17 +47,17 @@ const CreateTicket = ({userid}: {userid: string}) => {
             upsert: true 
         });
 
-        console.log(data);
+        
 
         error && console.error(error)
 
         const {data: urlData} = supabase.storage.from("work-queue").getPublicUrl(`${userid}/${file.name}`)
         
-        console.log(urlData);
+        
 
         const result = await updateQueue(userid, urlData.publicUrl, `${userid}/${file.name}`, machine || "", notes || "");
 
-        console.log(result);
+        
 
     }
 
@@ -67,7 +66,7 @@ const CreateTicket = ({userid}: {userid: string}) => {
     }
 
     const handleFileChange = (e: FileList | null) : void => {
-        console.log(e);
+        
         // @ts-ignore
         setFile(e[0]);
     }

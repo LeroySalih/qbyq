@@ -97,7 +97,7 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
 
     const {data} = result;
 
-    console.log("data", data);
+
 
     //@ts-ignore
     setPaperQuestions((prev) => [...prev, data]);
@@ -105,19 +105,16 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
   }
 
   const handleNewPaper = async () => {
-    console.log("New Paper")
+
     setShowDlg(true);
   }
 
   const handleSubmitDlg = async (data: any) => {
-    console.log("Data from dialog in handleSubmitDlg", data);
 
-    console.log("Processing Form")
       
     
     // create paper, returning paper id
     const {year, month, paper, title, marks, specId, subject, questionPaper, answerPaper } = data;
-    console.log({year, month, paper, title, marks, specId, subject })
     const result = await createNewPaper({year, month, paper, title, marks, specId, subject, qPaperLabel: questionPaper.name, aPaperLabel: answerPaper.name });
 
     if (!result || result.error || !result.id) {
@@ -125,19 +122,19 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
       return;
     }
 
-    console.log("Data returned", result);
+    
     const {id} = result;
 
-    console.log("Found Papers", questionPaper, answerPaper);
+    
     // setCurrentSpecId(data.specId);
     const {data: qPaperData, error: qPaperError} = await supabase.storage.from("exam-papers").upload(`${id}/${questionPaper.name}`, questionPaper);
     qPaperError && console.error(qPaperError);
-    console.log("Q Paper Data", qPaperData);
+   
 
   
     const {data: aPaperData, error: aPaperError} = await supabase.storage.from("exam-papers").upload(`${id}/${answerPaper.name}`, answerPaper);
     aPaperError && console.error(aPaperError);
-    console.log("Q Paper Data", aPaperData);
+    
 
     
     setCurrentSpecId(data.specId)
@@ -154,7 +151,7 @@ export const CreateForm = ({papers, specs, specItems}:  {papers: Papers, specs: 
   }
 
   const reload = async () => {
-    console.log("Refreshing data");
+    // console.log("Refreshing data");
     loadPaperQuestions(currentPaperId)
   }
 
@@ -204,7 +201,7 @@ const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecI
 
   const handleUpdateQuestion = (field: string, value: string | number | null) => {
     const update = Object.assign({}, {... paperQuestion}, {[field]:value} )
-    console.log("Updating Stated", update)
+    // console.log("Updating Stated", update)
     setIsDirty(true);
     setPaperQuestion((prev) => update);
   }
@@ -219,7 +216,7 @@ const DisplayPaperQuestion = ({question, specItems, currentPaperId, currentSpecI
       questionOrder: question.question_order
     });
 
-    console.log(result);
+    // console.log(result);
     setIsDirty(false)
     setIsSaving(false)
   }
@@ -269,18 +266,18 @@ const NewPaperDialog = (
     onSave : (data: any | null)=> void, 
     onCancel: () => void}) => {
 
-  console.log("Show:", show);
+  // console.log("Show:", show);
 
   const handleClose = async () => {
-    console.log("Handle Close Called")
+    // console.log("Handle Close Called")
     onCancel();
   }
 
   const handleSubscribe = async (data: any) => {
-    console.log("Handle Subscribe Called 2")
+    // console.log("Handle Subscribe Called 2")
    // const formData = new FormData(event.currentTarget)
    // const formJSON = Object.fromEntries((formData as any).entries());
-   // console.log("Form Data", formJSON);
+   // // console.log("Form Data", formJSON);
     onSave(data);
   }
 
@@ -291,11 +288,11 @@ const NewPaperDialog = (
     component: 'form',
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      console.log("Processing Form")
+      
       const formData = new FormData(event.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
       
-      console.log("Form Data", formJson);
+      
       handleSubscribe(formJson);
     },
   }}

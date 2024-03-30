@@ -50,7 +50,7 @@ const ClassList = ({userid}:{userid: string}) => {
 
         error && console.error(error);
 
-        console.log("Class:", data);
+        // console.log("Class:", data);
 
         if (!data){
             setClassToJoin(null);
@@ -75,7 +75,7 @@ const ClassList = ({userid}:{userid: string}) => {
 
         error && console.error(error);
 
-        console.log("Added ", {classId: classToJoin.id, pupilId : userid})
+        // console.log("Added ", {classId: classToJoin.id, pupilId : userid})
 
         setClassCode('');
         setMessage('Added to class: ' + classToJoin.title)

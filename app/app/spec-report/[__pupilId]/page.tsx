@@ -33,10 +33,10 @@ const SpecReport = ({params}: SpecReportType) => {
     
     const searchParams = useSearchParams();
     const __classid =  parseInt(searchParams && searchParams.get('classid') || "0");
-    console.log("__classid", __classid, searchParams?.has("clientid"));
+    // console.log("__classid", __classid, searchParams?.has("clientid"));
     // Display the key/value pairs
     for (const [key, value] of searchParams!.entries()) {
-        console.log(`${key}, ${value}`);
+        // console.log(`${key}, ${value}`);
     }
 
     
@@ -62,7 +62,7 @@ const SpecReport = ({params}: SpecReportType) => {
                                             .eq("pupilId", pupilId);
                                             
         error && console.error(error);
-        data && console.log(data);
+        //data && // console.log(data);
         if (!data || data === null || data.length == 0){
             setClasses(null);
             return;
@@ -70,7 +70,7 @@ const SpecReport = ({params}: SpecReportType) => {
 
         // @ts-ignore
         const shapedData = data.map((c) => ({id: c.Classes.id, tag: c.Classes.tag, title: c.Classes.title, specId: c.Classes.specId}));
-        console.log("shapedData", shapedData);
+        // console.log("shapedData", shapedData);
 
         // @ts-ignore
         setClasses(shapedData);
@@ -79,7 +79,7 @@ const SpecReport = ({params}: SpecReportType) => {
             setCurrentClassId(__classid)
         } else {
             //@ts-ignore
-            console.log("Setting currentClassId to ", data[0].Classes.id);
+            // console.log("Setting currentClassId to ", data[0].Classes.id);
 
             //@ts-ignore
             setCurrentClassId(data[0].Classes.id);
@@ -90,7 +90,7 @@ const SpecReport = ({params}: SpecReportType) => {
         const {data:classes, error} = await supabase.from("Classes").select()
 
         
-        // console.log("Classes", classes);
+        // // console.log("Classes", classes);
 
         error && console.error(error);
 
@@ -110,8 +110,8 @@ const SpecReport = ({params}: SpecReportType) => {
         if (!classes || !classId)  
             return null;
 
-        // console.log("looking for", classId, " in ", classes);
-        //console.log("classes", classes, classId)
+        // // console.log("looking for", classId, " in ", classes);
+        //// console.log("classes", classes, classId)
         //@ts-ignore
         return classes.filter((c) => c.id == classId)[0].specId;
 
@@ -129,7 +129,7 @@ const SpecReport = ({params}: SpecReportType) => {
             return;
             
 
-        console.log("pupils", pupils);
+        
 
         error && console.error(error);
 
@@ -185,7 +185,7 @@ const SpecReport = ({params}: SpecReportType) => {
     }, []);
 
     useEffect(()=> {
-        console.log("User Changed to", user);
+        // console.log("User Changed to", user);
         if (!user){
             return;
         }
@@ -194,8 +194,8 @@ const SpecReport = ({params}: SpecReportType) => {
     }, [user])
 
     useEffect(()=> {
-        console.log("Profile Changed to", profile);
-        console.log("specId Changed to", specId);
+        // console.log("Profile Changed to", profile);
+        // console.log("specId Changed to", specId);
 
 
         if (!profile){

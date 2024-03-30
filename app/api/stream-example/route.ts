@@ -18,7 +18,7 @@ export async function GET() {
   });
   // Log the response
   //for await (const part of response) {
-  //  console.log(part.choices[0].delta);
+  //  // console.log(part.choices[0].delta);
  // }
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);

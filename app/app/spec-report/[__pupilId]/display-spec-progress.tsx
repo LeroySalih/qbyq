@@ -12,7 +12,7 @@ const DisplaySpecProgress = ({pupilId, specId}: {pupilId: string, specId: number
         const {data, error} = await supabase.rpc('fn_pupil_marks_by_available_from_date', { specid: specId, uuid: pupilId});
 
         error && console.error(error);
-        // console.log("byDate", data);
+        // // console.log("byDate", data);
         // @ts-ignore
         setSpecData(data?.map(d => ({availableFrom: d.availablefrom, pMarks: d.pmarks, aMarks: d.amarks, pct: (d.pmarks / d.amarks)})));
     }

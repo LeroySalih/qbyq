@@ -51,7 +51,7 @@ const renderFCScore = ({row}: {row : Row})  => {
   }
 
   const renderPaperAverageSummary = ({row} :  {row:SummaryRow}) => {
-    console.log('Row', row)
+    // console.log('Row', row)
     return `${row.paperAverage}%`;
   }
 

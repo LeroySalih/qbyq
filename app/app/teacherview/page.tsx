@@ -12,7 +12,7 @@ const Page = () => {
         // specItem
         const channel = supabase.channel('22-10BS1');
 
-        channel.on('broadcast', {event: 'QUESTION_ANSWERED'}, (payload) => console.log("Question Answered", payload)).subscribe();
+        channel.on('broadcast', {event: 'QUESTION_ANSWERED'}, (payload) =>  console.info("Question Answered", payload)).subscribe();
 
     }, []);
 

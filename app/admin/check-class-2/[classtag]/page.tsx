@@ -53,8 +53,6 @@ const getPupilsByTag = async(classtag: string) => {
 
     const {data: pupils, error} = await supabase.from("vw_class_lists").select("tag, pupilId, firstName, familyName").eq("tag", classtag);
 
-    console.log("Pupils", pupils);
-
     return {pupils, pupilsError: error};
 }
 
@@ -76,6 +74,7 @@ const getPupilMarksByTag = async(classtag: string) => {
     const supabase = createSupabaseServerClient(false);
 
     if (!supabase){
+        throw Error("getPupilMarksByTag::supabase not created")
         return {data: null, pupilsError: "Supabase not created"}
     }
 
