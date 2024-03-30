@@ -47,3 +47,20 @@ export const getUser = async (delay: number = 0 ): Promise<User | null>  => {
                     
 }
 
+export const getAllPupilMarks = async (userId: string) => {
+    const supabase = createSupabaseServerClient(false);
+  
+    if (!supabase) {
+        throw(new Error("GetUser::Cant create supabase.")) 
+        return null;
+    }
+    
+    const {data, error} = await supabase
+                    .rpc("fn_pupil_marks_for_all_papers", {_userid: userId});
+
+    error && console.error(error);
+
+    return data;
+
+}
+

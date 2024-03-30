@@ -95,7 +95,7 @@ const loadClassesForPupil = async (pupilId : string) => {
 } 
 
 
-const Layout = async ({children, header, params} : {children: ReactNode, header: ReactNode, params: {pupilId: string}}) => {
+const Layout = async ({children, header, allpapers, params} : {children: ReactNode, header: ReactNode, allpapers: ReactNode, params: {pupilId: string}}) => {
 
     const {pupilId} = params;
 
@@ -130,14 +130,12 @@ const Layout = async ({children, header, params} : {children: ReactNode, header:
                             </div>)
                         }
 
-                        
-                        
                     </div>
                 </Paper>
             </Grid>
 
             <Grid item xs={12} md={8}>
-                {children}
+                <div>{children}</div>
             </Grid>
         </Grid>
         
