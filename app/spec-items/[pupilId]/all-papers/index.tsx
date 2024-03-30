@@ -25,7 +25,7 @@ const AllPapers = async (pupilId: string) => {
                 .returns<ClassPapers>();
                 
 
-    return <Paper className={styles.layout}><h3>All Papers for {pupilId}</h3>
+    return <Paper className={styles.layout}><h3>Schedule</h3>
         <PapersGrid classPapers={classPapers!} pupilId={pupilId}/>
         
     </Paper>
