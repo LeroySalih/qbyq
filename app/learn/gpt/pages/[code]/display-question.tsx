@@ -11,6 +11,8 @@ import { QueryStatsOutlined } from "@mui/icons-material";
 import DisplayAnswers from "./display-answers";
 
 import styles from "./display-question.module.css"
+import { DateTime } from "luxon";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const DisplayQuestion = ({code} : {code: string}) => {
   
@@ -23,10 +25,11 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
     const [selected, setSelected] = useState<number | null>(null);
     const [selectedText, setSelectedText] = useState<string | null>(null);
+    const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
+    const [isLocked, setIsLocked] = useState<boolean>(false);
+
 
     const loadNextQuestion = async (code: string) => {
-
-     
 
       setIsLoading(true);
 
@@ -38,6 +41,23 @@ const DisplayQuestion = ({code} : {code: string}) => {
         return;
       }
 
+
+      const {data: answerCount, error: answersError} = await supabase.from("dqAnswers")
+                  .select("id, dqQuestions!inner(code)")
+                  .eq("owner", user.id)
+                  .eq("isCorrect", true)
+                  .gt("created_at",DateTime.now().startOf('day').toISO())
+                  .eq("dqQuestions.code", code);
+
+      if (answersError){
+        throw(answersError);
+      }
+
+      setCorrectAnswerCount(answerCount.length);
+
+      if (answerCount.length > 9){
+        setIsLocked(true);
+      }
 
 
       //const {data, error} = await supabase.from("dqQuestions").select("id, question_text, choices, correct_answer").eq("code", code).limit(1);
@@ -171,9 +191,24 @@ const DisplayQuestion = ({code} : {code: string}) => {
       return <div>Loading User Details</div>
     }
 
+    if (isLocked){
+      return <>
+        <div style={{"display": "flex", "flexDirection": "row", "alignItems": "center", "margin": "2rem"}}>
+        <div style={{"margin":"2rem;"}}>
+          <LockOutlinedIcon fontSize="large"/>
+        </div>
+        <div>
+          <h3>You have answered 10 correct answers in this video today.</h3>
+          <h4>Why not try a different video?</h4>
+        </div>
+        </div>
+      </>
+    }
+
     return <div className={styles.questionContainer}>
         
         <Paper>
+            
             {isLoading && <div>Loading...</div>}
             {!isLoading && <><div className={styles.questionInner}>
               <div className={styles.question_text}>
