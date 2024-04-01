@@ -1,12 +1,13 @@
 export type ClassPaper = {
-    tag: string, 
-    specId: string, 
-    year: string, 
-    month: string, 
-    paper: string, 
-    title: string, 
-    paperId: string, 
-    classId: string,
-}[]
+    classId: number,
+    paperId: number,
+    paperTitle: string,
+    classTag: string,
+    availableFrom?: Date,
+    completeBy?: Date,
+    markBy?: Date,
+    paperMarks: number,
+    pupilMarks?: number
+  }[]
 
 export type ClassPapers = ClassPaper[];

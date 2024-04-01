@@ -1,0 +1,28 @@
+.Open{
+    background-color: green;
+    color: yellow;
+    text-align: center;
+    margin:0.2rem;
+    border-radius: 0.4rem;
+    height: 3rem;
+    width: 4rem;
+}
+
+.Late{
+    background-color: red;
+    color: yellow;
+    text-align: center;
+    margin:0.2rem;
+    border-radius: 0.4rem;
+    height: 3rem;
+    width: 4rem;
+}
+
+.Closed {
+    background-color: silver;
+    text-align: center;
+    margin:0.2rem;
+    border-radius: 0.4rem;
+    height: 3rem;
+    width: 4rem;
+}

@@ -29,7 +29,7 @@ const getHeader = async (pupilId: string) => {
 
     const user = await loadUserDetails(pupilId);
 
-    return <h1>Header for pupil {user && user.firstName} {user &&  user.familyName}</h1>
+    return <h1>{user && user.firstName} {user &&  user.familyName}</h1>
 }
 
 export default getHeader;

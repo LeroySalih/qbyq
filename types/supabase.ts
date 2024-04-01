@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      __specid: {
+        Row: {
+          specId: number | null
+        }
+        Insert: {
+          specId?: number | null
+        }
+        Update: {
+          specId?: number | null
+        }
+        Relationships: []
+      }
+      cat_names: {
+        Row: {
+          cat_name: string | null
+        }
+        Insert: {
+          cat_name?: string | null
+        }
+        Update: {
+          cat_name?: string | null
+        }
+        Relationships: []
+      }
       Classes: {
         Row: {
           created_at: string | null
@@ -41,7 +65,21 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       ClassMembership: {
@@ -69,6 +107,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "ClassMembership_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["classId"]
+          },
+          {
+            foreignKeyName: "ClassMembership_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["classId"]
+          },
+          {
             foreignKeyName: "ClassMembership_pupilId_fkey"
             columns: ["pupilId"]
             isOneToOne: false
@@ -79,9 +131,16 @@ export type Database = {
             foreignKeyName: "ClassMembership_pupilId_fkey"
             columns: ["pupilId"]
             isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
             referencedRelation: "vw_marks_for_papers_by_tag"
             referencedColumns: ["pupilId"]
-          }
+          },
         ]
       }
       ClassPapers: {
@@ -111,33 +170,61 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "ClassPapers_classId_fkey"
+            foreignKeyName: "public_ClassPapers_classId_fkey"
             columns: ["classId"]
             isOneToOne: false
             referencedRelation: "Classes"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "ClassPapers_paperId_fkey"
+            foreignKeyName: "public_ClassPapers_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["classId"]
+          },
+          {
+            foreignKeyName: "public_ClassPapers_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["classId"]
+          },
+          {
+            foreignKeyName: "public_ClassPapers_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "ClassPapers_paperId_fkey"
+            foreignKeyName: "public_ClassPapers_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "public_ClassPapers_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
             referencedRelation: "vw_papers_for_classes"
             referencedColumns: ["paperId"]
           },
           {
-            foreignKeyName: "ClassPapers_paperId_fkey"
+            foreignKeyName: "public_ClassPapers_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "public_ClassPapers_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
-          }
+          },
         ]
       }
       dqAnswers: {
@@ -177,7 +264,22 @@ export type Database = {
           owner?: string
           questionId?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "dqQuestions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["questionId"]
+          },
+        ]
       }
       dqPage: {
         Row: {
@@ -211,7 +313,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "public_dqPage_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "public_dqPage_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "public_dqPage_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqPage_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       dqQuestions: {
@@ -257,6 +387,13 @@ export type Database = {
             foreignKeyName: "public_dqQuestions_createdBy_fkey"
             columns: ["createdBy"]
             isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
             referencedRelation: "vw_marks_for_papers_by_tag"
             referencedColumns: ["pupilId"]
           },
@@ -266,7 +403,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "public_dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       dqQuestionType: {
@@ -316,7 +481,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "FCQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCQuestions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       FCUserQuestionHistory: {
@@ -361,7 +554,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUserQuestionHistory_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       FCUSerQueueEntries: {
@@ -408,6 +629,34 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
             foreignKeyName: "FCUSerQueueEntries_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
@@ -418,9 +667,16 @@ export type Database = {
             foreignKeyName: "FCUSerQueueEntries_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "FCUSerQueueEntries_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
             referencedRelation: "vw_marks_for_papers_by_tag"
             referencedColumns: ["pupilId"]
-          }
+          },
         ]
       }
       FCUserQueues: {
@@ -446,7 +702,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "FCUserQueues_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUserQueues_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "FCUserQueues_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "FCUserQueues_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       Papers: {
@@ -496,7 +780,21 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "Papers_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "Papers_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       Profile: {
@@ -534,7 +832,7 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       PupilMarks: {
@@ -574,7 +872,21 @@ export type Database = {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
             referencedColumns: ["paperId"]
           },
           {
@@ -595,37 +907,101 @@ export type Database = {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
             isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["questionId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["q_id"]
-          }
+          },
         ]
       }
-      "PupilMarks.copy": {
+      PupilMarks_2024_03_29: {
         Row: {
           created_at: string | null
-          id: number | null
+          id: number
           marks: number | null
-          paperId: number | null
-          questionId: number | null
-          userId: string | null
+          paperId: number
+          questionId: number
+          userId: string
         }
         Insert: {
           created_at?: string | null
-          id?: number | null
+          id?: number
           marks?: number | null
-          paperId?: number | null
-          questionId?: number | null
-          userId?: string | null
+          paperId: number
+          questionId: number
+          userId: string
         }
         Update: {
           created_at?: string | null
-          id?: number | null
+          id?: number
           marks?: number | null
-          paperId?: number | null
-          questionId?: number | null
-          userId?: string | null
+          paperId?: number
+          questionId?: number
+          userId?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "Papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["p_id"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "Questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["questionId"]
+          },
+          {
+            foreignKeyName: "public_PupilMarks_duplicate_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "vw_questions_denorm"
+            referencedColumns: ["q_id"]
+          },
+        ]
       }
       QPAnswer: {
         Row: {
@@ -673,9 +1049,16 @@ export type Database = {
             foreignKeyName: "QPAnswer_userId_fkey"
             columns: ["userId"]
             isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "QPAnswer_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
             referencedRelation: "vw_marks_for_papers_by_tag"
             referencedColumns: ["pupilId"]
-          }
+          },
         ]
       }
       Questions: {
@@ -718,7 +1101,21 @@ export type Database = {
             foreignKeyName: "Questions_PaperId_fkey"
             columns: ["PaperId"]
             isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "Questions_PaperId_fkey"
+            columns: ["PaperId"]
+            isOneToOne: false
             referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "Questions_PaperId_fkey"
+            columns: ["PaperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
             referencedColumns: ["paperId"]
           },
           {
@@ -734,7 +1131,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SpecItem"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "Questions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "Questions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_daily_pupil_answer_count"
+            referencedColumns: ["specItemId"]
+          },
+          {
+            foreignKeyName: "Questions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Questions_specItemId_fkey"
+            columns: ["specItemId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specItemId"]
+          },
         ]
       }
       result_record: {
@@ -803,6 +1228,7 @@ export type Database = {
           id: number
           revisionMaterials: string | null
           SpecId: number | null
+          specUnitId: number | null
           tag: string | null
           title: string | null
         }
@@ -811,6 +1237,7 @@ export type Database = {
           id?: number
           revisionMaterials?: string | null
           SpecId?: number | null
+          specUnitId?: number | null
           tag?: string | null
           title?: string | null
         }
@@ -819,17 +1246,96 @@ export type Database = {
           id?: number
           revisionMaterials?: string | null
           SpecId?: number | null
+          specUnitId?: number | null
           tag?: string | null
           title?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "public_SpecItem_specUnitId_fkey"
+            columns: ["specUnitId"]
+            isOneToOne: false
+            referencedRelation: "SpecUnits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_SpecItem_specUnitId_fkey"
+            columns: ["specUnitId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specUnitId"]
+          },
+          {
+            foreignKeyName: "public_SpecItem_specUnitId_fkey"
+            columns: ["specUnitId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specUnitId"]
+          },
           {
             foreignKeyName: "SpecItem_SpecId_fkey"
             columns: ["SpecId"]
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
+        ]
+      }
+      SpecUnits: {
+        Row: {
+          created_at: string
+          id: number
+          specId: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          specId: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          specId?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_SpecUnits_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_SpecUnits_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "public_SpecUnits_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       Tasks: {
@@ -863,11 +1369,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "Tasks_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["classId"]
+          },
+          {
+            foreignKeyName: "Tasks_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["classId"]
+          },
+          {
             foreignKeyName: "Tasks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
           },
           {
             foreignKeyName: "Tasks_paperId_fkey"
@@ -880,9 +1407,16 @@ export type Database = {
             foreignKeyName: "Tasks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "Tasks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
-          }
+          },
         ]
       }
       "TBD-ClassPaperResources": {
@@ -919,11 +1453,32 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "TBD-ClassPaperResources_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["classId"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["classId"]
+          },
+          {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
             referencedRelation: "Papers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
           },
           {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
@@ -936,10 +1491,35 @@ export type Database = {
             foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "TBD-ClassPaperResources_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
-          }
+          },
         ]
+      }
+      test: {
+        Row: {
+          category: string | null
+          id: number | null
+          value: number | null
+        }
+        Insert: {
+          category?: string | null
+          id?: number | null
+          value?: number | null
+        }
+        Update: {
+          category?: string | null
+          id?: number | null
+          value?: number | null
+        }
+        Relationships: []
       }
       WorkQueue: {
         Row: {
@@ -980,6 +1560,58 @@ export type Database = {
         }
         Relationships: []
       }
+      WorkUploads: {
+        Row: {
+          created_at: string
+          dt: string
+          fileName: string
+          id: number
+          owner: string
+          paperId: string
+          path: string
+        }
+        Insert: {
+          created_at?: string
+          dt: string
+          fileName: string
+          id?: number
+          owner: string
+          paperId: string
+          path: string
+        }
+        Update: {
+          created_at?: string
+          dt?: string
+          fileName?: string
+          id?: number
+          owner?: string
+          paperId?: string
+          path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_WorkUploads_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_WorkUploads_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "public_WorkUploads_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
+          },
+        ]
+      }
     }
     Views: {
       dq_vw_answers: {
@@ -996,7 +1628,22 @@ export type Database = {
           owner: string | null
           questionId: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "dqQuestions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["questionId"]
+          },
+        ]
       }
       vw_class_lists: {
         Row: {
@@ -1017,9 +1664,108 @@ export type Database = {
             foreignKeyName: "ClassMembership_pupilId_fkey"
             columns: ["pupilId"]
             isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
             referencedRelation: "vw_marks_for_papers_by_tag"
             referencedColumns: ["pupilId"]
-          }
+          },
+        ]
+      }
+      vw_dq_answers_denormed: {
+        Row: {
+          answerCreatedAt: string | null
+          answerId: string | null
+          answerQuestionId: number | null
+          created_at: string | null
+          familyName: string | null
+          firstName: string | null
+          isCorrect: boolean | null
+          owner: string | null
+          questionCode: string | null
+          questionId: number | null
+          specId: number | null
+          specItemId: number | null
+          specItemTag: string | null
+          specItemTitle: string | null
+          specSubject: string | null
+          specTitle: string | null
+          specUnitId: number | null
+          specUnitTitle: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Profile_id_fkey"
+            columns: ["owner"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["answerQuestionId"]
+            isOneToOne: false
+            referencedRelation: "dqQuestions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_dqAnswers_questionId_fkey"
+            columns: ["answerQuestionId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["questionId"]
+          },
+        ]
+      }
+      vw_dq_daily_pupil_answer_count: {
+        Row: {
+          classTag: string | null
+          count: number | null
+          created_at: string | null
+          familyName: string | null
+          firstName: string | null
+          owner: string | null
+          specItemId: number | null
+          tag: string | null
+          title: string | null
+        }
+        Relationships: []
+      }
+      vw_dq_pupil_scores_last5days: {
+        Row: {
+          cl_classTag: string | null
+          count: number | null
+          dt: string | null
+          familyName: string | null
+          firstName: string | null
+          pupilId: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
+          },
         ]
       }
       vw_duplicate_pupil_marks: {
@@ -1042,7 +1788,21 @@ export type Database = {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
             referencedColumns: ["paperId"]
           },
           {
@@ -1063,9 +1823,16 @@ export type Database = {
             foreignKeyName: "PupilMarks_questionId_fkey"
             columns: ["questionId"]
             isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["questionId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["q_id"]
-          }
+          },
         ]
       }
       vw_marks_for_papers_by_tag: {
@@ -1097,7 +1864,21 @@ export type Database = {
             foreignKeyName: "PupilMarks_paperId_fkey"
             columns: ["paperId"]
             isOneToOne: false
+            referencedRelation: "vw_paper_marks_for_pupil_detail"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
             referencedRelation: "vw_papers_for_classes"
+            referencedColumns: ["paperId"]
+          },
+          {
+            foreignKeyName: "PupilMarks_paperId_fkey"
+            columns: ["paperId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
             referencedColumns: ["paperId"]
           },
           {
@@ -1106,12 +1887,48 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vw_questions_denorm"
             referencedColumns: ["p_id"]
-          }
+          },
+        ]
+      }
+      vw_paper_marks_for_pupil_detail: {
+        Row: {
+          aMarks: number | null
+          id: number | null
+          paperId: number | null
+          qMarks: number | null
+          SpecId: number | null
+          tag: string | null
+          title: string | null
+          userId: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "Spec"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       vw_papers_for_classes: {
         Row: {
           availableFrom: string | null
+          classId: number | null
           completeBy: string | null
           markBy: string | null
           month: string | null
@@ -1129,7 +1946,75 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "Classes_specId_fkey"
+            columns: ["specId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
+        ]
+      }
+      vw_pupil_marks_denormed: {
+        Row: {
+          answerMarks: number | null
+          availableFrom: string | null
+          classId: number | null
+          classTag: string | null
+          classTitle: string | null
+          completeBy: string | null
+          familyName: string | null
+          firstName: string | null
+          markBy: string | null
+          month: string | null
+          paper: string | null
+          paperId: number | null
+          pupilId: string | null
+          pupilMarksId: number | null
+          questionId: number | null
+          questionMarks: number | null
+          questionNumber: string | null
+          questionOrder: number | null
+          specId: number | null
+          specItemId: number | null
+          specItemTag: string | null
+          specItemTitle: string | null
+          specSubject: string | null
+          specTitle: string | null
+          specUnitId: number | null
+          specUnitTitle: string | null
+          year: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["owner"]
+          },
+          {
+            foreignKeyName: "ClassMembership_pupilId_fkey"
+            columns: ["pupilId"]
+            isOneToOne: false
+            referencedRelation: "vw_marks_for_papers_by_tag"
+            referencedColumns: ["pupilId"]
+          },
         ]
       }
       vw_pupil_marks_for_spec: {
@@ -1149,7 +2034,21 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["SpecId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       vw_questions_denorm: {
@@ -1180,7 +2079,21 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "Spec"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["si_specId"]
+            isOneToOne: false
+            referencedRelation: "vw_dq_answers_denormed"
+            referencedColumns: ["specId"]
+          },
+          {
+            foreignKeyName: "SpecItem_SpecId_fkey"
+            columns: ["si_specId"]
+            isOneToOne: false
+            referencedRelation: "vw_pupil_marks_denormed"
+            referencedColumns: ["specId"]
+          },
         ]
       }
       vw_user_marks_for_paper: {
@@ -1232,6 +2145,30 @@ export type Database = {
       }
     }
     Functions: {
+      crosstab: {
+        Args: {
+          "": string
+        }
+        Returns: Record<string, unknown>[]
+      }
+      crosstab2: {
+        Args: {
+          "": string
+        }
+        Returns: Database["public"]["CompositeTypes"]["tablefunc_crosstab_2"][]
+      }
+      crosstab3: {
+        Args: {
+          "": string
+        }
+        Returns: Database["public"]["CompositeTypes"]["tablefunc_crosstab_3"][]
+      }
+      crosstab4: {
+        Args: {
+          "": string
+        }
+        Returns: Database["public"]["CompositeTypes"]["tablefunc_crosstab_4"][]
+      }
       dq_getspecitemquestioncount: {
         Args: {
           _specid: number
@@ -1363,7 +2300,7 @@ export type Database = {
           _specid: number
           _qid: string
         }
-        Returns: unknown
+        Returns: string[]
       }
       fn_fc_get_next_question: {
         Args: {
@@ -1448,6 +2385,22 @@ export type Database = {
           pMarks: number
         }[]
       }
+      fn_get_paper_details_for_pupil: {
+        Args: {
+          _owner: string
+        }
+        Returns: {
+          classId: number
+          paperId: number
+          paperTitle: string
+          classTag: string
+          availableFrom: string
+          completeBy: string
+          markBy: string
+          paperMarks: number
+          pupilMarks: number
+        }[]
+      }
       fn_get_papers_for_class: {
         Args: {
           _classid: number
@@ -1463,6 +2416,20 @@ export type Database = {
           availableFrom: string
           completeBy: string
           markBy: string
+        }[]
+      }
+      fn_get_specitemmarks_for_pupil_class: {
+        Args: {
+          _pupilid: string
+          _classtag: string
+        }
+        Returns: {
+          _specId: number
+          _specItemId: number
+          _specItemTag: string
+          _specItemTitle: string
+          _questionMarks: number
+          _answerMarks: number
         }[]
       }
       fn_marks_entered: {
@@ -1650,35 +2617,63 @@ export type Database = {
           paper: string
         }[]
       }
+      helloworld: {
+        Args: {
+          _name: string
+        }
+        Returns: {
+          msg: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
     }
     CompositeTypes: {
       dq_loadquestionbyspecitemidreturn: {
-        id: number
-        created_at: string
-        createdby: string
-        specitemid: number
-        questiondata: Json
-        questiontype: number
-        correctanswer: Json
-        tag: string
-        title: string
-        spectitle: string
+        id: number | null
+        created_at: string | null
+        createdby: string | null
+        specitemid: number | null
+        questiondata: Json | null
+        questiontype: number | null
+        correctanswer: Json | null
+        tag: string | null
+        title: string | null
+        spectitle: string | null
+      }
+      tablefunc_crosstab_2: {
+        row_name: string | null
+        category_1: string | null
+        category_2: string | null
+      }
+      tablefunc_crosstab_3: {
+        row_name: string | null
+        category_1: string | null
+        category_2: string | null
+        category_3: string | null
+      }
+      tablefunc_crosstab_4: {
+        row_name: string | null
+        category_1: string | null
+        category_2: string | null
+        category_3: string | null
+        category_4: string | null
       }
     }
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -1686,67 +2681,67 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never

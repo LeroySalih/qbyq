@@ -55,6 +55,7 @@ const DisplayQuestion = ({code} : {code: string}) => {
 
       setCorrectAnswerCount(answerCount.length);
 
+      // restrict the number of corretc answers a pupil can answer for a code.
       if (answerCount.length > 9){
         setIsLocked(true);
       }
