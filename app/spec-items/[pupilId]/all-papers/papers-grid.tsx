@@ -52,12 +52,14 @@ const PapersGrid = ({classPapers, pupilId} : {classPapers : ClassPapers, pupilId
     }
     
     return <DataGrid
-    /* @ts-expect-error */
-    rows={classPapers.map((r) => ({...r, id: `${r.classId}-${r.paperId}`}))}
+   
+    rows={//@ts-ignore
+         classPapers.map((r) => ({...r, id: `${r.classId}-${r.paperId}`}))}
     
-    /* @ts-expect-error */
+     /*@ts-ignore*/    
     columns={columns}
-    
+     
+
     initialState={{
         columns: {
             columnVisibilityModel: {
