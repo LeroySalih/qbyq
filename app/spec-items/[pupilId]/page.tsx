@@ -37,7 +37,7 @@ const Page = async ({params} : {params : {pupilId : string}}) => {
      const papers = await loadPapers(pupilId);
 
      return <>
-          <AllPapers papers={papers}/>         
+          <AllPapers papers={papers} pupilId={pupilId}/>         
      </>
 }
 export default Page;

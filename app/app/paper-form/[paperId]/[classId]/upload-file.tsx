@@ -106,6 +106,7 @@ const UploadFile = ({paperId, user} : {paperId: number, user: User | null}) => {
                             .eq("paperId", paperId)
                             .eq("fileName", file.name);
 
+        //@ts-expect-error
         const {data: uploadData, error: uploadError} = await supabase.from("WorkUploads").upsert({
             owner: user.id, 
             paperId, dt, path, 

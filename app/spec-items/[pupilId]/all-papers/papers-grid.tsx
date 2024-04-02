@@ -21,6 +21,7 @@ const PapersGrid = ({classPapers, pupilId} : {classPapers : ClassPapers, pupilId
       //  { field: 'completeBy', headerName: 'Complete By', valueGetter: (value: string, row) => `${value && value.substring(5, 10)}`},
         { field: 'markBy', headerName: 'Mark By', width: 100, valueGetter: (value: string, row) => `${value && value.substring(5, 10)}`},
         { field: 'status', headerName: 'Status', width: 100, 
+          //@ts-expect-error
            valueGetter: (value: string, rows) => formatOpen(rows), 
            renderCell: (params: GridRenderCellParams<any, Date>) => displayStatus(params),
             
@@ -36,19 +37,18 @@ const PapersGrid = ({classPapers, pupilId} : {classPapers : ClassPapers, pupilId
     const formatOpen = (row: ClassPaper) =>{
       const today = DateTime.now().toISODate();
 
-      if (row.availableFrom <= today && today <= row.markBy && !row.pupilMarks) {
+      //@ts-expect-error
+      if (row.pupilMarks) {
+        return "Ok"
+      }
+
+      //@ts-expect-error
+      if (today <= row.markBy && !row.pupilMarks) {
+        return "Open"
+      } else {
         return "Late"
       }
-      
-      if (row.availableFrom <= today && today <= row.markBy) {
-        return "Open"
-      }
-
-      if (row.markBy <= today){
-        return "Closed"
-      }
-
-      return "Unknown";
+    
     }
     
     return <DataGrid
