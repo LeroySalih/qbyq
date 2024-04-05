@@ -39,4 +39,4 @@ next-env.d.ts
 .env.local
 
 # do not comit seed file to git.
-supabase/seed.sql
+/supabase/seed.sql
