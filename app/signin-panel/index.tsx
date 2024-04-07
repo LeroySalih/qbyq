@@ -19,7 +19,6 @@ const SignIn = () => {
     
         error && console.error(error);
 
-        
     }
 
     return <div>
