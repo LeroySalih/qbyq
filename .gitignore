@@ -35,5 +35,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
+.env
 .env.local
+
+# do not comit seed file to git.
+/supabase/seed.sql
