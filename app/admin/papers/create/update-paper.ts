@@ -69,11 +69,11 @@ export const createNewPaper = async (data:Paper) => {
         return {id: null, error: "Supabase not created"};
     }
 
-    const {year, month, paper, title, marks, specId, subject } = data;
+    const {year, month, paper, title, marks, specId, subject, qPaperLabel, aPaperLabel } = data;
     
     // console.log({year, month, paper, title, marks, specId, subject });
 
-    const {data: newPaper, error} = (await supabase.from("Papers").insert({year, month, paper, title, marks, specId, subject }).select("id"));
+    const {data: newPaper, error} = (await supabase.from("Papers").insert({year, month, paper, title, marks, specId, subject, qPaperLabel, aPaperLabel }).select("id"));
 
     error && console.error(error);
     
