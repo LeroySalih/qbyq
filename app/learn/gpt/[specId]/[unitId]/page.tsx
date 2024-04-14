@@ -7,8 +7,10 @@ import { DateTime } from "luxon";
 
 import SpecSelector from "./unit-selector";
 import {Select, MenuItem} from "@mui/material";
+import { revalidatePath } from "next/cache";
 
 export const fetchCache = 'force-no-store';
+export const dynamic = 'force-dynamic'
 
 type Answers = {
     code: any;
@@ -39,6 +41,8 @@ type Links = Link[] | null;
 const Page = async (
     {params, searchParams}: {params: {specId: number, unitId: number}, searchParams : {specId : number | undefined }}
     ) => {
+
+    
 
     const {specId, unitId} = params;
 
@@ -80,6 +84,8 @@ const Page = async (
                                 .eq("owner", user.id)
                                 ;
                                 
+
+    console.log("Answers", answers);
 
     const sections = data.reduce((prev, cur) => { 
         // @ts-ignore

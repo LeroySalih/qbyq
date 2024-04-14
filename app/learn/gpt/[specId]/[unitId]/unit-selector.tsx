@@ -4,6 +4,8 @@ import supabase from "app/utils/supabase/client";
 import {useState, useEffect} from "react";
 import {Select, MenuItem} from "@mui/material";
 import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import clearCache from "./revalidate";
 
 type Spec = {
     id: number;
@@ -62,7 +64,8 @@ const UnitSelector = ({specId, unitId} :  {specId:number, unitId: number}) => {
         loadUnits(currentSpecId);
     }, [currentSpecId])
 
-    const handleSpecItemChange = (unitId: number) => {
+    const handleSpecItemChange = async (unitId: number) => {
+        await clearCache();
         router.push(`/learn/gpt/${currentSpecId}/${unitId}`);
     }
 
