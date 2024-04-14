@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {User, Session, AuthChangeEvent} from "@supabase/supabase-js";
 import {Avatar} from "@mui/material";
 import supabase from "app/utils/supabase/client";
-import AssessmentOutlinedIcon from '@material-ui/icons/AssessmentOutlined';
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import { IconButton } from '@mui/material';
 
 const SignInButton = () => {
