@@ -10,6 +10,7 @@ import {Ticket,Profile} from "./types";
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { DateTime } from "luxon";
+import clearCache from "./revalidate";
 
 const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket }) => {
 
@@ -29,6 +30,10 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket 
 
     const handleStatusChange = async (s: string) => {
         setIsSaving(true);
+        
+        console.log("Updating Status", s);
+
+        setTicketStatus(s);
 
         switch (s) {
             case 'waiting' : await ticketWaiting(id); break;
@@ -46,7 +51,10 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket 
 
 
     useEffect(()=> {
-        handleStatusChange(ticketStatus);
+        if (ticketStatus != status){
+            handleStatusChange(ticketStatus);
+        }
+        
     }, [ticketStatus])
 
     const handleDeleteTicket = async (id : number) =>  {
@@ -69,7 +77,7 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket 
     <Grid container>
        <Grid item xs={12} md={4}>{machine}</Grid> 
        <Grid item xs={12} md={4}>{firstName} {familyName}</Grid>
-       <Grid item xs={12} md={4}><div className={`${styles.statusLabel} ${getStatusClassName(status)}`}>{status}</div></Grid>
+       <Grid item xs={12} md={4}><div className={`${styles.statusLabel} ${getStatusClassName(ticketStatus)}`}>{ticketStatus}</div></Grid>
        <Grid item xs={12} md={6}>{notes}</Grid>
        <Grid item xs={12} md={6}>{tech_notes}</Grid>
        <Grid item xs={12} md={4}>
@@ -83,6 +91,7 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket 
             <option value="completed">Completed</option>
             <option value="failed">Failed</option>
         </select>
+        
     
         {(profile.isAdmin || profile.isTech) && ticketStatus == "failed" && <input value={techNote} onChange={(e) => setTechNote(e.target.value)} onBlur={(e) => handleTechNotes(id, e.target.value)}></input>}
     

@@ -11,6 +11,7 @@ const machineOptions = [
     "Select",
     "3D Printer", 
     "Laser Cutter",
+    "Test"
 ]
 
 type Ticket = {
