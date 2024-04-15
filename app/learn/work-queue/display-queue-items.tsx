@@ -44,8 +44,10 @@ const DisplayQueueItems = ({tickets, profile} : {tickets: Tickets, profile: Prof
 
     return <>
         <div className={styles.sortPanel}>
+            {/*
             <div>Hide Completed <Switch {...label} checked={hideCompleted || false} onChange={handleChangeHideCompelted}/> <pre>{hideCompleted ? "Hiding" : "Showing"}</pre>
             </div>
+            */}
             <div>Sort Ascending <Switch {...label} checked={sortAscending || false} onChange={handleChangeSortAscending}/> <pre>{sortAscending ? "Ascending" : "Descending"}</pre>
             </div>
         </div>
