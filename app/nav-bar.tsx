@@ -13,7 +13,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
+// import { revalidatePath } from "next/cache";
+import { refreshCache } from "./utils/cache";
 import {Button } from "@mui/material";
 
 type Profile = {
@@ -59,7 +60,8 @@ const NavBar = () => {
         setUser(user);
 
         // refresh the current page in case it's a server side page.
-        revalidatePath('/')
+        //revalidatePath('/')
+        refreshCache('/');
         router.refresh();
 
       } else {

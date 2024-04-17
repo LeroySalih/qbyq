@@ -93,7 +93,7 @@ const DisplayQueueItem = ({profile, ticket}: { profile: Profile, ticket: Ticket 
         </select>
         
     
-        {(profile.isAdmin || profile.isTech) && ticketStatus == "failed" && <input value={techNote} onChange={(e) => setTechNote(e.target.value)} onBlur={(e) => handleTechNotes(id, e.target.value)}></input>}
+        {(profile.isAdmin || profile.isTech) && ticketStatus == "failed" && <input value={techNote || ""} onChange={(e) => setTechNote(e.target.value)} onBlur={(e) => handleTechNotes(id, e.target.value)}></input>}
     
        </Grid>
        <Grid item xs={12} md={6}>

@@ -6,6 +6,7 @@ import { updateQueue } from "./updateQueue";
 import {User} from "@supabase/supabase-js";
 import styles from "./upload.module.css";
 
+import { refreshCache } from "app/utils/cache";
 
 const machineOptions = [
     "Select",
@@ -37,8 +38,6 @@ const CreateTicket = ({userid}: {userid: string}) => {
 
     const uploadFile = async ({machine, file, notes}: Ticket) => {
 
-        
-
         if (!file) {
             return;
         }
@@ -48,18 +47,14 @@ const CreateTicket = ({userid}: {userid: string}) => {
             upsert: true 
         });
 
-        
-
         error && console.error(error)
 
         const {data: urlData} = supabase.storage.from("work-queue").getPublicUrl(`${userid}/${file.name}`)
         
-        
-
         const result = await updateQueue(userid, urlData.publicUrl, `${userid}/${file.name}`, machine || "", notes || "");
 
+        refreshCache("/");
         
-
     }
 
     const handleUploadFile = () => {
@@ -105,8 +100,9 @@ const CreateTicket = ({userid}: {userid: string}) => {
         <select value={machine} onChange={(e) => setMachine(e.target.value)}>
             {machineOptions && machineOptions.map((mo, i) => <option value={mo} key={i}>{mo}</option>) }
         </select>
+
         <input type="file" onChange={(e) => handleFileChange(e?.target?.files)}/>
-        <input type="text" value={notes} placeholder="notes" onChange={(e) => setNotes(e.target.value)}/>
+        <input type="text" value={notes || ""} placeholder="notes" onChange={(e) => setNotes(e.target.value)}/>
         <button onClick={handleUploadFile} disabled={file === null || machine == "Select"}>Submit</button>
         
         </div>
