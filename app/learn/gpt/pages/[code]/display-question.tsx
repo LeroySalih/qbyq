@@ -56,9 +56,9 @@ const DisplayQuestion = ({code} : {code: string}) => {
       setCorrectAnswerCount(answerCount.length);
 
       // restrict the number of corretc answers a pupil can answer for a code.
-      if (answerCount.length > 9){
-        setIsLocked(true);
-      }
+      //if (answerCount.length > 9){
+      //  setIsLocked(true);
+      //}
 
 
       //const {data, error} = await supabase.from("dqQuestions").select("id, question_text, choices, correct_answer").eq("code", code).limit(1);
